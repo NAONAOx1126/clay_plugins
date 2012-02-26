@@ -10,6 +10,7 @@ class Order_Summery_PromotionRepeats extends FrameworkModule{
 	function execute($params){
 		// ローダーを初期化
 		$loader = new PluginLoader("Order");
+		$ploader = new PluginLoader("Product");
 		
 		// テーブルのインスタンスを作成する。
 		$promoOrder = $loader->loadTable("OrdersTable");
@@ -21,7 +22,7 @@ class Order_Summery_PromotionRepeats extends FrameworkModule{
 		$orderDetail = $loader->loadTable("RepeaterOrderDetailsTable");
 		$counter = $loader->loadTable("RepeaterOrderDetailsTable");
 		$counter->setAlias("counter");
-		$promotion = $loader->loadTable("ProductPromotionsTable");
+		$promotion = $ploader->loadTable("ProductPromotionsTable");
 		
 		// ターゲットの前月と次月を取得
 		if(isset($_POST["target"])){

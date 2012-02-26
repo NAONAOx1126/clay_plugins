@@ -163,9 +163,9 @@ class Order_Summery_OrderDetailRepeat extends FrameworkModule{
 				if(!isset($result2["price"])){
 					foreach($result2 as $key3 => $result3){
 						if(isset($result3["price"])){
-							usort($resultAll[$key1], array("Shop_Summery_OrderDetailRepeat", "repeatSort"));
+							usort($resultAll[$key1], array("Order_Summery_OrderDetailRepeat", "repeatSort"));
 						}else{
-							usort($resultAll[$key1][$key2], array("Shop_Summery_OrderDetailRepeat", "repeatSort"));
+							usort($resultAll[$key1][$key2], array("Order_Summery_OrderDetailRepeat", "repeatSort"));
 						}
 					}
 				}

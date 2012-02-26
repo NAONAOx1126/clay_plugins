@@ -19,6 +19,7 @@ class File_Excel_Download extends FrameworkModule{
 		ini_set("max_execution_time", 0);
 		
 		if(isset($_SERVER["PHP_EXCEL"])){
+			$_SERVER["PHP_EXCEL"]->setActiveSheetIndex(0);
 			ob_end_clean();
 			header('Content-Type: application/vnd.ms-excel');
 			header('Content-Disposition: attachment;filename="'.$params->get("file").'.xls"');

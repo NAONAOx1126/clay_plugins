@@ -36,9 +36,12 @@ class File_Excel_CreateSheet extends FrameworkModule{
 			$columns = explode(",", $params->get("columns"));
 			
 			$source = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+			
+			// フォントを設定
+			$_SERVER["PHP_EXCEL"]->getActiveSheet()->getDefaultStyle()->getFont()->setName(mb_convert_encoding('ＭＳ Ｐ ゴシック','cp932'));
+			$_SERVER["PHP_EXCEL"]->getActiveSheet()->getDefaultStyle()->getFont()->setSize(11); 
+				
 			foreach($titles as $index => $title){
-				$_SERVER["PHP_EXCEL"]->getActiveSheet()->getDefaultStyle()->getFont()->setName(mb_convert_encoding('ＭＳ Ｐ ゴシック','cp932'));
-				$_SERVER["PHP_EXCEL"]->getActiveSheet()->getDefaultStyle()->getFont()->setSize(11); 
 				$_SERVER["PHP_EXCEL"]->getActiveSheet()->setCellValue(substr($source, $index, 1)."1", $title);
 				$cellBorders = $_SERVER["PHP_EXCEL"]->getActiveSheet()->getStyleByColumnAndRow($index, 1)->getBorders();
 				$cellBorders->getTop()->setBorderStyle(PHPExcel_Style_Border::BORDER_THICK);

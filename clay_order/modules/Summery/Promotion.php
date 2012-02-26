@@ -10,6 +10,7 @@ class Order_Summery_Promotion extends FrameworkModule{
 	function execute($params){
 		// ローダーを初期化
 		$loader = new PluginLoader("Order");
+		$ploader = new PluginLoader("Product");
 		
 		// テーブルのインスタンスを作成する。
 		$promoOrder = $loader->loadTable("OrdersTable");
@@ -19,7 +20,7 @@ class Order_Summery_Promotion extends FrameworkModule{
 		$promoOrderDetail = $loader->loadTable("OrderDetailsTable");
 		$promoOrderDetail->setAlias("promo_order_details");
 		$orderDetail = $loader->loadTable("RepeaterOrderDetailsTable");
-		$promotion = $loader->loadTable("ProductPromotionsTable");
+		$promotion = $ploader->loadTable("ProductPromotionsTable");
 		
 		// SELECT文を構築する。
 		$select = new DatabaseSelect($promoOrderDetail);
