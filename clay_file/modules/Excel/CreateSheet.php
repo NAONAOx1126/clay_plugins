@@ -123,7 +123,6 @@ class File_Excel_CreateSheet extends FrameworkModule{
 		if($params->check("sheet")){
 			$_SERVER["PHP_EXCEL"]->getActiveSheet()->setTitle($params->get("sheet", "test"));
 		}
-		exit;
 	}
 }
 ?>
