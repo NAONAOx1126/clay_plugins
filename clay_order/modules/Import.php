@@ -43,6 +43,12 @@ class Order_Import extends FrameworkModule{
 				}
 				
 				foreach($_SERVER["ATTRIBUTES"][$params->get("key")] as $data){
+					// 半角カナを全角に変換する。
+					foreach($data as $key => $value){
+						if(!is_array($value)){
+							$data[$key] = mb_convert_kana($value);
+						}
+					}
 					
 					// 配送方法のテーブルが存在しなければ追加
 					if(empty($data["delivery_id"]) && !empty($data["delivery_name"])){
