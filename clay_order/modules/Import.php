@@ -91,6 +91,9 @@ class Order_Import extends FrameworkModule{
 							foreach($data as $key => $value){
 								$orderPayment->$key = $value;
 							}
+							if(isset($payments[$orderPayment->payment_name])){
+								$orderPayment->payment_id = $payments[$orderPayment->payment_name];
+							}
 							$orderPayment->save($db);
 						}
 						$data["order_payment_id"] = $orderPayment->order_payment_id;
