@@ -42,11 +42,12 @@ class Order_Import extends FrameworkModule{
 					$payments[$data->payment_name] = $data->payment_id;
 				}
 				
-				foreach($_SERVER["ATTRIBUTES"][$params->get("key")] as $data){
+				$list = $_SERVER["ATTRIBUTES"][$params->get("key")];
+				foreach($list as $index => $data){
 					// 半角カナを全角に変換する。
 					foreach($data as $key => $value){
 						if(!is_array($value)){
-							$data[$key] = mb_convert_kana($value);
+							$list[$index][$key] = mb_convert_kana($value);
 						}
 					}
 					
@@ -76,57 +77,42 @@ class Order_Import extends FrameworkModule{
 							$payments[$payment->payment_name] = $payment->payment_id;
 						}
 					}
-					
-					// 注文データを上書き
-					if(!empty($data["order_code"])){
-						$order = $loader->loadModel("OrderModel");
-						$order->findByCode($data["order_code"]);
-						foreach($data as $key => $value){
-							$order->$key = $value;
-						}
-						$order->save($db);
-						$data["order_id"] = $order->order_id;
-						unset($order);
-					}
-					
-					if(!empty($data["order_id"])){
-						// 注文決済データが存在しない場合には追加
-						$orderPayment = $loader->loadModel("OrderPaymentModel");
-						$orderPayments = $orderPayment->findAllByOrder($data["order_id"]);
-						if(empty($orderPayments)){
-							foreach($data as $key => $value){
-								$orderPayment->$key = $value;
-							}
-							if(isset($payments[$orderPayment->payment_name])){
-								$orderPayment->payment_id = $payments[$orderPayment->payment_name];
-							}
-							$orderPayment->save($db);
-						}
-						$data["order_payment_id"] = $orderPayment->order_payment_id;
-	
-						// 注文セットデータが存在しなければ追加
-						$orderPackage = $loader->loadModel("OrderPackageModel");
-						$orderPackage->findBy(array("order_id" => $data["order_id"]));
-						foreach($data as $key => $value){
-							$orderPackage->$key = $value;
-						}
-						$orderPackage->save($db);
-						$data["order_package_id"] = $orderPackage->order_package_id;
-						unset($orderPackage);
-	
-						if(!empty($data["order_package_id"])){
-							// 注文セットデータが存在しなければ追加
-							$orderDetail = $loader->loadModel("OrderDetailModel");
-							$orderDetail->findBy(array("order_package_id" => $data["order_package_id"], "product_code" => $data["product_code"]));
-							foreach($data as $key => $value){
-								$orderDetail->$key = $value;
-							}
-							$orderDetail->save($db);
-							$data["order_detail_id"] = $orderDetail->order_detail_id;
-							unset($orderDetail);
-						}
+				}
+				
+				// 注文データが注文コードによって一意になるようにリストを絞り込む
+				$orderList = array();
+				if(!is_array($_SERVER["ATTRIBUTES"][$params->get("key")."_TEMP_ORDERS"])){
+					$_SERVER["ATTRIBUTES"][$params->get("key")."_TEMP_ORDERS"] = array();
+				}
+				foreach($list as $data){
+					if(!isset($_SERVER["ATTRIBUTES"][$params->get("key")."_TEMP_ORDERS"][$data["order_code"]])){
+						$_SERVER["ATTRIBUTES"][$params->get("key")."_TEMP_ORDERS"][$data["order_code"]] = "1";
+						$orderList[$data["order_code"]] = $data;
 					}
 				}
+					
+				// 注文データを上書き
+				$order = $loader->loadModel("OrderModel");
+				$orderList = $order->saveAll($db, $orderList);
+
+				// 注文決済データを上書き
+				$orderPayment = $loader->loadModel("OrderPaymentModel");
+				$orderList = $orderPayment->saveAll($db, $orderList);
+				
+				// 注文パッケージデータを上書き
+				$orderPackage = $loader->loadModel("OrderPackageModel");
+				$orderList = $orderPackage->saveAll($db, $orderList);
+								
+				// 注文詳細データにIDを割り当てるためにIDを割り当て
+				foreach($list as $index => $data){
+					$list[$index]["order_id"] = $orderList[$data["order_code"]]["order_id"];
+					$list[$index]["order_payment_id"] = $orderList[$data["order_code"]]["order_payment_id"];
+					$list[$index]["order_package_id"] = $orderList[$data["order_code"]]["order_package_id"];
+				}
+				
+				// 注文詳細データを上書き
+				$orderDetail = $loader->loadModel("OrderDetailModel");
+				$list = $orderDetail->saveAll($db, $list);
 				$db->commit();
 			}catch(Exception $e){
 				$db->rollback();
