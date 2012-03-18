@@ -32,7 +32,7 @@ class Order_Summery_OrderDetailRepeat extends FrameworkModule{
 		
 		// リピート回数の入力の先頭に0回〜を加算
 		if(!isset($_POST["repeat"]) || !is_array($_POST["repeat"])){
-			$_POST["repeat"] = array();
+			$_POST["repeat"] = array("1", "2", "3", "4", "5");
 		}
 		if(!isset($_POST["repeat"][0]) || $_POST["repeat"][0] > 0){
 			array_unshift($_POST["repeat"], "0");
@@ -89,15 +89,15 @@ class Order_Summery_OrderDetailRepeat extends FrameworkModule{
 						// 次のリピート回数がある場合、その間にリピート回数があるかチェック
 						if($repeat + 1 < $_POST["repeat"][$i + 1]){
 							if($repeat == 0){
-								$order_repeat = "新規〜".$_POST["repeat"][$i + 1]."回";
+								$order_repeat = "新規〜リピート".$_POST["repeat"][$i + 1]."回";
 							}else{
-								$order_repeat = $repeat."回〜".($_POST["repeat"][$i + 1] - 1)."回";
+								$order_repeat = "リピート".$repeat."回〜リピート".($_POST["repeat"][$i + 1] - 1)."回";
 							}
 						}else{
 							if($repeat == 0){
 								$order_repeat = "新規";
 							}else{
-								$order_repeat = $repeat."回";
+								$order_repeat = "リピート".$repeat."回";
 							}
 						}
 					}else{
@@ -105,7 +105,7 @@ class Order_Summery_OrderDetailRepeat extends FrameworkModule{
 						if($repeat == 0){
 							$order_repeat = "新規〜";
 						}else{
-							$order_repeat = $repeat."回〜";
+							$order_repeat = "リピート".$repeat."回〜";
 						}
 					}
 				}

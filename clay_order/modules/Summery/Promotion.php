@@ -38,6 +38,7 @@ class Order_Summery_Promotion extends FrameworkModule{
 		//$select->addColumn("CASE WHEN ".$order->order_time." > ".$promoOrder->order_time." THEN UNIX_TIMESTAMP(".$order->order_time.") - UNIX_TIMESTAMP(".$promoOrder->order_time.") ELSE 0 END", "order_interval");
 		//$select->addColumn("CASE WHEN ".$order->order_time." > ".$promoOrder->order_time." THEN 1 ELSE 0 END", "order_success");
 		//$select->addColumn("1", "order_all");
+		$select->addWhere($promoOrder->order_time." >= ?", array($_POST["ge:order_time"]))->addWhere($promoOrder->order_time." <= ?", array($_POST["le:order_time"]));
 		$select->addGroupBy($promoOrderDetail->parent_name)->addGroupBy($promoOrderDetail->product_name);
 		$select->addGroupBy($orderDetail->parent_name)->addGroupBy($orderDetail->product_name);
 		$select->addOrder($promoOrder->order_code);

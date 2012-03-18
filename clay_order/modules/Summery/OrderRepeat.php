@@ -79,16 +79,16 @@ class Order_Summery_OrderRepeat extends FrameworkModule{
 						if(isset($_POST["repeat"][$i + 1])){
 							// 次の設定回数が今の設定回数+1の場合は単独指定、それ以外の場合は範囲していとする。
 							if($summery->order_repeat != $_POST["repeat"][$i + 1] - 1){
-								$summery->order_repeat_text = $summery->order_repeat."回〜".($_POST["repeat"][$i + 1] - 1)."回";
+								$summery->order_repeat_text = "リピート".$summery->order_repeat."回〜リピート".($_POST["repeat"][$i + 1] - 1)."回";
 							}else{
-								$summery->order_repeat_text = $summery->order_repeat."回";
+								$summery->order_repeat_text = "リピート".$summery->order_repeat."回";
 							}
 						}else{
 							// 次の設定回数が無い場合は上限無しの扱いとする。
-							$summery->order_repeat_text = $summery->order_repeat."回〜";							
+							$summery->order_repeat_text = "リピート".$summery->order_repeat."回〜";							
 						}
 						// ０回の項目を新規に差し替え
-						$summery->order_repeat_text = str_replace("0回", "新規", $summery->order_repeat_text);
+						$summery->order_repeat_text = str_replace("リピート0回", "新規", $summery->order_repeat_text);
 						$result[$i] = $summery;
 					}
 				}
@@ -102,11 +102,11 @@ class Order_Summery_OrderRepeat extends FrameworkModule{
 								
 								$summery->order_repeat = $repeat;
 								if($summery->order_repeat != $_POST["repeat"][$i + 1] - 1){
-									$summery->order_repeat_text = $summery->order_repeat."回〜".($_POST["repeat"][$i + 1] - 1)."回";
+									$summery->order_repeat_text = "リピート".$summery->order_repeat."回〜リピート".($_POST["repeat"][$i + 1] - 1)."回";
 								}else{
-									$summery->order_repeat_text = $summery->order_repeat."回";
+									$summery->order_repeat_text = "リピート".$summery->order_repeat."回";
 								}
-								$summery->order_repeat_text = str_replace("0回", "新規", $summery->order_repeat_text);
+								$summery->order_repeat_text = str_replace("リピート0回", "新規", $summery->order_repeat_text);
 								$result[$i] = $summery;
 							}else{
 								$result[$i]->count += $summery->count;
@@ -119,8 +119,8 @@ class Order_Summery_OrderRepeat extends FrameworkModule{
 						if($repeat < $summery->order_repeat){
 							if(!isset($result[$i])){
 								$summery->order_repeat = $repeat;
-								$summery->order_repeat_text = $summery->order_time."回〜";
-								$summery->order_repeat_text = str_replace("0回", "新規", $summery->order_repeat_text);
+								$summery->order_repeat_text = "リピート".$summery->order_time."回〜";
+								$summery->order_repeat_text = str_replace("リピート0回", "新規", $summery->order_repeat_text);
 								$result[$i] = $summery;
 							}else{
 								$result[$i]->count += $summery->count;

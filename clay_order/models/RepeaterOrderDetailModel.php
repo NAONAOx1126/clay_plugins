@@ -33,7 +33,7 @@ class Order_RepeaterOrderDetailModel extends DatabaseModel{
 		$sql .= "`shop_order_packages`.`deliv_address2` AS `deliv_address2`,`shop_order_packages`.`deliv_tel1` AS `deliv_tel1`,`shop_order_packages`.`deliv_tel2` AS `deliv_tel2`,";
 		$sql .= "`shop_order_packages`.`deliv_tel3` AS `deliv_tel3`,`shop_order_packages`.`delivery_id` AS `delivery_id`,`shop_order_packages`.`delivery_date` AS `delivery_date`,";
 		$sql .= "`shop_order_packages`.`delivery_time` AS `delivery_time`,`shop_order_packages`.`deliv_fee` AS `deliv_fee`,`shop_order_packages`.`ship_status` AS `ship_status`,";
-		$sql .= "`shop_order_details`.`order_detail_id` AS `order_detail_id`,`shop_order_details`.`order_package_id` AS `order_package_id`,`shop_order_details`.`product_id` AS `product_id`,";
+		$sql .= "`shop_order_details`.`order_detail_id` AS `order_detail_id`,`shop_order_details`.`order_package_id` AS `order_package_id`,";
 		$sql .= "`shop_order_details`.`product_code` AS `product_code`,`shop_order_details`.`parent_name` AS `parent_name`,`shop_order_details`.`product_name` AS `product_name`,";
 		$sql .= "`shop_order_details`.`option1_id` AS `option1_id`,`shop_order_details`.`option1_code` AS `option1_code`,`shop_order_details`.`option1_name` AS `option1_name`,";
 		$sql .= "`shop_order_details`.`option2_id` AS `option2_id`,`shop_order_details`.`option2_code` AS `option2_code`,`shop_order_details`.`option2_name` AS `option2_name`,";
