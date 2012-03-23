@@ -29,13 +29,15 @@ class Order_Summery_RepeaterOrderTime extends FrameworkModule{
 		$result = array();
 		$result_new = array();
 		$result_repeat = array();
-		foreach($_POST["time"] as $i => $t){
-			if($t > 23){
-				unset($_POST["time"][$i]);
+		if(isset($_POST["time"]) && is_array($_POST["time"])){
+			foreach($_POST["time"] as $i => $t){
+				if($t > 23){
+					unset($_POST["time"][$i]);
+				}
 			}
 		}
 		if(!isset($_POST["time"]) || !is_array($_POST["time"]) || empty($_POST["time"])){
-			$_POST["time"] = array("6", "9", "12", "15", "18", "21");
+			$_POST["time"] = array("3", "6", "9", "12", "15", "18", "21");
 		}
 		if($_POST["time"][0] != "0"){
 			array_unshift($_POST["time"], "0");

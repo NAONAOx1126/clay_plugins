@@ -26,7 +26,19 @@ class Order_ProductPromotionModel extends DatabaseModel{
 	}
 	
 	function findAllByPromotionCode($promotion_product_code){
-		return $this->findAllBy(array("promotion_product_code" => promotion_product_code));
+		return $this->findAllBy(array("promotion_product_code" => $promotion_product_code));
+	}
+	
+	function promotion(){
+		$product = new ProductModel();
+		$product->findByProductCode($this->promotion_product_code);
+		return $product;
+	}
+
+	function product(){
+		$product = new ProductModel();
+		$product->findByProductCode($this->product_code);
+		return $product;
 	}
 }
 ?>

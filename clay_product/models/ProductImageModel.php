@@ -1,27 +1,24 @@
 <?php
-// この処理で使用するテーブルモデルをインクルード
-LoadTable("ProductImagesTable", "Shopping");
-
-LoadModel("ProductModel", "Shopping");
-
 /**
  * カテゴリ情報のモデルクラス
  */
-class ProductImageModel extends DatabaseModel{
+class Product_ProductImageModel extends DatabaseModel{
 	function __construct($values = array()){
-		parent::__construct(new ProductImagesTable(), $values);
+		$loader = new PluginLoader("Product");
+		parent::__construct($loader->loadTable("ProductImagesTable"), $values);
 	}
 	
-	function findByPrimaryKey($product_id, $type_id){
-		$this->findBy(array("product_id" => $product_id, "type_id" => $type_id));
+	function findByPrimaryKey($product_id, $image_type){
+		$this->findBy(array("product_id" => $product_id, "image_type" => $image_type));
 	}
 	
-	function findAllByProduct($product_id){
-		return $this->findAllBy(array("product_id" => $product_id));
+	function findAllByProduct($product_id, $order = "", $reverse = false){
+		return $this->findAllBy(array("product_id" => $product_id), $order, $reverse);
 	}
 	
 	function product(){
-		$product = new ProductModel();
+		$loader = new PluginLoader("Product");
+		$product = $loader->loadModel("ProductModel");
 		$product->findByPrimaryKey($this->product_id);
 		return $product;
 	}

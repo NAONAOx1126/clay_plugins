@@ -1,11 +1,4 @@
 <?php
-// この機能で使用するモデルクラス
-$memberPluginLoader = new PluginLoader("Member");
-$memberPluginLoader->LoadModel("Setting");
-$memberPluginLoader->LoadModel("CustomerModel");
-$memberPluginLoader->LoadModel("CustomerTypeModel");
-$memberPluginLoader->LoadModel("CustomerOptionModel");
-
 /**
  * 携帯の個体番号でのログインを実行するモジュールです。
  *
@@ -15,8 +8,12 @@ $memberPluginLoader->LoadModel("CustomerOptionModel");
  * @params auto 1を設定すると、携帯の個体番号が渡っていた場合、自動でユーザー情報を作成する
  * @params result 顧客情報をページで使うためのキー名
  */
-class Members_Login_Mobile extends FrameworkModule{
+class Member_Login_Mobile extends FrameworkModule{
 	function execute($params){
+		// この機能で使用するモデルクラス
+		$loader = new PluginLoader("Member");
+		$loader->LoadSetting();
+
 		// アクセスしてきたモバイルIDを取得
 		if(!empty($_SERVER["HTTP_X_DCMGUID"])){
 			// ドコモID(GUID対応)
@@ -37,13 +34,14 @@ class Members_Login_Mobile extends FrameworkModule{
 			$mobileId = $_SESSION["MOBILE_GUID"];
 		}
 		
-		// モバイルIDが設定されておらず、guidパラメータも未設定の場合はguid付きでリダイレクトする。
+		// モバイルIDが設定おらず、guidが未設定の場合は、GUID付きのURLにリダイレクトする。
 		if(empty($mobileId)){
 			if(empty($_POST["guid"])){
 				header("Location: ".((strpos($_SERVER["REQUEST_URI"], "?") > 0)?$_SERVER["REQUEST_URI"]."&guid=ON":$_SERVER["REQUEST_URI"]."?guid=ON"));
 				exit;
 			}
-			$mobileId = "Mozilla/PC-ACCESS:TEST-USE";
+			// guidが設定されていても取得できない場合は、エラーとする。
+			throw new InvalidException(array("ログインに失敗しました。"));
 		}
 		
 		// モバイルのGUIDをセッションに保存
@@ -52,7 +50,7 @@ class Members_Login_Mobile extends FrameworkModule{
 		// モバイルIDが渡った場合にはユーザ情報を取得する。
 		if(!empty($mobileId)){
 			// カスタマモデルを使用して顧客情報を取得
-			$customer = new CustomerModel();
+			$customer = $loader->LoadModel("CustomerModel");
 			$customer->findByMobileId($mobileId);
 			
 			if(empty($customer->customer_id)){
@@ -80,26 +78,26 @@ class Members_Login_Mobile extends FrameworkModule{
 				}
 			}
 			if(!empty($customer->customer_id)){
-				$_SESSION[CUSTOMER_SESSION_KEY] = $customer;
-				$customerType = new CustomerTypeModel();
-				$_SESSION[CUSTOMER_SESSION_KEY]->types = $customerType->findAllByCustomer($customer->customer_id);
-				$customerOption = new CustomerOptionModel();
+				$_SESSION[Member_Setting::CUSTOMER_SESSION_KEY] = $customer;
+				$customerType = $loader->LoadModel("CustomerTypeModel");
+				$_SESSION[Member_Setting::CUSTOMER_SESSION_KEY]->types = $customerType->findAllByCustomer($customer->customer_id);
+				$customerOption = $loader->LoadModel("CustomerOptionModel");
 				$customerOptions = $customerOption->getOptionArrayByCustomer($customer->customer_id);
 				foreach($customerOptions as $name => $option){
-					$_SESSION[CUSTOMER_SESSION_KEY]->$name = $option->option_value;
+					$_SESSION[Member_Setting::CUSTOMER_SESSION_KEY]->$name = $option->option_value;
 				}
 			}
 		}
 	
-		if(empty($_SESSION[CUSTOMER_SESSION_KEY])){
+		if(empty($_SESSION[Member_Setting::CUSTOMER_SESSION_KEY])){
 			if($params->get("error")){
 				throw new InvalidException(array("ログインに失敗しました"));
 			}elseif($params->get("redirect")){
 				throw new RedirectException();
 			}
 		}
-		print_r($_SESSION[CUSTOMER_SESSION_KEY]);
-		$_SERVER["ATTRIBUTES"][$params->get("result", "customer")] = $_SESSION[CUSTOMER_SESSION_KEY];
+		print_r($_SESSION[Member_Setting::CUSTOMER_SESSION_KEY]);
+		$_SERVER["ATTRIBUTES"][$params->get("result", "customer")] = $_SESSION[Member_Setting::CUSTOMER_SESSION_KEY];
 	}
 }
 ?>

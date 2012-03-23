@@ -1,9 +1,4 @@
 <?php
-// ショッピングカートの設定を取得
-LoadModel("Setting", "Shopping");
-LoadModel("ProductModel", "Shopping");
-LoadModel("ProductCategoryModel", "Shopping");
-
 /**
  * ### Shopping.Product.New
  * 新規入荷商品のリストを取得する。
@@ -12,8 +7,11 @@ LoadModel("ProductCategoryModel", "Shopping");
  * @param category【カテゴリタイプ】 商品に紐付けするカテゴリ（条件にしない場合は空文字を設定）
  * @param result 結果を設定する配列のキーワード
  */
-class Shopping_Product_New extends FrameworkModule{
+class Product_New extends FrameworkModule{
 	function execute($params){
+		$loader = new PluginLoader("Product");
+		$loader->LoadSetting();
+
 		// ページャのオプションを設定
 		$option = array();
 		$option["mode"] = "Sliding";		// 現在ページにあわせて表示するページリストをシフトさせる。
@@ -29,16 +27,30 @@ class Shopping_Product_New extends FrameworkModule{
 		$option["curPageSpanPost"] = "</font>";		// 現在ページのサフィックス
 		$option["clearIfVoid"] = false;			// １ページのみの場合のページリンクの出力の有無
 		
-		$product = new ProductModel();
-		$productCategory = new ProductCategoryModel();
-		$pager = $product->pager($option);
+		// カテゴリが選択された場合、カテゴリの商品IDのリストを使う
+		$conditions = array();
 		if($params->check("category")){
-			$result = $pager->findAllByWith($productCategory, array("product_id" => "product_id"), "category_id", $params->get("category"), array(), $product->access->create_time);
-		}else{
-			$result = $pager->findAllBy(array(), $product->access->create_time);
+			$category = $loader->LoadModel("CategoryModel");
+			$category->findByPrimaryKey($params->get("category"));
+			$productCategories = $category->productCategories();
+			$conditions["in:product_id"] = array();
+			if(is_array($productCategories) && !empty($productCategories)){
+				foreach($productCategories as $productCategory){
+					$conditions["in:product_id"][] = $productCategory->product_id;
+				}
+			}
 		}
-				
-		$_SERVER["ATTRIBUTES"][$params->get("result", "products")] = $result;
+		
+		// 商品データを検索する。
+		$product = $loader->LoadModel("ProductModel");
+		$option["totalItems"] = $product->countBy($conditions);
+		$pager = AdvancedPager::factory($option);
+		list($from, $to) = $pager->getOffsetByPageId();
+		$product->limit($option["perPage"], $from - 1);
+		$products = $product->findAllBy($conditions, $this->access->create_time, true);
+		
+		$_SERVER["ATTRIBUTES"][$params->get("result", "products")."_pager"] = $pager;
+		$_SERVER["ATTRIBUTES"][$params->get("result", "products")] = $products;
 	}
 }
 ?>

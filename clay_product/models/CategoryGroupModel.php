@@ -15,20 +15,20 @@
 /**
  * 決済方法のモデルクラス
  */
-class Product_CategoryTypeModel extends DatabaseModel{
+class Product_CategoryGroupModel extends DatabaseModel{
 	function __construct($values = array()){
 		$loader = new PluginLoader("Product");
-		parent::__construct($loader->loadTable("CategoryTypesTable"), $values);
+		parent::__construct($loader->loadTable("CategoryGroupsTable"), $values);
 	}
 	
-	function findByPrimaryKey($category_type_id){
-		$this->findBy(array("category_type_id" => $category_type_id));
+	function findByPrimaryKey($category_group_id){
+		$this->findBy(array("category_group_id" => $category_group_id));
 	}
 	
 	function categories($order = "", $reverse = false){
 		$loader = new PluginLoader("Product");
 		$model = $loader->loadModel("CategoryModel");
-		return $model->findAllByType($this->category_type_id, $order, $reverse);
+		return $model->findAllByGroup($this->category_group_id, $order, $reverse);
 	}
 }
 ?>

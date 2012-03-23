@@ -1,79 +1,85 @@
 <?php
-// この処理で使用するテーブルモデルをインクルード
-LoadTable("ProductsTable", "Shopping");
-LoadTable("ProductCategoriesTable", "Shopping");
-LoadTable("CategoriesTable", "Shopping");
-LoadTable("CategoryTypesTable", "Shopping");
-LoadTable("ProductTypesTable", "Shopping");
-LoadTable("ProductImagesTable", "Shopping");
-LoadTable("OrderDetailsTable", "Shopping");
-
-LoadModel("ProductCategoryModel", "Shopping");
-LoadModel("ProductImageModel", "Shopping");
-
 /**
  * 顧客情報のモデルクラス
  */
-class ProductModel extends DatabaseModel{
+class Product_ProductModel extends DatabaseModel{
 	function __construct($values = array()){
-		parent::__construct(new ProductsTable(), $values);
+		$loader = new PluginLoader("Product");
+		parent::__construct($loader->loadTable("ProductsTable"), $values);
 	}
 	
 	function findByPrimaryKey($product_id){
 		$this->findBy(array("product_id" => $product_id));
 	}
 	
-	function findAllByParent($parent_id){
-		$model = new ProductModel();
-		return $model->findAllBy(array("parent_id" => $parent_id));
+	function findByProductCode($product_code){
+		$this->findBy(array("product_code" => $product_code));
 	}
 	
-	function parent(){
-		$product = new ProductModel();
-		$product->findByPrimaryKey($this->parent_id);
-		return $product;
-	}
-
-	function children(){
-		$model = new ProductModel();
-		return $model->findAllByParent($this->product_id);
+	function findAllByParent($parent_name, $order = "", $reverse = false){
+		$loader = new PluginLoader("Product");
+		$model = $loader->loadModel("ProductModel");
+		return $model->findAllBy(array("parent_name" => $parent_name), $order, $reverse);
 	}
 	
-	function categories(){
-		$model = new ProductCategoryModel();
-		return $model->findAllByProduct($this->product_id);
+	function productCategories($order = "", $reverse = false){
+		$loader = new PluginLoader("Product");
+		$model = $loader->loadModel("ProductCategoryModel");
+		return $model->findAllByProduct($this->product_id, $order, $reverse);
+	}
+	
+	function categories($values = array(), $order = "", $reverse = false){
+		$productCategories = $this->productCategories();
+		if(!is_array($values)){
+			$values = array();
+		}
+		$values["in:category_id"] = array();
+		foreach($productCategories as $item){
+			$values["in:category_id"][] = $item->category_id;
+		}
+		$loader = new PluginLoader("Product");
+		$product = $loader->loadModel("CategoryModel");
+		return $product->findAllBy($values, $order, $reverse);
 	}
 
 	function category($type_id){
-		$categories = $this->categories();
-		foreach($categories as $category){
-			if($category->category()->category_type_id == $type_id){
-				return $category;
-			}
+		$categories = $this->categories(array("category_type_id" => $type_id));
+		if(count($categories) > 0){
+			return $categories[0];
 		}
-		return new ProductCategoryModel();
+		$loader = new PluginLoader("Product");
+		return $loader->loadModel("CategoryModel");
 	}
 
 	function images(){
-		$model = new ProductImageModel();
-		return $model->findAllByProduct($this->product_id);
+		$loader = new PluginLoader("Product");
+		$model = $loader->loadModel("ProductImageModel");
+		$images = $model->findAllByProduct($this->product_id);
+		$result = array();
+		foreach($images as $image){
+			$result[$image->image_type] = $image;
+		}
+		return $result;
 	}
 
-	function image($type_id){
-		$image = new ProductImageModel();
-		$image->findByPrimaryKey($this->product_id, $type_id);
-		return $image;
+	function image($image_type){
+		$loader = new PluginLoader("Product");
+		$model = $loader->loadModel("ProductImageModel");
+		$model->findByPrimaryKey($this->product_id, $image_type);
+		return $model;
 	}
 
-	function options(){
-		$model = new ProductOptionModel();
-		return $model->findAllByProduct($this->product_id);
+	function options($order = "", $reverse = false){
+		$loader = new PluginLoader("Product");
+		$model = $loader->loadModel("ProductOptionModel");
+		return $model->findAllByProduct($this->product_id, $order, $reverse);
 	}
 
 	function option($option1_id = 0, $option2_id = 0, $option3_id = 0, $option4_id = 0){
-		$option = new ProductOptionModel();
-		$option->findByPrimaryKey($this->product_id, $option1_id, $option2_id, $option3_id, $option4_id);
-		return $option;
+		$loader = new PluginLoader("Product");
+		$model = $loader->loadModel("ProductOptionModel");
+		$model->findByPrimaryKey($this->product_id, $option1_id, $option2_id, $option3_id, $option4_id);
+		return $model;
 	}
 }
 ?>

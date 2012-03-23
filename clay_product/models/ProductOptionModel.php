@@ -1,15 +1,11 @@
 <?php
-// この処理で使用するテーブルモデルをインクルード
-LoadTable("ProductOptionsTable", "Shopping");
-
-LoadModel("ProductModel", "Shopping");
-
 /**
  * 顧客情報のモデルクラス
  */
-class ProductOptionModel extends DatabaseModel{
+class Product_ProductOptionModel extends DatabaseModel{
 	function __construct($values = array()){
-		parent::__construct(new ProductOptionsTable(), $values);
+		$loader = new PluginLoader("Product");
+		parent::__construct($loader->loadTable("ProductOptionsTable"), $values);
 	}
 	
 	function findByPrimaryKey($product_id, $option1_id = 0, $option2_id = 0, $option3_id = 0, $option4_id = 0){
@@ -22,12 +18,13 @@ class ProductOptionModel extends DatabaseModel{
 		$this->findBy($condition);
 	}
 	
-	function findAllByProduct($product_id){
-		return $this->findAllBy(array("product_id" => $product_id));
+	function findAllByProduct($product_id, $order = "", $reverse = false){
+		return $this->findAllBy(array("product_id" => $product_id), $order, $reverse);
 	}
 	
 	function product(){
-		$product = new ProductModel();
+		$loader = new PluginLoader("Product");
+		$product = $loader->loadModel("ProductModel");
 		$product->findByPrimaryKey($this->product_id);
 		return $product;
 	}
