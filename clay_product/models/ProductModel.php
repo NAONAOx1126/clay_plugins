@@ -16,10 +16,36 @@ class Product_ProductModel extends DatabaseModel{
 		$this->findBy(array("product_code" => $product_code));
 	}
 	
+	function findAllByDeveloper($developer_id, $order = "", $reverse = false){
+		$loader = new PluginLoader("Product");
+		$model = $loader->loadModel("ProductModel");
+		return $model->findAllBy(array("developer_id" => $developer_id), $order, $reverse);
+	}
+	
+	function findAllBySeller($seller_id, $order = "", $reverse = false){
+		$loader = new PluginLoader("Product");
+		$model = $loader->loadModel("ProductModel");
+		return $model->findAllBy(array("seller_id" => $seller_id), $order, $reverse);
+	}
+	
 	function findAllByParent($parent_name, $order = "", $reverse = false){
 		$loader = new PluginLoader("Product");
 		$model = $loader->loadModel("ProductModel");
 		return $model->findAllBy(array("parent_name" => $parent_name), $order, $reverse);
+	}
+	
+	function developer(){
+		$loader = new PluginLoader("Product");
+		$developer = $loader->loadModel("ProductDevloperModel");
+		$developer->findByPrimaryKey($this->developer_id);
+		return $developer;
+	}
+	
+	function seller(){
+		$loader = new PluginLoader("Product");
+		$seller = $loader->loadModel("ProductSellerModel");
+		$seller->findByPrimaryKey($this->seller_id);
+		return $seller;
 	}
 	
 	function productCategories($order = "", $reverse = false){

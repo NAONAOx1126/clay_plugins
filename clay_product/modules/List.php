@@ -1,6 +1,6 @@
 <?php
 /**
- * ### Shopping.Product.List
+ * ### Product.List
  * 商品のリストを取得する。
  * @param item １ページあたりの件数
  * @param delta 現在ページの前後に表示するページ数
