@@ -12,8 +12,19 @@ class Product_Developer_List extends FrameworkModule{
 		$loader = new PluginLoader("Product");
 		$loader->LoadSetting();
 
+		// 並べ替え順序が指定されている場合に適用
+		$sortOrder = "";
+		$sortReverse = false;
+		if($params->check("sort_key")){
+			$sortOrder = $_POST[$params->get("sort_key")];
+			if(preg_match("/^rev@/", $sortOrder) > 0){
+				list($dummy, $sortOrder) = explode("@", $sortOrder);
+				$sortReverse = true;
+			}
+		}
+		
 		$developer = $loader->loadModel("ProductDeveloperModel");
-		$developers = $developer->findAllBy(array());
+		$developers = $developer->findAllBy(array(), $sortOrder, $sortReverse);
 		
 		$_SERVER["ATTRIBUTES"][$params->get("result", "developers")] = $developers;
 	}

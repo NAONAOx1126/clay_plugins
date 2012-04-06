@@ -36,7 +36,7 @@ class Product_ProductModel extends DatabaseModel{
 	
 	function developer(){
 		$loader = new PluginLoader("Product");
-		$developer = $loader->loadModel("ProductDevloperModel");
+		$developer = $loader->loadModel("ProductDeveloperModel");
 		$developer->findByPrimaryKey($this->developer_id);
 		return $developer;
 	}
@@ -52,6 +52,16 @@ class Product_ProductModel extends DatabaseModel{
 		$loader = new PluginLoader("Product");
 		$model = $loader->loadModel("ProductCategoryModel");
 		return $model->findAllByProduct($this->product_id, $order, $reverse);
+	}
+	
+	function hasCategory($category_id){
+		$loader = new PluginLoader("Product");
+		$model = $loader->loadModel("ProductCategoryModel");
+		$model->findByPrimaryKey($this->product_id, $category_id);
+		if($model->product_id > 0){
+			return true;
+		}
+		return false;
 	}
 	
 	function categories($values = array(), $order = "", $reverse = false){

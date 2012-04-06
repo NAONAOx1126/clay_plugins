@@ -12,8 +12,19 @@ class Product_Seller_List extends FrameworkModule{
 		$loader = new PluginLoader("Product");
 		$loader->LoadSetting();
 
+		// 並べ替え順序が指定されている場合に適用
+		$sortOrder = "";
+		$sortReverse = false;
+		if($params->check("sort_key")){
+			$sortOrder = $_POST[$params->get("sort_key")];
+			if(preg_match("/^rev@/", $sortOrder) > 0){
+				list($dummy, $sortOrder) = explode("@", $sortOrder);
+				$sortReverse = true;
+			}
+		}
+		
 		$seller = $loader->loadModel("ProductSellerModel");
-		$sellers = $seller->findAllBy(array());
+		$sellers = $seller->findAllBy(array(), $sortOrder, $sortReverse);
 		
 		$_SERVER["ATTRIBUTES"][$params->get("result", "sellers")] = $sellers;
 	}
