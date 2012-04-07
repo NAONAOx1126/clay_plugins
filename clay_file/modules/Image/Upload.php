@@ -2,6 +2,7 @@
 /**
  * ### File.Image.Upload
  * 画像をアップロードを処理するためのクラスです。
+ * 標準的なアップロードを想定しているため、画像に限らずアップロードを処理することが可能です。
  * PHP5.3以上での動作のみ保証しています。
  * 動作自体はPHP5.2以上から動作します。
  *
@@ -23,87 +24,43 @@ class File_Image_Upload extends FrameworkModule{
 		// ローダーを初期化
 		$loader = new PluginLoader("File");
 		
-		if($params->check("key") && isset($_POST["upload"]["image"][$params->check("key")])){
-			$image = array();
-			$image["error"] = $_FILES["image"]["error"][$params->check("key")];
-			$image["type"] = $_FILES["image"]["type"][$params->check("key")];
-			$image["name"] = $_FILES["image"]["name"][$params->check("key")];
-			$image["tmp_name"] = $_FILES["image"]["tmp_name"][$params->check("key")];
-			$image["size"] = $_FILES["image"]["size"][$params->check("key")];
-			print_r($image);
-			print_r($_POST);
-			exit;
-
-			// CSV設定を取得
-			$csv = $loader->loadModel("CsvModel");
-			$csv->findByCsvCode($params->get("key"));
-			
-			if($csv->csv_id > 0){			
-				// CSVコンテンツ設定を取得
-				$csvContent = $loader->loadModel("CsvContentModel");
-				$csvContents = $csvContent->getCotentArrayByCsv($csv->csv_id);
-				
-				// アップロードファイルが正常にアップされた場合
-				if($_FILES[$params->get("key")]["error"] == 0){
-					// アップロードログを書き込み
-					try{
-						// トランザクションデータベースの取得
-						$db = DBFactory::getConnection("file");
-						
-						// トランザクションの開始
-						$db->beginTransaction();
-						
-						// アップロードログを生成
-						$uploadLog = $loader->loadModel("UploadLogModel");
-						$uploadLog->upload_time = date("Y-m-d H:i:s");
-						$uploadLog->upload_filename = $_FILES[$params->get("key")]["name"];
-						$uploadLog->upload_size = $_FILES[$params->get("key")]["size"];
-						$uploadLog->save($db);
-
-						$db->commit();
-					}catch(Exception $e){
-						$db->rollback();
-					}
-					
-					// アップロードファイルを開く
-					if(($orgFp = fopen($_FILES[$params->get("key")]["tmp_name"], "r")) !== FALSE){
-						// SJISのCSVファイルをUTF8に変換
-						$fp = tmpfile();
-						$i = 0;
-						while (($buffer = fgets($orgFp)) !== false){
-							$buffer = mb_convert_encoding($buffer, "UTF-8", "Shift_JIS");
-							$buffer = str_replace("\r", "\n", str_replace("\r\n", "\n", $buffer));
-							$buffer = str_replace("\n", "\r\n", $buffer);
-							fwrite($fp, $buffer);
-						}
-						rewind($fp);
-						
-						// ヘッダ行をスキップ
-						for($i = 0; $i < $params->get("skip", 0); $i ++){
-							fgetcsv($fp);
-						}
-						
-						// CSVデータを読み込む
-						$_SERVER["FILE_CSV_UPLOAD"]["FP"] = $fp;
-						$_SERVER["FILE_CSV_UPLOAD"]["LIMIT"] = $params->get("unit", 1);
-						$_SERVER["FILE_CSV_UPLOAD"]["CSV"] = $csv;
-						$_SERVER["FILE_CSV_UPLOAD"]["CSV_CONTENTS"] = $csvContents;
-						$i = 0;
-						$_SERVER["ATTRIBUTES"][$csv->list_key] = null;
-						while($i < $params->get("unit", 1) && ($data = fgetcsv($fp)) !== FALSE){
-							$saveData = array();
-							foreach($csvContents as $content){
-								$saveData[$content->content_key] = $data[$content->order - 1];
+		$images = array();
+		if(is_array($_POST[$params->get("key", "upload")])){
+			foreach($_POST[$params->get("key", "upload")] as $key1 => $upload){
+				if(is_array($upload)){
+					foreach($upload as $key2 => $upload2){
+						if($_FILES[$key1]["error"][$key2] == 0){
+							// 保存先のディレクトリを構築
+							$saveDir = "/".$params->get("base", "upload")."/".sha1("site".$_SERVER["CONFIGURE"]->site_id)."/".$key1."/".$key2."/";
+							if(!file_exists(FRAMEWORK_SITE_HOME.$saveDir)){
+								mkdir(FRAMEWORK_SITE_HOME.$saveDir, 0777, true);
 							}
-							if(!is_array($_SERVER["ATTRIBUTES"][$csv->list_key])){
-								$_SERVER["ATTRIBUTES"][$csv->list_key] = array();
-							}
-							$_SERVER["ATTRIBUTES"][$csv->list_key][] = $saveData;
-							$i ++;
+							// 保存するファイル名を構築
+							$info = pathinfo($_FILES[$key1]["name"][$key2]);
+							$saveFile = sha1(uniqid($_FILES[$key1]["name"][$key2])).(!empty($info["extension"])?".".$info["extension"]:"");
+							// 保存するファイルを移動
+							move_uploaded_file($_FILES[$key1]["tmp_name"][$key2], FRAMEWORK_SITE_HOME.$saveDir.$saveFile);
+							// 登録した内容をPOSTに設定
+							$_POST[$key1."_name"][$key2] = $_FILES[$key1]["name"][$key2];
+							$_POST[$key1][$key2] = FRAMEWORK_URL_BASE."/contents/".$_SERVER["SERVER_NAME"].$saveDir.$saveFile;
 						}
 					}
 				}else{
-					throw new InvalidException(array($_FILES[$params->get("key")]["error"]."アップロードに失敗しました。"));
+					if($_FILES[$key1]["error"] == 0){
+						// 保存先のディレクトリを構築
+						$saveDir = "/".$params->get("base", "upload")."/".sha1("site".$_SERVER["CONFIGURE"]->site_id)."/".$key1."/";
+						if(!file_exists(FRAMEWORK_SITE_HOME.$saveDir)){
+							mkdir(FRAMEWORK_SITE_HOME.$saveDir, 0777, true);
+						}
+						// 保存するファイル名を構築
+						$info = pathinfo($_FILES[$key1]["name"]);
+						$saveFile = sha1(uniqid($_FILES[$key1]["name"])).(!empty($info["extension"])?".".$info["extension"]:"");
+						// 保存するファイルを移動
+						move_uploaded_file($_FILES[$key1]["tmp_name"], FRAMEWORK_SITE_HOME.$saveDir.$saveFile);
+						// 登録した内容をPOSTに設定
+						$_POST[$key1."_name"] = $_FILES[$key1]["name"];
+						$_POST[$key1] = FRAMEWORK_URL_BASE."/contents/".$_SERVER["SERVER_NAME"].$saveDir.$saveFile;
+					}
 				}
 			}
 		}

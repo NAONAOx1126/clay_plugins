@@ -14,7 +14,7 @@
  * @param value チェック対象の名称
  * @param suffix エラーメッセージのサフィックス
  */
-class Default_Checks_Required extends FrameworkModule{
+class Base_Checks_Required extends FrameworkModule{
 	/**
 	 * モジュールのエンドポイント
 	 * @param $param モジュールのパラメータオブジェクト

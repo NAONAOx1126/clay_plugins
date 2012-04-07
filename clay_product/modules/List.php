@@ -28,7 +28,14 @@ class Product_List extends FrameworkModule{
 		$option["clearIfVoid"] = false;			// １ページのみの場合のページリンクの出力の有無
 		
 		// カテゴリが選択された場合、カテゴリの商品IDのリストを使う
-		$conditions = $_POST;
+		$conditions = array();
+		if(is_array($_POST["search"])){
+			foreach($_POST["search"] as $key => $value){
+				if(!empty($value)){
+					$condition[$key] = $value;
+				}
+			}
+		}
 		if($params->check("category")){
 			$category = $loader->LoadModel("CategoryModel");
 			$category->findByPrimaryKey($params->get("category"));

@@ -87,6 +87,36 @@ class Product_ProductModel extends DatabaseModel{
 		return $loader->loadModel("CategoryModel");
 	}
 
+	function productFlags($order = "", $reverse = false){
+		$loader = new PluginLoader("Product");
+		$model = $loader->loadModel("ProductFlagModel");
+		return $model->findAllByProduct($this->product_id, $order, $reverse);
+	}
+	
+	function hasFlag($flag_id){
+		$loader = new PluginLoader("Product");
+		$model = $loader->loadModel("ProductFlagModel");
+		$model->findByPrimaryKey($this->product_id, $flag_id);
+		if($model->product_id > 0){
+			return true;
+		}
+		return false;
+	}
+	
+	function flags($values = array(), $order = "", $reverse = false){
+		$productFlags = $this->productFlags();
+		if(!is_array($values)){
+			$values = array();
+		}
+		$values["in:flag_id"] = array();
+		foreach($productFlags as $item){
+			$values["in:flag_id"][] = $item->flag_id;
+		}
+		$loader = new PluginLoader("Product");
+		$product = $loader->loadModel("FlagModel");
+		return $product->findAllBy($values, $order, $reverse);
+	}
+	
 	function images(){
 		$loader = new PluginLoader("Product");
 		$model = $loader->loadModel("ProductImageModel");
