@@ -1,17 +1,34 @@
 <?php
 /**
- * ### Product.List
- * 商品のリストを取得する。
+ * ### Product.Page
+ * 商品のリストをページング付きで取得する。
+ * @param item １ページあたりの件数
+ * @param delta 現在ページの前後に表示するページ数
  * @param category 検索条件とするカテゴリ
  * @param category2 検索条件とするカテゴリ
  * @param flag 検索条件とするフラグ
  * @param result 結果を設定する配列のキーワード
  */
-class Product_List extends FrameworkModule{
+class Product_Page extends FrameworkModule{
 	function execute($params){
 		$loader = new PluginLoader("Product");
 		$loader->LoadSetting();
 
+		// ページャのオプションを設定
+		$option = array();
+		$option["mode"] = "Sliding";		// 現在ページにあわせて表示するページリストをシフトさせる。
+		$option["perPage"] = $params->get("item", "10");			// １ページあたりの件数
+		$option["delta"] = $params->get("delta", "3");				// 現在ページの前後に表示するページ番号の数（Slidingの場合は2n+1ページ分表示）
+		$option["prevImg"] = "<";			// 前のページ用のテキスト
+		$option["nextImg"] = ">";			// 次のページ用のテキスト
+		$option["prevAccessKey"] = "*";			// 前のページ用のアクセスキー
+		$option["nextAccessKey"] = "#";			// 次のページ用のアクセスキー
+		$option["firstPageText"] = "<<"; 	// 最初のページ用のテキスト
+		$option["lastPageText"] = ">>";		// 最後のページ用のテキスト
+		$option["curPageSpanPre"] = "<font color=\"#000000\">";		// 現在ページのプレフィクス
+		$option["curPageSpanPost"] = "</font>";		// 現在ページのサフィックス
+		$option["clearIfVoid"] = false;			// １ページのみの場合のページリンクの出力の有無
+		
 		// カテゴリが選択された場合、カテゴリの商品IDのリストを使う
 		$conditions = array();
 		if(is_array($_POST["search"])){
@@ -66,7 +83,7 @@ class Product_List extends FrameworkModule{
 				}
 			}
 		}
-
+		
 		// 並べ替え順序が指定されている場合に適用
 		$sortOrder = "";
 		$sortReverse = false;
@@ -83,8 +100,13 @@ class Product_List extends FrameworkModule{
 		
 		// 商品データを検索する。
 		$product = $loader->LoadModel("ProductModel");
+		$option["totalItems"] = $product->countBy($conditions);
+		$pager = AdvancedPager::factory($option);
+		list($from, $to) = $pager->getOffsetByPageId();
+		$product->limit($option["perPage"], $from - 1);
 		$products = $product->findAllBy($conditions, $sortOrder, $sortReverse);
 		
+		$_SERVER["ATTRIBUTES"][$params->get("result", "products")."_pager"] = $pager;
 		$_SERVER["ATTRIBUTES"][$params->get("result", "products")] = $products;
 	}
 }

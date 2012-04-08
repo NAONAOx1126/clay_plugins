@@ -1,23 +1,26 @@
 <?php
-// この処理で使用するテーブルモデルをインクルード
-LoadTable("SerialLogsTable", "Members");
-
 /**
- * 顧客種別情報のモデルクラス
+ * シリアル発行ログのモデルクラス
  */
-class SerialLogModel extends DatabaseModel{
-	function __construct($values = array()){
-		parent::__construct(new SerialLogsTable(), $values);
+class Member_SerialLogModel extends DatabaseModel{
+	public function __construct($values = array()){
+		$loader = new PluginLoader("Member");
+		parent::__construct($loader->loadTable("SerialLogsTable"), $values);
 	}
 	
-	function findAllBySerial($serial){
-		$result = $this->findAllBy(array("serial" => $serial));
-		return $result;
+	public function findByPrimaryKey($serial_log_id){
+		$this->findBy(array("serial_log_id" => $serial_log_id));
 	}
 	
-	function findAllByCustomer($customer_id){
-		$result = $this->findAllBy(array("customer_id" => $customer_id));
-		return $result;
+	public function findAllByCustomer($customer_id, $order = "", $reverse = false){
+		return $this->findAllBy(array("customer_id" => $customer_id), $order, $reverse);
+	}
+	
+	public function customer(){
+		$loader = new PluginLoader("Member");
+		$customer = $loader->loadModel("CustomerModel");
+		$customer->findByPrimaryKey($this->customer_id);
+		return $customer;
 	}
 }
 ?>

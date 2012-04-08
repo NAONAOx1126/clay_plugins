@@ -27,6 +27,13 @@ class Base_PrefModel extends DatabaseModel{
 	}
 	
 	/**
+	 * 主キーでデータを検索する。
+	 */
+	function findByName($pref_name){
+		$this->findBy(array("name" => $pref_name));
+	}
+	
+	/**
 	 * モデル自体を都道府県の名前文字列として扱えるようにする。
 	 */
 	function __toString(){

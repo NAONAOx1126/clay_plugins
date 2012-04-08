@@ -135,13 +135,13 @@ class Product_ProductModel extends DatabaseModel{
 		return $model;
 	}
 
-	function options($order = "", $reverse = false){
+	function productOptions($order = "", $reverse = false){
 		$loader = new PluginLoader("Product");
 		$model = $loader->loadModel("ProductOptionModel");
 		return $model->findAllByProduct($this->product_id, $order, $reverse);
 	}
 
-	function option($option1_id = 0, $option2_id = 0, $option3_id = 0, $option4_id = 0){
+	function productOption($option1_id = 0, $option2_id = 0, $option3_id = 0, $option4_id = 0){
 		$loader = new PluginLoader("Product");
 		$model = $loader->loadModel("ProductOptionModel");
 		$model->findByPrimaryKey($this->product_id, $option1_id, $option2_id, $option3_id, $option4_id);

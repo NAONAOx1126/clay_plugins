@@ -103,6 +103,16 @@ class Product_Save extends FrameworkModule{
 					}
 				}
 				
+				// 商品のオプションを登録する。
+				if(isset($_POST["option"])){
+					$productOptions = $product->productOptions();
+					foreach($productOptions as $productOption){
+						// 登録時にオプションは全て削除
+						$productOption->delete($db);
+					}
+					$this->setOption($db, $product, $_POST["option"]);
+				}
+				
 				unset($_POST["save"]);
 				
 				// エラーが無かった場合、処理をコミットする。
@@ -111,6 +121,35 @@ class Product_Save extends FrameworkModule{
 				$db->rollBack();
 				unset($_POST["save"]);
 				throw $e;
+			}
+		}
+	}
+	
+	private function setOption($db, $product, $option, $option_ids = array()){
+		if(is_array($option)){
+			if(isset($option["stock"])){
+				// データを登録
+				$loader = new PluginLoader("Product");
+				$insert = new DatabaseInsert($loader->LoadModel("ProductOptionsTable"), $db);
+				$data = array(
+					"product_id" => $product->product_id, 
+					"stock" => $option["stock"], 
+					"stock_unlimited" => $option["stock_unlimited"], 
+					"create_time" => date("Y-m-d H:i:s"), 
+					"update_time" => date("Y-m-d H:i:s")
+				);
+				foreach($option_ids as $i => $option_id){
+					$data["option".($i + 1)."_id"] = $option_id;
+				}
+				$insert->execute($data);
+			}else{
+				foreach($option as $option_id => $option){
+					if(count($option_ids) < 4){
+						$ids = $option_ids;
+						$ids[] = $option_id;
+						$this->setOption($db, $product, $option, $ids);
+					}
+				}
 			}
 		}
 	}

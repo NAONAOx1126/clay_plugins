@@ -4,18 +4,30 @@ LoadModel("Setting", "Members");
 LoadTable("PointLogsTable", "Members");
 
 /**
- * 顧客種別情報のモデルクラス
+ * ポイントログのモデルクラス
  */
-class PointLogModel extends DatabaseModel{
-	function __construct($values = array()){
-		parent::__construct(new PointLogsTable(), $values);
+class Member_PointLogModel extends DatabaseModel{
+	public function __construct($values = array()){
+		$loader = new PluginLoader("Member");
+		parent::__construct($loader->loadTable("PointLogsTable"), $values);
 	}
 	
-	function findByPrimaryKey($point_log_id){
+	public function findByPrimaryKey($point_log_id){
 		$this->findBy(array("point_log_id" => $point_log_id));
 	}
 	
-	function save($db, $point){
+	public function findAllByCustomer($customer_id, $order = "", $reverse = false){
+		return $this->findAllBy(array("customer_id" => $customer_id), $order, $reverse);
+	}
+	
+	public function customer(){
+		$loader = new PluginLoader("Member");
+		$customer = $loader->loadModel("CustomerModel");
+		$customer->findByPrimaryKey($this->customer_id);
+		return $customer;
+	}
+	
+	function add($db, $point){
 		$this->log_time = date("Y-m-d H:i:s");
 		$this->customer_id = $_SESSION[CUSTOMER_SESSION_KEY]->customer_id;
 		$this->point = $point;

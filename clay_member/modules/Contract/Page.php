@@ -1,21 +1,17 @@
 <?php
-// ショッピングカートの設定を取得
-LoadModel("Setting", "Shopping");
-LoadModel("ProductCategoryModel", "Shopping");
-LoadModel("ProductModel", "Shopping");
-
-// この処理で使用するテーブルモデルをインクルード
-
 /**
- * ### Shopping.Product.CategoryPage
- * 商品のリストを取得する。
+ * ### Member.Contract.List
+ * 契約のリストを取得する。
  * @param item １ページあたりの件数
  * @param delta 現在ページの前後に表示するページ数
- * @param category【カテゴリタイプ】 商品に紐付けするカテゴリ（条件にしない場合は空文字を設定）
+ * @param type 抽出するカテゴリのタイプ（指定しない場合は全タイプから抽出）
  * @param result 結果を設定する配列のキーワード
  */
-class Shopping_Product_CategoryPage extends FrameworkModule{
+class Member_Contract_Page extends FrameworkModule{
 	function execute($params){
+		$loader = new PluginLoader("Member");
+		$loader->LoadSetting();
+
 		// ページャのオプションを設定
 		$option = array();
 		$option["mode"] = "Sliding";		// 現在ページにあわせて表示するページリストをシフトさせる。
@@ -31,11 +27,16 @@ class Shopping_Product_CategoryPage extends FrameworkModule{
 		$option["curPageSpanPost"] = "</font>";		// 現在ページのサフィックス
 		$option["clearIfVoid"] = false;			// １ページのみの場合のページリンクの出力の有無
 		
-		$model = new ProductCategoryModel();
-		$pager = $model->pager($option);
-		$result = $pager->findAllBy(array("category_id" => $params->category_id));
+		// カテゴリデータを検索する。
+		$contract = $loader->LoadModel("ContractModel");
+		$option["totalItems"] = $category->countBy(array());
+		$pager = AdvancedPager::factory($option);
+		list($from, $to) = $pager->getOffsetByPageId();
+		$contract->limit($option["perPage"], $from - 1);
+		$contracts = $contract->findAllBy(array());
 		
-		$_SERVER["ATTRIBUTES"][$params->get("result", "products")] = $result;
+		$_SERVER["ATTRIBUTES"][$params->get("result", "contracts")."_pager"] = $pager;
+		$_SERVER["ATTRIBUTES"][$params->get("result", "contracts")] = $contracts;
 	}
 }
 ?>
