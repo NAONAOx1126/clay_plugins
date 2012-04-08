@@ -27,10 +27,10 @@ class Product_List extends FrameworkModule{
 			$_POST = array("search" => $conditions);
 		}
 		if($params->check("category")){
+			$conditions["in:product_id"] = array("0");
 			$productCategory = $loader->LoadModel("ProductCategoryModel");
 			$productCategories = $productCategory->findAllByCategory($params->get("category"));
 			if(is_array($productCategories) && !empty($productCategories)){
-				$conditions["in:product_id"] = array("0");
 				foreach($productCategories as $productCategory){
 					$conditions["in:product_id"][] = $productCategory->product_id;
 				}
