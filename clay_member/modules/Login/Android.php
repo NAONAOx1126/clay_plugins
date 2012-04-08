@@ -64,7 +64,6 @@ class Member_Login_Android extends FrameworkModule{
 				$db->beginTransaction();
 				
 				try{
-					print_r($customer);
 					// データを保存
 					$customer->save($db);
 					

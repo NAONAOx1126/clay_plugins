@@ -47,7 +47,7 @@ class Product_Page extends FrameworkModule{
 			$productCategory = $loader->LoadModel("ProductCategoryModel");
 			$productCategories = $productCategory->findAllByCategory($params->get("category"));
 			if(is_array($productCategories) && !empty($productCategories)){
-				$conditions["in:product_id"] = array();
+				$conditions["in:product_id"] = array("0");
 				foreach($productCategories as $productCategory){
 					$conditions["in:product_id"][] = $productCategory->product_id;
 				}
@@ -57,7 +57,7 @@ class Product_Page extends FrameworkModule{
 			$productCategory = $loader->LoadModel("ProductCategoryModel");
 			$productCategorys = $productCategory->findAllByCategory($params->get("category2"));
 			if(is_array($productCategorys) && !empty($productCategorys)){
-				$conditions2["in:product_id"] = array();
+				$conditions2["in:product_id"] = array("0");
 				foreach($productCategorys as $productCategory){
 					$conditions2["in:product_id"][] = $productCategory->product_id;
 				}
@@ -72,7 +72,7 @@ class Product_Page extends FrameworkModule{
 			$productFlag = $loader->LoadModel("ProductFlagModel");
 			$productFlags = $productFlag->findAllByFlag($params->get("flag"));
 			if(is_array($productFlags) && !empty($productFlags)){
-				$conditions2["in:product_id"] = array();
+				$conditions2["in:product_id"] = array("0");
 				foreach($productFlags as $productFlag){
 					$conditions2["in:product_id"][] = $productFlag->product_id;
 				}
