@@ -11,7 +11,7 @@ class Product_Category_Delete extends FrameworkModule{
 			$loader->LoadSetting();
 			
 			// トランザクションデータベースの取得
-			$db = DBFactory::getConnection();
+			$db = DBFactory::getConnection("product");
 			
 			// トランザクションの開始
 			$db->beginTransaction();
