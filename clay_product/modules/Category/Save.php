@@ -42,6 +42,7 @@ class Product_Category_Save extends FrameworkModule{
 				$this->reload();
 			}catch(Exception $e){
 				$db->rollBack();
+				unset($_POST["save"]);
 				throw $e;
 			}
 		}

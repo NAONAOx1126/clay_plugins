@@ -42,6 +42,8 @@ class Product_Category_Delete extends FrameworkModule{
 				$this->reload();
 			}catch(Exception $e){
 				$db->rollBack();
+				unset($_POST["category_id"]);
+				unset($_POST["delete"]);
 				throw $e;
 			}
 		}

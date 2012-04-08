@@ -9,7 +9,7 @@
  */
 class Product_Save extends FrameworkModule{
 	function execute($params){
-		if(isset($_POST[$params->get("key", "add")])){
+		if(isset($_POST["save"])){
 			// 商品情報を登録する。
 			$loader = new PluginLoader("Product");
 			$loader->LoadSetting();
@@ -103,10 +103,13 @@ class Product_Save extends FrameworkModule{
 					}
 				}
 				
+				unset($_POST["save"]);
+				
 				// エラーが無かった場合、処理をコミットする。
 				$db->commit();
 			}catch(Exception $e){
 				$db->rollBack();
+				unset($_POST["save"]);
 				throw $e;
 			}
 		}

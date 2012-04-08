@@ -42,6 +42,8 @@ class Product_Seller_Delete extends FrameworkModule{
 				$this->reload();
 			}catch(Exception $e){
 				$db->rollBack();
+				unset($_POST["seller_id"]);
+				unset($_POST["delete"]);
 				throw $e;
 			}
 		}
