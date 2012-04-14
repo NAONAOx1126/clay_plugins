@@ -2,9 +2,9 @@
 /**
  * 広告のモデルクラス
  */
-class Member_AdvertiseModel extends DatabaseModel{
+class Content_AdvertiseModel extends DatabaseModel{
 	public function __construct($values = array()){
-		$loader = new PluginLoader("Member");
+		$loader = new PluginLoader("Content");
 		parent::__construct($loader->loadTable("AdvertisesTable"), $values);
 	}
 	

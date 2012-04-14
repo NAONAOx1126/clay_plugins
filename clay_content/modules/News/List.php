@@ -1,14 +1,13 @@
 <?php
 /**
- * ### Member.Contract.List
- * 契約のリストを取得する。
- * @param type 抽出するカテゴリのタイプ（指定しない場合は全タイプから抽出）
+ * ### Content.News.List
+ * 新着情報のリストを取得する。
  * @param result 結果を設定する配列のキーワード
  */
-class Member_Contract_List extends FrameworkModule{
+class Content_News_List extends FrameworkModule{
 	function execute($params){
 		// ローダーの初期化
-		$loader = new PluginLoader("Member");
+		$loader = new PluginLoader("Content");
 		$loader->LoadSetting();
 		
 		// 並べ替え順序が指定されている場合に適用
@@ -21,7 +20,7 @@ class Member_Contract_List extends FrameworkModule{
 				$sortReverse = true;
 			}
 		}
-		
+
 		// 検索条件と並べ替えキー以外を無効化する。
 		if($params->get("clear", "0") == "1"){
 			if($params->check("sort_key")){
@@ -32,10 +31,10 @@ class Member_Contract_List extends FrameworkModule{
 		}
 		
 		// カテゴリデータを検索する。
-		$contract = $loader->LoadModel("ContractModel");
-		$contracts = $contract->findAllBy(array(), $sortOrder, $sortReverse);
+		$news = $loader->LoadModel("NewsModel");
+		$newses = $news->findAllBy(array(), $sortOrder, $sortReverse);
 		
-		$_SERVER["ATTRIBUTES"][$params->get("result", "contracts")] = $contracts;
+		$_SERVER["ATTRIBUTES"][$params->get("result", "newses")] = $newses;
 	}
 }
 ?>

@@ -40,6 +40,12 @@ class Product_New extends FrameworkModule{
 				}
 			}
 		}
+		// 検索条件と並べ替えキー以外を無効化する。
+		if($params->check("sort_key")){
+			$_POST = array("search" => $conditions, $params->get("sort_key") => $_POST[$params->get("sort_key")]);
+		}else{
+			$_POST = array("search" => $conditions);
+		}
 		
 		// 商品データを検索する。
 		$product = $loader->LoadModel("ProductModel");
