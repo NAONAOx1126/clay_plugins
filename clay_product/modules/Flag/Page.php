@@ -1,13 +1,12 @@
 <?php
 /**
- * ### Shopping.Category.List
- * 商品カテゴリのリストを取得する。
+ * ### Shopping.Flag.List
+ * 商品フラグのリストを取得する。
  * @param item １ページあたりの件数
  * @param delta 現在ページの前後に表示するページ数
- * @param type 抽出するカテゴリのタイプ（指定しない場合は全タイプから抽出）
  * @param result 結果を設定する配列のキーワード
  */
-class Product_Category_Page extends FrameworkModule{
+class Product_Flag_Page extends FrameworkModule{
 	function execute($params){
 		$loader = new PluginLoader("Product");
 		$loader->LoadSetting();
@@ -39,15 +38,15 @@ class Product_Category_Page extends FrameworkModule{
 		}
 		
 		// カテゴリデータを検索する。
-		$category = $loader->LoadModel("CategoryModel");
-		$option["totalItems"] = $category->countBy(array("category_type_id" => $params->get("type")));
+		$flag = $loader->LoadModel("FlagModel");
+		$option["totalItems"] = $flag->countBy(array());
 		$pager = AdvancedPager::factory($option);
 		list($from, $to) = $pager->getOffsetByPageId();
-		$category->limit($option["perPage"], $from - 1);
-		$categories = $category->findAllByType($params->get("type"), $sortOrder, $sortReverse);
+		$flag->limit($option["perPage"], $from - 1);
+		$flags = $flag->findAllBy(array(), $sortOrder, $sortReverse);
 		
-		$_SERVER["ATTRIBUTES"][$params->get("result", "categories")."_pager"] = $pager;
-		$_SERVER["ATTRIBUTES"][$params->get("result", "categories")] = $categories;
+		$_SERVER["ATTRIBUTES"][$params->get("result", "flags")."_pager"] = $pager;
+		$_SERVER["ATTRIBUTES"][$params->get("result", "flags")] = $flags;
 	}
 }
 ?>

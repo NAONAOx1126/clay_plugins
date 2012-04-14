@@ -62,8 +62,8 @@ class Product_Save extends FrameworkModule{
 					}
 				}
 				// カテゴリの要素をInsert Ignoreで登録する。
-				if(empty($_POST["flags"])) $_POST["flags"] = array();
-				foreach($_POST["flags"] as $flag_id){
+				if(empty($_POST["flag"])) $_POST["flag"] = array();
+				foreach($_POST["flag"] as $flag_id){
 					$insert = new DatabaseInsertIgnore($loader->LoadModel("ProductFlagsTable"), $db);
 					$insert->execute(array(
 						"product_id" => $product->product_id, 
