@@ -23,7 +23,7 @@ class Base_Checks_Required extends FrameworkModule{
 		if(!is_array($_SERVER["ERRORS"])){
 			$_SERVER["ERRORS"] = array();
 		}
-		if(empty($_SERVER["POST"][$params->get("key")]) && empty($_SERVER["ERRORS"][$params->get("key")])){
+		if((!isset($_POST[$params->get("key")]) || $_POST[$params->get("key")] == "") && empty($_SERVER["ERRORS"][$params->get("key")])){
 			$_SERVER["ERRORS"][$params->get("key")] = $params->get("value").$params->get("suffix", "が未入力です。");
 		}
 	}

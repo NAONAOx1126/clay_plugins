@@ -34,9 +34,6 @@ class Member_Contract_Save extends FrameworkModule{
 				$db->commit();
 				
 				unset($_POST["save"]);
-				
-				// 登録が正常に完了した場合には、ページをリロードする。
-				$this->reload();
 			}catch(Exception $e){
 				$db->rollBack();
 				unset($_POST["save"]);
