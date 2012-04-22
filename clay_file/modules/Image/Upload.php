@@ -47,6 +47,7 @@ class File_Image_Upload extends FrameworkModule{
 					}
 				}else{
 					if($_FILES[$key1]["error"] == 0){
+						Logger::writeDebug(var_export($_FILES, true));
 						// 保存先のディレクトリを構築
 						$saveDir = "/".$params->get("base", "upload")."/".sha1("site".$_SERVER["CONFIGURE"]->site_id)."/".$key1."/";
 						if(!file_exists(FRAMEWORK_SITE_HOME.$saveDir)){

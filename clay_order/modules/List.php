@@ -12,24 +12,16 @@ class Order_List extends FrameworkModule{
 		// ローダーを初期化
 		$loader = new PluginLoader("Order");
 		
-		// ページャのオプションを設定
-		$option = array();
-		$option["mode"] = "Sliding";		// 現在ページにあわせて表示するページリストをシフトさせる。
-		$option["perPage"] = $params->get("item", "10");			// １ページあたりの件数
-		$option["delta"] = $params->get("delta", "3");				// 現在ページの前後に表示するページ番号の数（Slidingの場合は2n+1ページ分表示）
-		$option["prevImg"] = "<";			// 前のページ用のテキスト
-		$option["nextImg"] = ">";			// 次のページ用のテキスト
-		$option["prevAccessKey"] = "*";			// 前のページ用のアクセスキー
-		$option["nextAccessKey"] = "#";			// 次のページ用のアクセスキー
-		$option["firstPageText"] = "<<"; 	// 最初のページ用のテキスト
-		$option["lastPageText"] = ">>";		// 最後のページ用のテキスト
-		$option["curPageSpanPre"] = "<font color=\"#000000\">";		// 現在ページのプレフィクス
-		$option["curPageSpanPost"] = "</font>";		// 現在ページのサフィックス
-		$option["clearIfVoid"] = false;			// １ページのみの場合のページリンクの出力の有無
-		$option["fileName"] = $_SERVER["TEMPLATE_NAME"];
-		$option["fixFileName"] = false;
-		
 		$order = $loader->loadModel("OrderModel");
+		
+		// 商品コード・作品名・商品名による検索
+		$condition = array();
+		if(!empty($_POST["product_code"]) || !empty($_POST["parent_name"]) || !empty($_POST["product_name"])){
+			$cond = array();
+			if($_POST["product_code"]){
+				
+			}
+		}
 		
 		// パラメータのsortを並び順変更のキーとして利用
 		$sortKey = $_POST[$params->get("order", "order")];
