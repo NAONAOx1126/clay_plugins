@@ -17,6 +17,7 @@ class Base_CompanyOperatorModel extends DatabaseModel{
 	public function __construct($values = array()){
 		$loader = new PluginLoader();
 		parent::__construct($loader->loadTable("CompanyOperatorsTable"), $values);
+		Logger::writeDebug(var_export($this));
 	}
 	
 	/**
