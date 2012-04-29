@@ -1,17 +1,17 @@
 <?php
 /**
- * ランダムな英数からなるコードを発行します。一意性は保証されません。
- * PHP5.3以上での動作のみ保証しています。
- * 動作自体はPHP5.2以上から動作します。
+ * This file is part of CLAY Framework for view-module based system.
  *
- * @category  Modules
- * @package   Base
- * @author    Naohisa Minagawa <info@sweetberry.jp>
- * @copyright 2010-2012 Naohisa Minagawa
+ * @author    Naohisa Minagawa <info@clay-system.jp>
+ * @copyright Copyright (c) 2010, Naohisa Minagawa
  * @license http://www.apache.org/licenses/LICENSE-2.0.html Apache License, Version 2.0
- * @version   1.0.0
+ * @since PHP 5.3
+ * @version   3.0.0
  */
 
+/**
+ * ランダムな英数からなるコードを発行します。一意性は保証されません。
+ */
 class Base_Pages_RandomCode extends FrameworkModule{
 	function execute($params){
 		if($params->check("code")){

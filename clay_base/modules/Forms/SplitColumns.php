@@ -1,16 +1,18 @@
 <?php
 /**
+ * This file is part of CLAY Framework for view-module based system.
+ *
+ * @author    Naohisa Minagawa <info@clay-system.jp>
+ * @copyright Copyright (c) 2010, Naohisa Minagawa
+ * @license http://www.apache.org/licenses/LICENSE-2.0.html Apache License, Version 2.0
+ * @since PHP 5.3
+ * @version   3.0.0
+ */
+
+/**
  * ### Base.Forms.SplitColumns
  * カラムを分割するクラスです。
- * PHP5.3以上での動作のみ保証しています。
- * 動作自体はPHP5.2以上から動作します。
  *
- * @category  Modules
- * @package   Base
- * @author    Naohisa Minagawa <info@sweetberry.jp>
- * @copyright 2010-2012 Naohisa Minagawa
- * @license http://www.apache.org/licenses/LICENSE-2.0.html Apache License, Version 2.0
- * @version   1.0.0
  * @param key 変数のキー
  * @param target 対象とするキー
  * @param regex クリアする対象の変数

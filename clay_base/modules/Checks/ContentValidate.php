@@ -1,15 +1,18 @@
 <?php
 /**
+ * This file is part of CLAY Framework for view-module based system.
+ *
+ * @author    Naohisa Minagawa <info@clay-system.jp>
+ * @copyright Copyright (c) 2010, Naohisa Minagawa
+ * @license http://www.apache.org/licenses/LICENSE-2.0.html Apache License, Version 2.0
+ * @since PHP 5.3
+ * @version   3.0.0
+ */
+
+/**
  * ### Base.Checks.ContentValidate
  * コンテンツに正規表現が含まれるかどうかのチェックを行うCheckパッケージのクラスです。
  *
- * @category  Modules
- * @package   Checks
- * @author    Naohisa Minagawa <info@sweetberry.jp>
- * @copyright 2010-2012 Naohisa Minagawa
- * @license http://www.apache.org/licenses/LICENSE-2.0.html Apache License, Version 2.0
- * @since PHP 5.3
- * @version   1.0.0
  * @param key チェック対象のキー名
  * @param message エラーメッセージ
  */

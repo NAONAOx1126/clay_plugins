@@ -24,5 +24,12 @@ class Order_OrderDetailModel extends DatabaseModel{
 	function findAllByOrderPackage($order_package_id){
 		return $this->findAllBy(array("order_package_id" => $order_package_id));
 	}
+	
+	function package(){
+		$loader = new PluginLoader("Order");
+		$orderPackage = $loader->loadModel("OrderPackageModel");
+		$orderPackage->findByPrimaryKey($this->order_package_id);		
+		return $orderPackage;
+	}
 }
 ?>

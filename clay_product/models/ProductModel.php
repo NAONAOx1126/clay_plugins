@@ -34,6 +34,13 @@ class Product_ProductModel extends DatabaseModel{
 		return $model->findAllBy(array("parent_name" => $parent_name), $order, $reverse);
 	}
 	
+	function isNew($days = 30){
+		if(strtotime(date("Y-m-d 00:00:00", strtotime("-".$days." day"))) < strtotime($this->create_date)){
+			return true;
+		}
+		return false;
+	}
+	
 	function developer(){
 		$loader = new PluginLoader("Product");
 		$developer = $loader->loadModel("ProductDeveloperModel");

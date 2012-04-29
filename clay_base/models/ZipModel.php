@@ -1,14 +1,16 @@
 <?php
 /**
- * 郵便番号のデータモデルです。。
+ * This file is part of CLAY Framework for view-module based system.
  *
- * @category  Model
- * @package   Base
- * @author    Naohisa Minagawa <info@sweetberry.jp>
- * @copyright 2010-2012 Naohisa Minagawa
+ * @author    Naohisa Minagawa <info@clay-system.jp>
+ * @copyright Copyright (c) 2010, Naohisa Minagawa
  * @license http://www.apache.org/licenses/LICENSE-2.0.html Apache License, Version 2.0
  * @since PHP 5.3
- * @version   1.0.0
+ * @version   3.0.0
+ */
+
+/**
+ * 郵便番号のデータモデルです。。
  */
 class Base_ZipModel extends DatabaseModel{
 	/**
