@@ -30,11 +30,11 @@ class Product_New extends FrameworkModule{
 		// カテゴリが選択された場合、カテゴリの商品IDのリストを使う
 		$conditions = array();
 		if($params->check("category")){
+			$conditions["in:product_id"] = array("0");
 			$category = $loader->LoadModel("CategoryModel");
 			$category->findByPrimaryKey($params->get("category"));
 			$productCategories = $category->productCategories();
 			if(is_array($productCategories) && !empty($productCategories)){
-				$conditions["in:product_id"] = array();
 				foreach($productCategories as $productCategory){
 					$conditions["in:product_id"][] = $productCategory->product_id;
 				}
