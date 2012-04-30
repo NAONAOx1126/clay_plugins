@@ -33,8 +33,8 @@ class Product_New extends FrameworkModule{
 			$category = $loader->LoadModel("CategoryModel");
 			$category->findByPrimaryKey($params->get("category"));
 			$productCategories = $category->productCategories();
-			$conditions["in:product_id"] = array();
 			if(is_array($productCategories) && !empty($productCategories)){
+				$conditions["in:product_id"] = array();
 				foreach($productCategories as $productCategory){
 					$conditions["in:product_id"][] = $productCategory->product_id;
 				}

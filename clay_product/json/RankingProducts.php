@@ -1,5 +1,5 @@
 <?php
-class Product_NewProducts{
+class Product_RankingProducts{
 	public function execute(){
 		// 商品プラグインの初期化
 		$loader = new PluginLoader("Product");
@@ -7,11 +7,6 @@ class Product_NewProducts{
 		
 		// 検索条件を設定
 		$conditions = array();
-		foreach($_POST as $key => $value){
-			if($key != "category" && $key != "category2" && $key != "flag" && $key != "limit" && $key != "offset" && !empty($value)){
-				$conditions[$key] = $value;
-			}
-		}
 		
 		// カテゴリ検索条件を追加
 		if(isset($_POST["category"])){
@@ -58,7 +53,7 @@ class Product_NewProducts{
 		}
 		
 		// 商品データを検索する。
-		$product = $loader->LoadModel("ProductModel");
+		$product = $loader->LoadModel("ProductProfitModel");
 		if(isset($_POST["limit"])){
 			if(isset($_POST["offset"])){
 				$product->limit($_POST["limit"], $_POST["offset"]);
@@ -66,9 +61,10 @@ class Product_NewProducts{
 				$product->limit($_POST["limit"]);
 			}
 		}
-		$products = $product->findAllBy($conditions, "create_date", true);
+		$profits = $product->findAllBy($conditions, "efficient_profit", true);
 		$result = array();
-		foreach($products as $product){
+		foreach($profits as $profit){
+			$product = $profit->product();
 			$data = $product->toArray();
 			$data["isNew"] = $product->isNew();
 			$data["sample_data"] = $product->image("sample")->image;

@@ -39,6 +39,20 @@ class Product_CategoryModel extends DatabaseModel{
 		return $productCategory->findAllByCategory($this->category_id, $order, $reverse);
 	}
 	
+	function productMultiCategories($other, $order = "", $reverse = false){
+		$loader = new PluginLoader("Product");
+		$productCategory = $loader->loadModel("ProductCategoryModel");
+		$in_products = $productCategory->findAllByCategory($other, $order, $reverse);
+		$conditions = array("category_id" => $this->category_id);
+		if(is_array($in_products) && count($in_products) > 0){
+			$conditions["in:product_id"] = array();
+			foreach($in_products as $in_product){
+				$conditions["in:product_id"][] = $in_product->product_id;
+			}
+		}
+		return $productCategory->findAllBy($conditions, $order, $reverse);
+	}
+	
 	function products($values = array(), $order = "", $reverse = false){
 		$productCategories = $this->productCategories();
 		if(!is_array($values)){

@@ -56,15 +56,15 @@ class Product_Page extends FrameworkModule{
 				}
 			}
 		}
-		if($params->check("category2")){
+		if(isset($_POST["category_id"]) && $_POST["category_id"] > 0){
 			$productCategory = $loader->LoadModel("ProductCategoryModel");
-			$productCategorys = $productCategory->findAllByCategory($params->get("category2"));
+			$productCategorys = $productCategory->findAllByCategory($_POST["category_id"]);
 			if(is_array($productCategorys) && !empty($productCategorys)){
 				$conditions2["in:product_id"] = array("0");
 				foreach($productCategorys as $productCategory){
 					$conditions2["in:product_id"][] = $productCategory->product_id;
 				}
-				if(is_array($condition["in:product_id"])){
+				if(is_array($conditions["in:product_id"])){
 					$conditions["in:product_id"] = array_intersect($conditions["in:product_id"], $conditions2["in:product_id"]);
 				}else{
 					$conditions["in:product_id"] = $conditions2["in:product_id"];
