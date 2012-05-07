@@ -10,11 +10,8 @@ class Content_Cover_Save extends FrameworkModule{
 			$loader = new PluginLoader("Content");
 			$loader->LoadSetting();
 			
-			// トランザクションデータベースの取得
-			$db = DBFactory::getConnection("content");
-			
 			// トランザクションの開始
-			$db->beginTransaction();
+			DBFactory::begin();
 			
 			try{
 				// POSTされたデータを元にモデルを作成
@@ -30,17 +27,17 @@ class Content_Cover_Save extends FrameworkModule{
 				$cover->sort_order = $_POST["sort_order"];
 				
 				// カテゴリを保存
-				$cover->save($db);
+				$cover->save();
 						
 				// エラーが無かった場合、処理をコミットする。
-				$db->commit();
+				DBFactory::commit();
 				
 				unset($_POST);
 				
 				// 登録が正常に完了した場合には、ページをリロードする。
 				$this->reload();
 			}catch(Exception $e){
-				$db->rollBack();
+				DBFactory::rollback();
 				unset($_POST["save"]);
 				throw $e;
 			}

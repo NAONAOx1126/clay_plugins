@@ -10,11 +10,8 @@ class Product_Developer_Delete extends FrameworkModule{
 			$loader = new PluginLoader("Product");
 			$loader->LoadSetting();
 			
-			// トランザクションデータベースの取得
-			$db = DBFactory::getConnection("product");
-			
 			// トランザクションの開始
-			$db->beginTransaction();
+			DBFactory::begin("product");
 			
 			try{
 				// 渡されたカテゴリIDのインスタンスを生成
@@ -29,11 +26,11 @@ class Product_Developer_Delete extends FrameworkModule{
 				foreach($_POST["developer_id"] as $developer_id){
 					// カテゴリを削除
 					$developer->findByPrimaryKey($developer_id);
-					$developer->delete($db);
+					$developer->delete();
 				}
 				
 				// エラーが無かった場合、処理をコミットする。
-				$db->commit();
+				DBFactory::commit("product");
 				
 				unset($_POST["developer_id"]);
 				unset($_POST["delete"]);
@@ -41,7 +38,7 @@ class Product_Developer_Delete extends FrameworkModule{
 				// 登録が正常に完了した場合には、ページをリロードする。
 				$this->reload();
 			}catch(Exception $e){
-				$db->rollBack();
+				DBFactory::rollback("product");
 				unset($_POST["developer_id"]);
 				unset($_POST["delete"]);
 				throw $e;

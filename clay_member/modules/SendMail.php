@@ -15,9 +15,8 @@ LoadModel("MailTemplateModel");
 class Members_SendMail extends FrameworkModule{
 	function execute($params){
 		if($params->check("mail")){
-			// トランザクションデータベースの取得
-			$db = DBFactory::getLocal();// トランザクションの開始
-			$db->beginTransaction();
+			// トランザクションの開始
+			DBFactory::begin("member");
 			
 			try{
 				// 登録完了メール送信
@@ -51,9 +50,10 @@ class Members_SendMail extends FrameworkModule{
 				$sendMail->addBody($body);
 				$sendMail->send();
 				$sendMail->reply();
+				DBFactory::commit("member");
 			}catch(Exception $ex){
 				unset($_POST["regist"]);
-				$db->rollBack();
+				DBFactory::rollback("member");
 				throw $ex;
 			}
 		}

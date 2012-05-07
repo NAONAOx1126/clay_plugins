@@ -10,11 +10,8 @@ class Content_News_Save extends FrameworkModule{
 			$loader = new PluginLoader("Content");
 			$loader->LoadSetting();
 			
-			// トランザクションデータベースの取得
-			$db = DBFactory::getConnection("content");
-			
 			// トランザクションの開始
-			$db->beginTransaction();
+			DBFactory::begin();
 			
 			try{
 				// POSTされたデータを元にモデルを作成
@@ -29,17 +26,17 @@ class Content_News_Save extends FrameworkModule{
 				$news->end_time = $_POST["end_time"];
 				
 				// カテゴリを保存
-				$news->save($db);
+				$news->save();
 						
 				// エラーが無かった場合、処理をコミットする。
-				$db->commit();
+				DBFactory::commit();
 				
 				unset($_POST["save"]);
 				
 				// 登録が正常に完了した場合には、ページをリロードする。
 				$this->reload();
 			}catch(Exception $e){
-				$db->rollBack();
+				DBFactory::rollback();
 				unset($_POST["save"]);
 				throw $e;
 			}

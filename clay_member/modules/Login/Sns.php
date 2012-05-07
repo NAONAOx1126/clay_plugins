@@ -58,20 +58,19 @@ class Members_Login_Mobile extends FrameworkModule{
 			if(empty($customer->customer_id)){
 				// 該当するデータが無い場合はデータを作成
 				if($params->get("auto", "0") == "1"){
-					// トランザクションデータベースの取得
-					$db = DBFactory::getLocal();// トランザクションの開始
-					$db->beginTransaction();
+					// トランザクションの開始
+					DBFactory::begin("member");
 					
 					try{
 						// データを登録する。
 						$customer->mobile_id = $mobileId;
-						$customer->save($db);
+						$customer->save();
 						
 						// エラーが無かった場合、処理をコミットする。
-						$db->commit();
+						DBFactory::commit("member");
 					}catch(Exception $ex){
 						unset($_POST["regist"]);
-						$db->rollBack();
+						DBFactory::rollback("member");
 						throw $ex;
 					}
 					

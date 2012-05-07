@@ -57,20 +57,18 @@ class Member_Login_Android extends FrameworkModule{
 				foreach($android as $key => $value){
 					$customer->$key = $value;
 				}
-				// トランザクションデータベースの取得
-				$db = DBFactory::getConnection("member");
 				
 				// トランザクションの開始
-				$db->beginTransaction();
+				DBFactory::begin("member");
 				
 				try{
 					// データを保存
-					$customer->save($db);
+					$customer->save();
 					
 					// エラーが無かった場合、処理をコミットする。
-					$db->commit();
+					DBFactory::commit("member");
 				}catch(Exception $e){
-					$db->rollBack();
+					DBFactory::rollback("member");
 					throw $e;
 				}
 			}

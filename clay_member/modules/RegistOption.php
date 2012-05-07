@@ -19,9 +19,8 @@ class Members_RegistOption extends FrameworkModule{
 				// 画像キーを取得
 				$optionKey = $params->get("option");
 			
-				// トランザクションデータベースの取得
-				$db = DBFactory::getLocal();// トランザクションの開始
-				$db->beginTransaction();
+				// トランザクションの開始
+				DBFactory::begin("member");
 				
 				try{
 					// 顧客データモデルを初期化
@@ -31,16 +30,16 @@ class Members_RegistOption extends FrameworkModule{
 					$option->option_value = $_SESSION["INPUT_DATA"][$optionKey];
 					
 					// 画像データを登録する。
-					$option->save($db);
+					$option->save();
 					
 					// エラーが無かった場合、処理をコミットする。
-					$db->commit();
+					DBFactory::commit("member");
 	
 					// 結果を登録する。
 					$_SESSION[CUSTOMER_SESSION_KEY]->$optionKey = $_SESSION["INPUT_DATA"][$optionKey];
 					$_SERVER["ATTRIBUTES"][$params->get("result", "customer")]= $_SESSION[CUSTOMER_SESSION_KEY];					
 				}catch(Exception $ex){
-					$db->rollBack();
+					DBFactory::rollback("member");
 					exit;
 					throw $ex;
 				}

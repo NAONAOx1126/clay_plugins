@@ -27,11 +27,11 @@ class Member_PointLogModel extends DatabaseModel{
 		return $customer;
 	}
 	
-	function add($db, $point){
+	function add($point){
 		$this->log_time = date("Y-m-d H:i:s");
 		$this->customer_id = $_SESSION[CUSTOMER_SESSION_KEY]->customer_id;
 		$this->point = $point;
-		parent::save($db);
+		parent::save();
 	}
 }
 ?>

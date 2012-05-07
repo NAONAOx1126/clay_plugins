@@ -10,11 +10,8 @@ class Content_Advertise_Delete extends FrameworkModule{
 			$loader = new PluginLoader("Content");
 			$loader->LoadSetting();
 			
-			// トランザクションデータベースの取得
-			$db = DBFactory::getConnection("content");
-			
 			// トランザクションの開始
-			$db->beginTransaction();
+			DBFactory::begin();
 			
 			try{
 				// 渡されたカテゴリIDのインスタンスを生成
@@ -29,11 +26,11 @@ class Content_Advertise_Delete extends FrameworkModule{
 				foreach($_POST["advertise_id"] as $advertise_id){
 					// カテゴリを削除
 					$advertise->findByPrimaryKey($advertise_id);
-					$advertise->delete($db);
+					$advertise->delete();
 				}
 				
 				// エラーが無かった場合、処理をコミットする。
-				$db->commit();
+				DBFactory::commit();
 				
 				unset($_POST["advertise_id"]);
 				unset($_POST["delete"]);
@@ -41,7 +38,7 @@ class Content_Advertise_Delete extends FrameworkModule{
 				// 登録が正常に完了した場合には、ページをリロードする。
 				$this->reload();
 			}catch(Exception $e){
-				$db->rollBack();
+				DBFactory::rollback();
 				unset($_POST["advertise_id"]);
 				unset($_POST["delete"]);
 				throw $e;

@@ -10,11 +10,8 @@ class Product_Developer_Save extends FrameworkModule{
 			$loader = new PluginLoader("Product");
 			$loader->LoadSetting();
 			
-			// トランザクションデータベースの取得
-			$db = DBFactory::getConnection("product");
-			
 			// トランザクションの開始
-			$db->beginTransaction();
+			DBFactory::begin("product");
 			
 			try{
 				// POSTされたデータを元にモデルを作成
@@ -26,14 +23,14 @@ class Product_Developer_Save extends FrameworkModule{
 				$developer->sort_order = $_POST["sort_order"];
 				
 				// カテゴリを保存
-				$developer->save($db);
+				$developer->save();
 						
 				// エラーが無かった場合、処理をコミットする。
-				$db->commit();
+				DBFactory::commit("product");
 				
 				unset($_POST["save"]);
 			}catch(Exception $e){
-				$db->rollBack();
+				DBFactory::rollback("product");
 				unset($_POST["save"]);
 				throw $e;
 			}

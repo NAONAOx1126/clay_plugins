@@ -10,11 +10,8 @@ class Product_Flag_Save extends FrameworkModule{
 			$loader = new PluginLoader("Product");
 			$loader->LoadSetting();
 			
-			// トランザクションデータベースの取得
-			$db = DBFactory::getConnection("product");
-			
 			// トランザクションの開始
-			$db->beginTransaction();
+			DBFactory::begin("product");
 			
 			try{
 				// POSTされたデータを元にモデルを作成
@@ -28,17 +25,17 @@ class Product_Flag_Save extends FrameworkModule{
 				$flag->sort_order = $_POST["sort_order"];
 				
 				// カテゴリを保存
-				$flag->save($db);
+				$flag->save();
 						
 				// エラーが無かった場合、処理をコミットする。
-				$db->commit();
+				DBFactory::commit("product");
 				
 				unset($_POST["save"]);
 				
 				// 登録が正常に完了した場合には、ページをリロードする。
 				$this->reload();
 			}catch(Exception $e){
-				$db->rollBack();
+				DBFactory::rollback("product");
 				unset($_POST["save"]);
 				throw $e;
 			}

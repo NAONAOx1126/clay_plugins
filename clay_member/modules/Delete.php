@@ -18,41 +18,40 @@ LoadModel("CustomerTypeModel", "Members");
 class Members_Delete extends FrameworkModule{
 	function execute($params){
 		if(isset($_POST["delete"]) && isset($_POST["customer_id"]) && !empty($_POST["customer_id"])){
-			// トランザクションデータベースの取得
-			$db = DBFactory::getLocal();// トランザクションの開始
-			$db->beginTransaction();
+			// トランザクションの開始
+			DBFactory::begin("member");
 			
 			try{
 				// 配送情報を削除
 				$model = new CustomerDeliverModel();
 				$delivers = $model->findAllByCustomer($_POST["customer_id"]);
 				foreach($delivers as $deliver){
-					$deliver->delete($db);
+					$deliver->delete();
 				}
 
 				// オプション項目を削除
 				$model = new CustomerOptionModel();
 				$options = $model->findAllByCustomer($_POST["customer_id"]);
 				foreach($options as $option){
-					$option->delete($db);
+					$option->delete();
 				}
 				
 				// 顧客種別を削除
 				$model = new CustomerTypeModel();
 				$types = $model->findAllByCustomer($_POST["customer_id"]);
 				foreach($types as $type){
-					$type->delete($db);
+					$type->delete();
 				}
 				
 				// 顧客データを削除
 				$customer = new CustomerModel();
 				$customer->findByPrimaryKey($_POST["customer_id"]);
-				$customer->delete($db);
+				$customer->delete();
 				
 				// エラーが無かった場合、処理をコミットする。
-				$db->commit();
+				DBFactory::commit("member");
 			}catch(Exception $ex){
-				$db->rollBack();
+				DBFactory::rollback("member");
 				throw $ex;
 			}
 		}

@@ -28,32 +28,32 @@ class Product_NewProducts{
 		if(isset($_POST["category2"])){
 			$productCategory = $loader->LoadModel("ProductCategoryModel");
 			$productCategorys = $productCategory->findAllByCategory($_POST["category2"]);
+			$conditions2["in:product_id"] = array("0");
 			if(is_array($productCategorys) && !empty($productCategorys)){
-				$conditions2["in:product_id"] = array("0");
 				foreach($productCategorys as $productCategory){
 					$conditions2["in:product_id"][] = $productCategory->product_id;
 				}
-				if(is_array($conditions["in:product_id"])){
-					$conditions["in:product_id"] = array_intersect($conditions["in:product_id"], $conditions2["in:product_id"]);
-				}else{
-					$conditions["in:product_id"] = $conditions2["in:product_id"];
-				}
+			}
+			if(is_array($conditions["in:product_id"])){
+				$conditions["in:product_id"] = array_intersect($conditions["in:product_id"], $conditions2["in:product_id"]);
+			}else{
+				$conditions["in:product_id"] = $conditions2["in:product_id"];
 			}
 		}
 		// フラグ検索条件を追加
 		if(isset($_POST["flag"])){
 			$productFlag = $loader->LoadModel("ProductFlagModel");
 			$productFlags = $productFlag->findAllByFlag($_POST["flag"]);
+			$conditions2["in:product_id"] = array("0");
 			if(is_array($productFlags) && !empty($productFlags)){
-				$conditions2["in:product_id"] = array("0");
 				foreach($productFlags as $productFlag){
 					$conditions2["in:product_id"][] = $productFlag->product_id;
 				}
-				if(is_array($condition["in:product_id"])){
-					$conditions["in:product_id"] = array_intersect($conditions["in:product_id"], $conditions2["in:product_id"]);
-				}else{
-					$conditions["in:product_id"] = $conditions2["in:product_id"];
-				}
+			}
+			if(is_array($conditions["in:product_id"])){
+				$conditions["in:product_id"] = array_intersect($conditions["in:product_id"], $conditions2["in:product_id"]);
+			}else{
+				$conditions["in:product_id"] = $conditions2["in:product_id"];
 			}
 		}
 		

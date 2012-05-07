@@ -10,11 +10,8 @@ class Member_Contract_Save extends FrameworkModule{
 			$loader = new PluginLoader("Member");
 			$loader->LoadSetting();
 			
-			// トランザクションデータベースの取得
-			$db = DBFactory::getConnection("member");
-			
 			// トランザクションの開始
-			$db->beginTransaction();
+			DBFactory::begin("member");
 			
 			try{
 				// POSTされたデータを元にモデルを作成
@@ -28,14 +25,14 @@ class Member_Contract_Save extends FrameworkModule{
 				$contract->contract_interval = $_POST["contract_interval"];
 				
 				// カテゴリを保存
-				$contract->save($db);
+				$contract->save();
 						
 				// エラーが無かった場合、処理をコミットする。
-				$db->commit();
+				DBFactory::commit("member");
 				
 				unset($_POST["save"]);
 			}catch(Exception $e){
-				$db->rollBack();
+				DBFactory::rollback("member");
 				unset($_POST["save"]);
 				throw $e;
 			}

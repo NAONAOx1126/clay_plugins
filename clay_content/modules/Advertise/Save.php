@@ -10,11 +10,8 @@ class Content_Advertise_Save extends FrameworkModule{
 			$loader = new PluginLoader("Content");
 			$loader->LoadSetting();
 			
-			// トランザクションデータベースの取得
-			$db = DBFactory::getConnection("content");
-			
 			// トランザクションの開始
-			$db->beginTransaction();
+			DBFactory::begin();
 			
 			try{
 				// POSTされたデータを元にモデルを作成
@@ -30,14 +27,13 @@ class Content_Advertise_Save extends FrameworkModule{
 				$advertise->advertise_end_time = $_POST["advertise_end_time"];
 				
 				// カテゴリを保存
-				$advertise->save($db);
 						
 				// エラーが無かった場合、処理をコミットする。
-				$db->commit();
+				DBFactory::commit();
 				
 				unset($_POST["save"]);
 			}catch(Exception $e){
-				$db->rollBack();
+				DBFactory::rollback();
 				unset($_POST["save"]);
 				throw $e;
 			}

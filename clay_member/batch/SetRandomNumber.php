@@ -30,13 +30,12 @@ foreach($customers as $customer_id){
 	$randoms[$customer_id]->option_value = mt_rand();
 	
 	// データを保存
-	$db = DBFactory::getLocal();
-	$db->beginTransaction();
+	DBFactory::begin("member");
 	try{
-		$randoms[$customer_id]->save($db);
-		$db->commit();
+		$randoms[$customer_id]->save();
+		DBFactory::commit("member");
 	}catch(Exception $e){
-		$db->rollback();
+		DBFactory::rollback("member");
 	}
 }
 ?>

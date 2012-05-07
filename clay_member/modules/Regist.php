@@ -16,9 +16,8 @@ LoadModel("CustomerTypeModel", "Members");
 class Members_Regist extends FrameworkModule{
 	function execute($params){
 		if(isset($_POST["regist"]) && !empty($_SESSION["INPUT_DATA"])){
-			// トランザクションデータベースの取得
-			$db = DBFactory::getLocal();// トランザクションの開始
-			$db->beginTransaction();
+			// トランザクションの開始
+			DBFactory::begin("member");
 			
 			try{
 				if($params->check("unique")){
@@ -46,17 +45,17 @@ class Members_Regist extends FrameworkModule{
 					foreach($_SESSION["INPUT_DATA"] as $name => $value){
 						$customer->$name = $value;
 					}
-					$customer->save($db);
+					$customer->save();
 				}
 				
 				// エラーが無かった場合、処理をコミットする。
-				$db->commit();
+				DBFactory::commit("member");
 	
 				// 結果を設定
 				$_SERVER["ATTRIBUTES"][$params->get("result", "customer")]= $_SESSION[CUSTOMER_SESSION_KEY] = $customer;					
 			}catch(Exception $ex){
 				unset($_POST["regist"]);
-				$db->rollBack();
+				DBFactory::rollback("member");
 				throw $ex;
 			}
 		}

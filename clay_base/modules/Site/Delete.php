@@ -20,19 +20,16 @@ class Base_Site_Delete extends FrameworkModule{
 		$site = $loader->loadModel("SiteModel");
 		$site->findByPrimaryKey($_POST["site_id"]);
 		
-		// トランザクションデータベースの取得
-		$db = DBFactory::getConnection();
-		
 		// トランザクションの開始
-		$db->beginTransaction();
+		DBFactory::begin();
 		
 		try{
-			$site->delete($db);
+			$site->delete();
 					
 			// エラーが無かった場合、処理をコミットする。
-			$db->commit();
+			DBFactory::commit();
 		}catch(Exception $e){
-			$db->rollBack();
+			DBFactory::rollBack();
 			throw $e;
 		}
 	}

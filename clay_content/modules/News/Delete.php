@@ -10,11 +10,8 @@ class Content_News_Delete extends FrameworkModule{
 			$loader = new PluginLoader("Content");
 			$loader->LoadSetting();
 			
-			// トランザクションデータベースの取得
-			$db = DBFactory::getConnection("content");
-			
 			// トランザクションの開始
-			$db->beginTransaction();
+			DBFactory::begin();
 			
 			try{
 				// 渡されたカテゴリIDのインスタンスを生成
@@ -29,11 +26,11 @@ class Content_News_Delete extends FrameworkModule{
 				foreach($_POST["news_id"] as $news_id){
 					// カテゴリを削除
 					$news->findByPrimaryKey($news_id);
-					$news->delete($db);
+					$news->delete();
 				}
 				
 				// エラーが無かった場合、処理をコミットする。
-				$db->commit();
+				DBFactory::commit();
 				
 				unset($_POST["news_id"]);
 				unset($_POST["delete"]);
@@ -41,7 +38,7 @@ class Content_News_Delete extends FrameworkModule{
 				// 登録が正常に完了した場合には、ページをリロードする。
 				$this->reload();
 			}catch(Exception $e){
-				$db->rollBack();
+				DBFactory::rollback();
 				unset($_POST["news_id"]);
 				unset($_POST["delete"]);
 				throw $e;

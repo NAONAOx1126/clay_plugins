@@ -21,11 +21,8 @@ class Shopping_Shopping_Purchase extends FrameworkModule{
 				throw new InvalidException($errors);
 			}
 		
-			// トランザクションデータベースの取得
-			$db = DBFactory::getLocal();
-			
 			// トランザクションの開始
-			$db->beginTransaction();
+			DBFactory::begin("order");
 			
 			try{
 				// セッションから、受注用の情報を構築する。
@@ -51,7 +48,7 @@ class Shopping_Shopping_Purchase extends FrameworkModule{
 				
 				if(!empty($_SESSION["cart"])){
 					// 受注情報をDBに登録する。
-					$order = Registers::TempOrder($db, $order);
+					$order = Registers::TempOrder($order);
 
 					// セッションから受注詳細用のデータを構築する。
 					$details = array();
@@ -75,10 +72,10 @@ class Shopping_Shopping_Purchase extends FrameworkModule{
 					}
 					
 					// 受注詳細情報をDBに登録する。
-					Registers::TempOrderDetails($db, $details, $stockKeys, "quantity");
+					Registers::TempOrderDetails($details, $stockKeys, "quantity");
 		
 					// エラーが無かった場合、処理をコミットする。
-					$db->commit();
+					DBFactory::commit("order");
 					
 					// 注文IDをクッキーに保存する。（決済完了せず、前の画面に戻った場合は在庫を戻す）
 					setcookie("inprocess_order_id", $order["order_id"], time() + 365 * 24 * 3600);
@@ -96,30 +93,29 @@ class Shopping_Shopping_Purchase extends FrameworkModule{
 				}
 			}catch(Exception $ex){
 				unset($_POST["regist"]);
-				$db->rollBack();
+				DBFactory::rollback("order");
 				throw $ex;
 			}
 		}
 		
 		// 購入完了後処理
 		if(!empty($_POST["post_regist"])){
-			// データベースの初期化	
-			$db = DBFactory::getLocal();// トランザクションの開始
-			$db->beginTransaction();
+			// トランザクションの開始
+			DBFactory::begin("order");
 		
 			try{
 				// 受注完了メール用に受注データを取得する。
-				$order = Searches::TempOrder($_POST["order_id"], $db);
+				$order = Searches::TempOrder($_POST["order_id"]);
 				
 				if(!empty($order) && is_array($order["details"])){
 					// 受注データを仮テーブルから本テーブルに移動する。
-					Registers::CommitTemps($db, $_POST["order_id"]);
+					Registers::CommitTemps($_POST["order_id"]);
 					
 					// 受注完了メール送信
-					Mails::Order($db, $_SERVER["CONFIGURE"]["SITE"]["order_mail_subject"], $_SERVER["CONFIGURE"]["SITE"]["order_mail_header"], $_SERVER["CONFIGURE"]["SITE"]["order_mail_footer"], $order, $_SERVER["CONFIGURE"]["SITE"]);
+					Mails::Order($_SERVER["CONFIGURE"]["SITE"]["order_mail_subject"], $_SERVER["CONFIGURE"]["SITE"]["order_mail_header"], $_SERVER["CONFIGURE"]["SITE"]["order_mail_footer"], $order, $_SERVER["CONFIGURE"]["SITE"]);
 							
 					// エラーが無かった場合、次のページへ
-					$db->commit();
+					DBFactory::commit("order");
 					
 					// 確定したら、カートの中身をクリアする。
 					unset($_SESSION["cart"]);
@@ -133,7 +129,7 @@ class Shopping_Shopping_Purchase extends FrameworkModule{
 					throw new InvalidException(array("カートの中身がありません"));
 				}
 			}catch(Exception $ex){
-				$db->rollBack();
+				DBFactory::rollback("order");
 				throw $ex;
 			}
 		}

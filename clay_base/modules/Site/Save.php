@@ -23,11 +23,8 @@ class Base_Site_Save extends FrameworkModule{
 			$site->$key = $value;
 		}
 		
-		// トランザクションデータベースの取得
-		$db = DBFactory::getConnection();
-		
 		// トランザクションの開始
-		$db->beginTransaction();
+		DBFactory::begin();
 		
 		if($site->site_code == ""){
 			throw new InvalidException(array("サイトコードは必須です"));
@@ -45,12 +42,12 @@ class Base_Site_Save extends FrameworkModule{
 		}
 		
 		try{
-			$site->save($db);
+			$site->save();
 					
 			// エラーが無かった場合、処理をコミットする。
-			$db->commit();
+			DBFactory::commit();
 		}catch(Exception $e){
-			$db->rollBack();
+			DBFactory::rollBack();
 			throw $e;
 		}
 	}

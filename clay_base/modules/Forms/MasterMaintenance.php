@@ -41,15 +41,12 @@ class Base_Forms_MasterMaintenance extends FrameworkModule{
 			
 			// 削除処理
 			if(isset($_POST["delete"])){
-				// トランザクションデータベースの取得
-				$db = DBFactory::getConnection();
-				
 				// トランザクションの開始
-				$db->beginTransaction();
+				DBFactory::begin();
 				
 				try{
 					// DBのデータを削除
-					$delete = new DatabaseDelete($table, $db);
+					$delete = new DatabaseDelete($table);
 					foreach($_POST as $key => $value){
 						if(in_array($key, $table->getColumns())){
 							$delete->addWhere($table->$key." = ?", array($value));
@@ -57,9 +54,9 @@ class Base_Forms_MasterMaintenance extends FrameworkModule{
 					}
 					$delete->execute();
 					// コミット
-					$db->commit();
+					DBFactory::commit();
 				}catch(Exception $e){
-					$db->rollback();
+					DBFactory::rollback();
 				}
 			}
 			
@@ -96,18 +93,15 @@ class Base_Forms_MasterMaintenance extends FrameworkModule{
 					}
 				}
 				
-				// トランザクションデータベースの取得
-				$db = DBFactory::getConnection();
-				
 				// トランザクションの開始
-				$db->beginTransaction();
+				DBFactory::begin();
 				
 				try{
 					// DBの内容をクリア
-					$truncate = new DatabaseTruncate($table, $db);
+					$truncate = new DatabaseTruncate($table);
 					$truncate->execute();
 					// DBにデータを登録
-					$insert = new DatabaseInsert($table, $db);
+					$insert = new DatabaseInsert($table);
 					foreach($_POST["data"] as $data){
 						if(empty($data["create_time"])){
 							$data["create_time"] = $data["update_time"] = date("Y-m-d H:i:s");
@@ -117,9 +111,9 @@ class Base_Forms_MasterMaintenance extends FrameworkModule{
 						$insert->execute($data);
 					}
 					// コミット
-					$db->commit();
+					DBFactory::commit();
 				}catch(Exception $e){
-					$db->rollback();
+					DBFactory::rollback();
 				}
 			}
 			

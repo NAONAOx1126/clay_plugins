@@ -17,11 +17,8 @@ class Order_Import extends FrameworkModule{
 	function execute($params){
 		if($params->check("key") && is_array($_SERVER["ATTRIBUTES"][$params->get("key")])){
 			try{
-				// トランザクションデータベースの取得
-				$db = DBFactory::getConnection("order");
-				
 				// トランザクションの開始
-				$db->beginTransaction();
+				DBFactory::begin("order");
 				
 				// ローダーを初期化
 				$loader = new PluginLoader("Order");
@@ -58,7 +55,7 @@ class Order_Import extends FrameworkModule{
 							$delivery->delivery_name = $data["delivery_name"];
 							$delivery->deliv_fee = $data["deliv_fee"];
 							$delivery->sort_order = "0";
-							$delivery->save($db);
+							$delivery->save();
 							$delivery->findBy(array("delivery_name" => $data["delivery_name"]));
 							$deliverys[$delivery->delivery_name] = $delivery->delivery_id;
 						}
@@ -72,7 +69,7 @@ class Order_Import extends FrameworkModule{
 							$payment->charge = $data["charge"];
 							$payment->credit_flg = "0";
 							$payment->sort_order = "0";
-							$payment->save($db);
+							$payment->save();
 							$payment->findBy(array("payment_name" => $data["payment_name"]));
 							$payments[$payment->payment_name] = $payment->payment_id;
 						}
@@ -93,15 +90,15 @@ class Order_Import extends FrameworkModule{
 					
 				// 注文データを上書き
 				$order = $loader->loadModel("OrderModel");
-				$orderList = $order->saveAll($db, $orderList);
+				$orderList = $order->saveAll($orderList);
 
 				// 注文決済データを上書き
 				$orderPayment = $loader->loadModel("OrderPaymentModel");
-				$orderList = $orderPayment->saveAll($db, $orderList);
+				$orderList = $orderPayment->saveAll($orderList);
 				
 				// 注文パッケージデータを上書き
 				$orderPackage = $loader->loadModel("OrderPackageModel");
-				$orderList = $orderPackage->saveAll($db, $orderList);
+				$orderList = $orderPackage->saveAll($orderList);
 								
 				// 注文詳細データにIDを割り当てるためにIDを割り当て
 				foreach($list as $index => $data){
@@ -112,10 +109,10 @@ class Order_Import extends FrameworkModule{
 				
 				// 注文詳細データを上書き
 				$orderDetail = $loader->loadModel("OrderDetailModel");
-				$list = $orderDetail->saveAll($db, $list);
-				$db->commit();
+				$list = $orderDetail->saveAll($list);
+				DBFactory::commit("order");
 			}catch(Exception $e){
-				$db->rollback();
+				DBFactory::rollback("order");
 			}
 		}
 	}

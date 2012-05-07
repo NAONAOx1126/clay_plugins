@@ -22,11 +22,8 @@ class Shopping_Shopping_Contents extends FrameworkModule{
 			
 			// 購入完了処理を行う。(ダウンロードコンテンツ用）
 			if(!empty($_POST[$mode])){
-				// トランザクションデータベースの取得
-				$db = DBFactory::getLocal();
-				
 				// トランザクションの開始
-				$db->beginTransaction();
+				DBFactory::begin("order");
 				
 				try{
 					// 仮受注テーブルにデータを設定する
@@ -60,18 +57,18 @@ class Shopping_Shopping_Contents extends FrameworkModule{
 					$payment->findByPrimaryKey($order->payment_id);
 					
 					// 受注情報をDBに登録する。
-					$order->save($db);
+					$order->save();
 	
 					foreach($_SESSION[CART_SESSION_KEY] as $cart){
 						// 注文詳細データを登録
 						$cart["order_id"] = $order->order_id;
 						$cart["price"] = $cart["sale_price"];
 						$orderDetail = new TempOrderDetailModel($cart);
-						$orderDetail->save($db);
+						$orderDetail->save();
 					}
 					
 					// エラーが無かった場合、処理をコミットする。
-					$db->commit();
+					DBFactory::commit("order");
 	
 					// 支払い合計額が0円以上の場合は、決済を実行する。
 					if($_SESSION[CUSTOMER_SESSION_KEY]->payment_total > 0){
@@ -89,7 +86,7 @@ class Shopping_Shopping_Contents extends FrameworkModule{
 					}
 				}catch(Exception $ex){
 					unset($_POST["regist"]);
-					$db->rollBack();
+					DBFactory::rollback("order");
 					throw $ex;
 				}
 			}

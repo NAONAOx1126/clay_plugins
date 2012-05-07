@@ -19,9 +19,8 @@ class Members_AddPoint extends FrameworkModule{
 		$point = $params->get("point", $_POST["point"]);
 		
 		if(!empty($point)){
-			// トランザクションデータベースの取得
-			$db = DBFactory::getLocal();// トランザクションの開始
-			$db->beginTransaction();
+			// トランザクションの開始
+			DBFactory::begin("member");
 			
 			try{
 				// 決済金額とポイントが一致するかチェック
@@ -30,22 +29,22 @@ class Members_AddPoint extends FrameworkModule{
 					$_SESSION[CUSTOMER_SESSION_KEY]->point += $point;
 					
 					// 変更内容をデータベースに反映
-					$_SESSION[CUSTOMER_SESSION_KEY]->save($db);
+					$_SESSION[CUSTOMER_SESSION_KEY]->save();
 					$customerTypes = $_SESSION[CUSTOMER_SESSION_KEY]->types;
 					foreach($customerTypes as $customerType){
-						$customerType->save($db);
+						$customerType->save();
 					}
 					
 					// ポイントログに書き込み
 					$pointLog = new PointLogModel();
-					$pointLog->save($db, $point);
+					$pointLog->save($point);
 				}
 				
 				// エラーが無かった場合、処理をコミットする。
-				$db->commit();
+				DBFactory::commit("member");
 					
 			}catch(Exception $ex){
-				$db->rollBack();
+				DBFactory::rollback("member");
 				throw $ex;
 			}
 		}

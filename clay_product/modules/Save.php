@@ -14,11 +14,8 @@ class Product_Save extends FrameworkModule{
 			$loader = new PluginLoader("Product");
 			$loader->LoadSetting();
 	
-			// トランザクションデータベースの取得
-			$db = DBFactory::getConnection("product");
-			
 			// トランザクションの開始
-			$db->beginTransaction();
+			DBFactory::begin("product");
 		
 			try{
 				// 商品データを検索する。
@@ -31,20 +28,20 @@ class Product_Save extends FrameworkModule{
 				foreach($_POST as $key => $value){
 					$product->$key = $value;
 				}
-				$product->save($db);
+				$product->save();
 				
 				// 商品のカテゴリを登録する。
 				$categories = $product->productCategories();
 				foreach($categories as $category){
 					// 登録するカテゴリに含まれない場合は削除
 					if(!isset($_POST["category"][$category->category_id])){
-						$category->delete($db);
+						$category->delete();
 					}
 				}
 				// カテゴリの要素をInsert Ignoreで登録する。
 				if(empty($_POST["category"])) $_POST["category"] = array();
 				foreach($_POST["category"] as $category_id){
-					$insert = new DatabaseInsertIgnore($loader->LoadModel("ProductCategoriesTable"), $db);
+					$insert = new DatabaseInsertIgnore($loader->LoadModel("ProductCategoriesTable"));
 					$insert->execute(array(
 						"product_id" => $product->product_id, 
 						"category_id" => $category_id, 
@@ -58,13 +55,13 @@ class Product_Save extends FrameworkModule{
 				foreach($flags as $flag){
 					// 登録するカテゴリに含まれない場合は削除
 					if(!isset($_POST["flag"][$flag->flag_id])){
-						$flag->delete($db);
+						$flag->delete();
 					}
 				}
 				// カテゴリの要素をInsert Ignoreで登録する。
 				if(empty($_POST["flag"])) $_POST["flag"] = array();
 				foreach($_POST["flag"] as $flag_id){
-					$insert = new DatabaseInsertIgnore($loader->LoadModel("ProductFlagsTable"), $db);
+					$insert = new DatabaseInsertIgnore($loader->LoadModel("ProductFlagsTable"));
 					$insert->execute(array(
 						"product_id" => $product->product_id, 
 						"flag_id" => $flag_id, 
@@ -87,10 +84,10 @@ class Product_Save extends FrameworkModule{
 							// データが存在する場合にはアップデート
 							$image->image_name = $image_name;
 							$image->image = $image_file;
-							$image->save($db);
+							$image->save();
 						}else{
 							// データが存在しない場合は登録する。
-							$insert = new DatabaseInsertIgnore($loader->LoadModel("ProductImagesTable"), $db);
+							$insert = new DatabaseInsertIgnore($loader->LoadModel("ProductImagesTable"));
 							$insert->execute(array(
 								"product_id" => $product->product_id, 
 								"image_type" => $image_type, 
@@ -108,29 +105,29 @@ class Product_Save extends FrameworkModule{
 					$productOptions = $product->productOptions();
 					foreach($productOptions as $productOption){
 						// 登録時にオプションは全て削除
-						$productOption->delete($db);
+						$productOption->delete();
 					}
-					$this->setOption($db, $product, $_POST["option"]);
+					$this->setOption($product, $_POST["option"]);
 				}
 				
 				unset($_POST["save"]);
 				
 				// エラーが無かった場合、処理をコミットする。
-				$db->commit();
+				DBFactory::commit("product");
 			}catch(Exception $e){
-				$db->rollBack();
+				DBFactory::rollback("product");
 				unset($_POST["save"]);
 				throw $e;
 			}
 		}
 	}
 	
-	private function setOption($db, $product, $option, $option_ids = array()){
+	private function setOption($product, $option, $option_ids = array()){
 		if(is_array($option)){
 			if(isset($option["stock"])){
 				// データを登録
 				$loader = new PluginLoader("Product");
-				$insert = new DatabaseInsert($loader->LoadModel("ProductOptionsTable"), $db);
+				$insert = new DatabaseInsert($loader->LoadModel("ProductOptionsTable"));
 				$data = array(
 					"product_id" => $product->product_id, 
 					"stock" => $option["stock"], 
@@ -147,7 +144,7 @@ class Product_Save extends FrameworkModule{
 					if(count($option_ids) < 4){
 						$ids = $option_ids;
 						$ids[] = $option_id;
-						$this->setOption($db, $product, $option, $ids);
+						$this->setOption($product, $option, $ids);
 					}
 				}
 			}

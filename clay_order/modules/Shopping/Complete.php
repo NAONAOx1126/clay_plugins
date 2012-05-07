@@ -20,9 +20,8 @@ class Shopping_Shopping_Complete extends FrameworkModule{
 		if(!empty($_SESSION[CART_SESSION_KEY])){
 			// 購入完了後処理
 			if(!empty($_POST["post_regist"])){
-				// データベースの初期化	
-				$db = DBFactory::getLocal();// トランザクションの開始
-				$db->beginTransaction();
+				// トランザクションの開始
+				DBFactory::begin("order");
 			
 				try{
 					// 受注完了メール用に受注データを取得する。
@@ -33,13 +32,13 @@ class Shopping_Shopping_Complete extends FrameworkModule{
 					if(!empty($order->order_id) && is_array($orderDetails)){
 						// 受注データをコピー
 						$newOrder = new OrderModel($order);
-						$newOrder->save($db);
+						$newOrder->save();
 						
 						// 受注明細データをコピー
 						$newOrder->details = array();
 						foreach($orderDetails as $detail){
 							$newDetail = new OrderDetailModel($detail);
-							$newDetail->save($db);
+							$newDetail->save();
 							$newOrder->details[] = $newDetail;
 							
 							// 該当する在庫データを引き当て
@@ -48,7 +47,7 @@ class Shopping_Shopping_Complete extends FrameworkModule{
 							if($productOption->stock_unlimited != "1"){
 								if($productOption->stock > $newDetail->quantity){
 									$productOption->stock -= $newDetail->quantity;
-									$productOption->save($db);
+									$productOption->save();
 								}else{
 									throw new InvalidException(array("購入商品の在庫が足りません"));
 								}
@@ -59,17 +58,17 @@ class Shopping_Shopping_Complete extends FrameworkModule{
 						if($_SESSION[CUSTOMER_SESSION_KEY]->use_point < $_SESSION[CUSTOMER_SESSION_KEY]->point){
 							// ポイント払いで必要なポイントがある場合は、ポイントを減算して購入完了に進める。
 							$_SESSION[CUSTOMER_SESSION_KEY]->point -= $_SESSION[CUSTOMER_SESSION_KEY]->use_point;
-							$_SESSION[CUSTOMER_SESSION_KEY]->save($db);
+							$_SESSION[CUSTOMER_SESSION_KEY]->save();
 							
 							// ポイントログに登録
 							$pointLog = new PointLogModel();
-							$pointLog->save($db, - $_SESSION[CUSTOMER_SESSION_KEY]->use_point);
+							$pointLog->save(- $_SESSION[CUSTOMER_SESSION_KEY]->use_point);
 						}else{
 							throw new InvalidException(array("指定された利用ポイントが所持ポイントより不足しています。"));
 						}
 
 						// エラーが無かった場合、次のページへ
-						$db->commit();
+						DBFactory::commit("order");
 						
 						// 確定したら、カートの中身をクリアする。
 						unset($_SESSION["cart"]);
@@ -80,7 +79,7 @@ class Shopping_Shopping_Complete extends FrameworkModule{
 						throw new InvalidException(array("既に注文完了しております。"));
 					}
 				}catch(Exception $ex){
-					$db->rollBack();
+					DBFactory::rollback("order");
 					throw $ex;
 				}
 			}

@@ -44,9 +44,8 @@ class Members_CheckSerial extends FrameworkModule{
 					}
 				}
 				
-				// トランザクションデータベースの取得
-				$db = DBFactory::getLocal();// トランザクションの開始
-				$db->beginTransaction();
+				// トランザクションの開始
+				DBFactory::begin("member");
 				
 				try{
 					// 顧客データモデルを初期化
@@ -57,12 +56,12 @@ class Members_CheckSerial extends FrameworkModule{
 					$log->customer_code = $customer->customer_code;
 					
 					// 画像データを登録する。
-					$log->save($db);
+					$log->save();
 					
 					// エラーが無かった場合、処理をコミットする。
-					$db->commit();
+					DBFactory::commit("member");
 				}catch(Exception $ex){
-					$db->rollBack();
+					DBFactory::rollback("member");
 					throw $ex;
 				}
 			}

@@ -68,9 +68,8 @@ class Members_CreateSerial extends FrameworkModule{
 					$serial .= $keyChain[$index];
 				}
 
-				// トランザクションデータベースの取得
-				$db = DBFactory::getLocal();// トランザクションの開始
-				$db->beginTransaction();
+				// トランザクションの開始
+				DBFactory::begin("member");
 				
 				try{
 					// 顧客データモデルを初期化
@@ -80,16 +79,16 @@ class Members_CreateSerial extends FrameworkModule{
 					$option->option_value = $serial;
 					
 					// 画像データを登録する。
-					$option->save($db);
+					$option->save();
 					
 					// エラーが無かった場合、処理をコミットする。
-					$db->commit();
+					DBFactory::commit("member");
 	
 					// 結果を登録する。
 					$_SESSION[CUSTOMER_SESSION_KEY]->$optionKey = $serial;
 					$_SERVER["ATTRIBUTES"][$params->get("result", "customer")]= $_SESSION[CUSTOMER_SESSION_KEY];					
 				}catch(Exception $ex){
-					$db->rollBack();
+					DBFactory::rollback("member");
 					throw $ex;
 				}
 			}

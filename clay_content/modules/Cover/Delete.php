@@ -10,11 +10,8 @@ class Content_Cover_Delete extends FrameworkModule{
 			$loader = new PluginLoader("Content");
 			$loader->LoadSetting();
 			
-			// トランザクションデータベースの取得
-			$db = DBFactory::getConnection("content");
-			
 			// トランザクションの開始
-			$db->beginTransaction();
+			DBFactory::begin();
 			
 			try{
 				// 渡されたカテゴリIDのインスタンスを生成
@@ -29,11 +26,11 @@ class Content_Cover_Delete extends FrameworkModule{
 				foreach($_POST["cover_id"] as $cover_id){
 					// カテゴリを削除
 					$cover->findByPrimaryKey($cover_id);
-					$cover->delete($db);
+					$cover->delete();
 				}
 				
 				// エラーが無かった場合、処理をコミットする。
-				$db->commit();
+				DBFactory::commit();
 				
 				unset($_POST["cover_id"]);
 				unset($_POST["delete"]);
@@ -41,7 +38,7 @@ class Content_Cover_Delete extends FrameworkModule{
 				// 登録が正常に完了した場合には、ページをリロードする。
 				$this->reload();
 			}catch(Exception $e){
-				$db->rollBack();
+				DBFactory::rollback();
 				unset($_POST["cover_id"]);
 				unset($_POST["delete"]);
 				throw $e;

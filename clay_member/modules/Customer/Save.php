@@ -14,11 +14,8 @@ class Member_Customer_Save extends FrameworkModule{
 			$loader = new PluginLoader("Member");
 			$loader->LoadSetting();
 	
-			// トランザクションデータベースの取得
-			$db = DBFactory::getConnection("member");
-			
 			// トランザクションの開始
-			$db->beginTransaction();
+			DBFactory::begin("member");
 		
 			try{
 				// 商品データを検索する。
@@ -31,19 +28,19 @@ class Member_Customer_Save extends FrameworkModule{
 				foreach($_POST as $key => $value){
 					$customer->$key = $value;
 				}
-				$customer->save($db);
+				$customer->save();
 				
 				// 顧客のオプションを登録する。
 				if(isset($_POST["option"])){
 					$customerOptions = $customer->customerOptions();
 					foreach($customerOptions as $customerOption){
 						// 登録時にオプションは全て削除
-						$customerOption->delete($db);
+						$customerOption->delete();
 					}
 					if(is_array($_POST["option"])){
 						foreach($_POST["option"] as $name => $value){
 							// データを登録
-							$insert = new DatabaseInsert($loader->LoadModel("CustomerOptionsTable"), $db);
+							$insert = new DatabaseInsert($loader->LoadModel("CustomerOptionsTable"));
 							$data = array(
 								"customer_id" => $customer->customer_id, 
 								"option_name" => $name, 
@@ -59,9 +56,9 @@ class Member_Customer_Save extends FrameworkModule{
 				unset($_POST["save"]);
 				
 				// エラーが無かった場合、処理をコミットする。
-				$db->commit();
+				DBFactory::commit("member");
 			}catch(Exception $e){
-				$db->rollBack();
+				DBFactory::rollback("member");
 				unset($_POST["save"]);
 				throw $e;
 			}

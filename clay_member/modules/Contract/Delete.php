@@ -10,11 +10,8 @@ class Member_Contract_Delete extends FrameworkModule{
 			$loader = new PluginLoader("Member");
 			$loader->LoadSetting();
 			
-			// トランザクションデータベースの取得
-			$db = DBFactory::getConnection("member");
-			
 			// トランザクションの開始
-			$db->beginTransaction();
+			DBFactory::begin("member");
 			
 			try{
 				// 渡されたカテゴリIDのインスタンスを生成
@@ -29,11 +26,11 @@ class Member_Contract_Delete extends FrameworkModule{
 				foreach($_POST["contract_id"] as $contract_id){
 					// カテゴリを削除
 					$contract->findByPrimaryKey($contract_id);
-					$contract->delete($db);
+					$contract->delete();
 				}
 				
 				// エラーが無かった場合、処理をコミットする。
-				$db->commit();
+				DBFactory::commit("member");
 				
 				unset($_POST["contract_id"]);
 				unset($_POST["delete"]);
@@ -41,7 +38,7 @@ class Member_Contract_Delete extends FrameworkModule{
 				// 登録が正常に完了した場合には、ページをリロードする。
 				$this->reload();
 			}catch(Exception $e){
-				$db->rollBack();
+				DBFactory::rollback("member");
 				unset($_POST["contract_id"]);
 				unset($_POST["delete"]);
 				throw $e;

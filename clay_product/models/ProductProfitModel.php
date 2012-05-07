@@ -28,28 +28,29 @@ class Product_ProductProfitModel extends DatabaseModel{
 		$sql .= " FROM `shop_products` INNER JOIN `shop_order_details` ON `shop_products`.`product_code` = `shop_order_details`.`product_code`";
 		$sql .= " INNER JOIN `shop_order_packages` ON `shop_order_details`.`order_package_id` = `shop_order_packages`.`order_package_id`";
 		$sql .= " INNER JOIN `shop_orders` ON `shop_order_packages`.`order_id` = `shop_orders`.`order_id` GROUP BY `shop_products`.`product_id`";
-		$prepare = $connection->prepare($sql);
-		$prepare->execute();
-		$result = $prepare->fetchAll(PDO::FETCH_ASSOC);
+		$result = $connection->query($sql);
+		$list = $result->fetchAll();
 		
-		$connection = DBFactory::getConnection("product");
-		$connection->beginTransaction();
-		$prepare = $connection->prepare("TRUNCATE `shop_product_profits`");
-		$prepare->execute();
-		$sql = "INSERT INTO `shop_product_profits`(`product_code`, `efficient_profit`, `total_profit`) VALUES (?, ?, ?)";
-		$prepare = $connection->prepare($sql);
-		foreach($result as $data){
-			$prepare->execute(array($data["product_code"], $data["efficient_profit"], $data["total_profit"]));
+		DBFactory::begin("product");
+		try{
+			$connection = DBFactory::getConnection("product");
+			$connection->query("TRUNCATE `shop_product_profits`");
+			$sql = "INSERT INTO `shop_product_profits`(`product_code`, `efficient_profit`, `total_profit`) VALUES (?, ?, ?)";
+			$connection->query($sql);
+			foreach($list as $data){
+				$prepare->execute(array($data["product_code"], $data["efficient_profit"], $data["total_profit"]));
+			}
+			
+			$sql = "UPDATE `shop_product_profits`, `shop_products`";
+			$sql .= " SET `shop_product_profits`.`product_id` = `shop_products`.`product_id`";
+			$sql .= ", `shop_product_profits`.`create_time` = NOW(), `shop_product_profits`.`update_time` = NOW()";
+			$sql .= " WHERE `shop_product_profits`.`product_code` = `shop_products`.`product_code`";
+			$connection->query($sql);
+	
+			DBFactory::commit("product");
+		}catch(Expception $e){
+			DBFactory::rollback("product");
 		}
-		
-		$sql = "UPDATE `shop_product_profits`, `shop_products`";
-		$sql .= " SET `shop_product_profits`.`product_id` = `shop_products`.`product_id`";
-		$sql .= ", `shop_product_profits`.`create_time` = NOW(), `shop_product_profits`.`update_time` = NOW()";
-		$sql .= " WHERE `shop_product_profits`.`product_code` = `shop_products`.`product_code`";
-		$prepare = $connection->prepare($sql);
-		$prepare->execute();
-
-		$connection->commit();
 	}
 }
 ?>

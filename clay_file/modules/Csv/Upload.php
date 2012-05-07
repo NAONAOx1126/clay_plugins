@@ -37,22 +37,19 @@ class File_Csv_Upload extends FrameworkModule{
 				if($_FILES[$params->get("key")]["error"] == 0){
 					// アップロードログを書き込み
 					try{
-						// トランザクションデータベースの取得
-						$db = DBFactory::getConnection("file");
-						
 						// トランザクションの開始
-						$db->beginTransaction();
+						DBFactory::begin("file");
 						
 						// アップロードログを生成
 						$uploadLog = $loader->loadModel("UploadLogModel");
 						$uploadLog->upload_time = date("Y-m-d H:i:s");
 						$uploadLog->upload_filename = $_FILES[$params->get("key")]["name"];
 						$uploadLog->upload_size = $_FILES[$params->get("key")]["size"];
-						$uploadLog->save($db);
+						$uploadLog->save();
 
-						$db->commit();
+						DBFactory::commit("file");
 					}catch(Exception $e){
-						$db->rollback();
+						DBFactory::rollback("file");
 					}
 					
 					// アップロードファイルを開く

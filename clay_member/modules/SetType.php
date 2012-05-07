@@ -19,9 +19,8 @@ class Members_SetType extends FrameworkModule{
 		$type_id = $params->get("type", $_POST["type"]);
 		
 		if(!empty($type_id)){
-			// トランザクションデータベースの取得
-			$db = DBFactory::getLocal();// トランザクションの開始
-			$db->beginTransaction();
+			// トランザクションの開始
+			DBFactory::begin("member");
 			
 			try{
 				// 現在のタイプが設定されているか調べる。
@@ -43,23 +42,23 @@ class Members_SetType extends FrameworkModule{
 						$_SESSION[CUSTOMER_SESSION_KEY]->point += $type->init_point;
 						
 						// 変更内容をデータベースに反映
-						$_SESSION[CUSTOMER_SESSION_KEY]->save($db);
+						$_SESSION[CUSTOMER_SESSION_KEY]->save();
 						$customerTypes = $_SESSION[CUSTOMER_SESSION_KEY]->types;
 						foreach($customerTypes as $customerType){
-							$customerType->save($db);
+							$customerType->save();
 						}
 
 						// ポイントログに書き込み
 						$pointLog = new PointLogModel();
-						$pointLog->save($db, $type->init_point);
+						$pointLog->save($type->init_point);
 					}
 				}
 				
 				// エラーが無かった場合、処理をコミットする。
-				$db->commit();
+				DBFactory::commit("member");
 					
 			}catch(Exception $ex){
-				$db->rollBack();
+				DBFactory::rollback("member");
 				throw $ex;
 			}
 		}

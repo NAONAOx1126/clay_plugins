@@ -23,7 +23,7 @@ class Order_CustomerProducts extends FrameworkModule{
 		if(defined("CUSTOMER_SESSION_KEY") && isset($_SESSION[CUSTOMER_SESSION_KEY]) && $_SESSION[CUSTOMER_SESSION_KEY]->customer_id > 0){
 			$orders = $order->findAllByCustomer($_SESSION[CUSTOMER_SESSION_KEY]->customer_id);
 		}else{
-			$orders = $order->findAllBy(array("gt:customer_id", 0));
+			$orders = $order->findAllBy(array("gt:customer_id" => 0));
 		}
 		
 		$result = array();

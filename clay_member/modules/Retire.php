@@ -16,37 +16,36 @@ LoadModel("CustomerTypeModel", "Members");
 class Members_Retire extends FrameworkModule{
 	function execute($params){
 		if(isset($_POST["retire"])){
-			// トランザクションデータベースの取得
-			$db = DBFactory::getLocal();// トランザクションの開始
-			$db->beginTransaction();
+			// トランザクションの開始
+			DBFactory::begin("member");
 			
 			try{
 				// オプションデータを削除
 				$customerOption = new CustomerOptionModel();
 				$customerOptions = $customerOption->getOptionArrayByCustomer($_SESSION[CUSTOMER_SESSION_KEY]->customer_id);
 				foreach($customerOptions as $option){
-					$option->delete($db);
+					$option->delete();
 				}
 			
 				// 顧客種別を削除
 				$customerType = new CustomerTypeModel();
 				$customerTypes = $customerType->findAllByCustomer($_SESSION[CUSTOMER_SESSION_KEY]->customer_id);
 				foreach($customerTypes as $type){
-					$type->delete($db);
+					$type->delete();
 				}
 			
 				// 顧客データを削除
 				$customer = new CustomerModel();
 				$customer->findByPrimaryKey($_SESSION[CUSTOMER_SESSION_KEY]->customer_id);
-				$customer->delete($db);
+				$customer->delete();
 				
 				// エラーが無かった場合、処理をコミットする。
-				$db->commit();
+				DBFactory::commit("member");
 	
 				// セッションをクリア
 				unset($_SESSION[CUSTOMER_SESSION_KEY]);
 			}catch(Exception $ex){
-				$db->rollBack();
+				DBFactory::rollback("member");
 				throw $ex;
 			}
 		}

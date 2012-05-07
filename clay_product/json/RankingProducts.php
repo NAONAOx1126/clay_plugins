@@ -44,7 +44,7 @@ class Product_RankingProducts{
 				foreach($productFlags as $productFlag){
 					$conditions2["in:product_id"][] = $productFlag->product_id;
 				}
-				if(is_array($condition["in:product_id"])){
+				if(is_array($conditions["in:product_id"])){
 					$conditions["in:product_id"] = array_intersect($conditions["in:product_id"], $conditions2["in:product_id"]);
 				}else{
 					$conditions["in:product_id"] = $conditions2["in:product_id"];
