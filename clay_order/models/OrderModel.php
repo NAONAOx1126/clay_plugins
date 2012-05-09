@@ -35,6 +35,17 @@ class Order_OrderModel extends DatabaseModel{
 		return $orderPackage->findAllByOrder($this->order_id);
 	}
 	
+	function details(){
+		$orderPackages = $this->packages();
+		$conditions = array("in:order_package_id" => array());
+		foreach($orderPackages as $orderPackage){
+			$conditions["in:order_package_id"][] = $orderPackage->order_package_id;
+		}
+		$loader = new PluginLoader("Order");
+		$orderDetail = $loader->loadModel("OrderDetailModel");
+		return $orderDetail->findAllBy($conditions);
+	}
+	
 	function payments(){
 		$loader = new PluginLoader("Order");
 		$orderPayment = $loader->loadModel("OrderPaymentModel");
