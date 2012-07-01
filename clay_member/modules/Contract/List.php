@@ -34,7 +34,7 @@ class Member_Contract_List extends FrameworkModule{
 		// カテゴリデータを検索する。
 		$contract = $loader->LoadModel("ContractModel");
 		$contracts = $contract->findAllBy(array(), $sortOrder, $sortReverse);
-		
+
 		$_SERVER["ATTRIBUTES"][$params->get("result", "contracts")] = $contracts;
 	}
 }

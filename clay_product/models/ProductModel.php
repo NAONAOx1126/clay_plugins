@@ -154,5 +154,55 @@ class Product_ProductModel extends DatabaseModel{
 		$model->findByPrimaryKey($this->product_id, $option1_id, $option2_id, $option3_id, $option4_id);
 		return $model;
 	}
+	
+	function relatedProducts($limit = 0){
+		// プラグインローダーの初期化
+		$productPlugin = new PluginLoader("Product");
+		$orderPlugin = new PluginLoader("Order");
+		
+		// 商品テーブルを生成
+		$product = $productPlugin->loadTable("ProductsTable");
+		
+		// 受注明細テーブルを生成
+		$orderDetail1 = $orderPlugin->loadTable("OrderDetailsTable");
+		$orderDetail1->setAlias("order_details_1");
+		$orderDetail2 = $orderPlugin->loadTable("OrderDetailsTable");
+		$orderDetail2->setAlias("order_details_2");
+		
+		// 受注パッケージテーブルを作成
+		$orderPackage1 = $orderPlugin->loadTable("OrderPackagesTable");
+		$orderPackage1->setAlias("order_packages_1");
+		$orderPackage2 = $orderPlugin->loadTable("OrderPackagesTable");
+		$orderPackage2->setAlias("order_packages_2");
+		
+		// 受注テーブルを作成
+		$order1 = $orderPlugin->loadTable("OrdersTable");
+		$order1->setAlias("orders_1");
+		$order2 = $orderPlugin->loadTable("OrdersTable");
+		$order2->setAlias("orders_2");
+		
+		// SELECT文を作成
+		$select = new DatabaseSelect($product);
+		$select->addColumn($product->_W)->addColumn("COUNT(".$product->product_id.")");
+		$select->join($orderDetail1, array($orderDetail1->product_code." = ".$product->product_code));
+		$select->join($orderPackage1, array($orderPackage1->order_package_id." = ".$orderDetail1->order_package_id));
+		$select->join($order1, array($order1->order_id." = ".$orderPackage1->order_id));
+		$select->join($order2, array($order1->customer_id." = ".$order2->customer_id));
+		$select->join($orderPackage2, array($order2->order_id." = ".$orderPackage2->order_id));
+		$select->join($orderDetail2, array($orderPackage2->order_package_id." = ".$orderDetail2->order_package_id));
+		$select->addWhere($orderDetail2->product_code." = ?", array($this->product_code));
+		$select->addWhere($product->product_code." <> ?", array($this->product_code));
+		$select->addGroupBy($product->product_id)->addOrder("COUNT(".$product->product_id.")", true);
+		if($limit > 0){
+			$result = $select->execute($limit);
+		}else{
+			$result = $select->execute();
+		}
+		$products = array();
+		foreach($result as $data){
+			$products[] = new ProductModel($data);
+		}
+		return $products;
+	}
 }
 ?>

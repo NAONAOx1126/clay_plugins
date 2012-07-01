@@ -10,7 +10,7 @@
  */
 
 /**
- * 未処理のエラーがある場合にはエラーを再発行するための基本クラスです。
+ * 一意性をある程度考慮したランダムコードを発行します。
  */
 class Base_Pages_UniqueCode extends FrameworkModule{
 	function execute($params){
@@ -20,7 +20,9 @@ class Base_Pages_UniqueCode extends FrameworkModule{
 			for($i = 0; $i < $params->get("length", "5"); $i ++){
 				$result .= substr($codes, mt_rand(0, strlen($codes) - 1), 1);
 			}
-			$_POST[$params->get("code")] = uniqid($result);
+			if($params->check("original", "0") == "0" || !isset($_POST[$params->get("code")])){
+				$_POST[$params->get("code")] = uniqid($result);
+			}
 		}
 	}
 }

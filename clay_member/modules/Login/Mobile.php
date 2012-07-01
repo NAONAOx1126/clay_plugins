@@ -77,14 +77,7 @@ class Member_Login_Mobile extends FrameworkModule{
 				}
 			}
 			if(!empty($customer->customer_id)){
-				$_SESSION[Member_Setting::CUSTOMER_SESSION_KEY] = $customer;
-				$customerType = $loader->LoadModel("CustomerTypeModel");
-				$_SESSION[Member_Setting::CUSTOMER_SESSION_KEY]->types = $customerType->findAllByCustomer($customer->customer_id);
-				$customerOption = $loader->LoadModel("CustomerOptionModel");
-				$customerOptions = $customerOption->getOptionArrayByCustomer($customer->customer_id);
-				foreach($customerOptions as $name => $option){
-					$_SESSION[Member_Setting::CUSTOMER_SESSION_KEY]->$name = $option->option_value;
-				}
+				$_SESSION[Member_Setting::CUSTOMER_SESSION_KEY] = $customer->toArray();
 			}
 		}
 	
@@ -95,7 +88,6 @@ class Member_Login_Mobile extends FrameworkModule{
 				throw new RedirectException();
 			}
 		}
-		print_r($_SESSION[Member_Setting::CUSTOMER_SESSION_KEY]);
 		$_SERVER["ATTRIBUTES"][$params->get("result", "customer")] = $_SESSION[Member_Setting::CUSTOMER_SESSION_KEY];
 	}
 }
