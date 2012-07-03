@@ -10,11 +10,10 @@
  */
 
 /**
- * ### Base.Pages.BasicAuth
- * 未処理のエラーがある場合にはエラーを再発行するための基本クラスです。
+ * チェックしたエラーの内容をコミットして、例外を発生させる。
  */
 
-class Base_Pages_CheckError extends FrameworkModule{
+class Base_Checks_Commit extends FrameworkModule{
 	function execute($params){
 		if(!empty($_SERVER["ERRORS"])){
 			$_SERVER["INPUT_DATA"] = $_POST;

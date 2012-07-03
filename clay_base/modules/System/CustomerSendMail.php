@@ -1,35 +1,41 @@
 <?php
-// この処理で使用するテーブルモデルをインクルード
-LoadModel("MailTemplateModel");
-
-class Default_Forms_SendFormMail extends FrameworkModule{
+class Base_System_CustomerSendMail extends FrameworkModule{
 	function execute($params){
+		// ローダーを初期化
+		$loader = new PluginLoader();
+		$loader->LoadSetting();
+		
 		// 引数を処理する。
-		$template = $params->get("template");
+		$template_code = $params->get("template");
 		
 		// templateが設定されていて、hiddenに設定されたパラメータがPOSTで渡されている場合に処理を実行
-		if(!empty($template)){
-			// ローダーを初期化
-			$loader = new PluginLoader();
-			// この機能で使用するテーブルモデルを初期化
-			$mailTemplate = $loader->loadModel("MailTemplateModel");
+		if(!empty($template_code)){
+			$template = $loader->LoadModel("MailTemplateModel");
 			
 			// テンプレートデータを取得
-			$mailTemplate->findByPrimaryKey($template);
+			$template->findByPrimaryKey($template_code);
 			
 			// データが取得できた場合のみ処理を実行
-			if($mailTemplate->template_code == $template){
+			if($template->template_code == $template_code){
 				$mail = new SendMail();
-				$mail->setFrom($_POST[$params->get("email", "email")]);
-				$mail->setTo($_SERVER["CONFIGURE"]["site_email"], $group["manager_group_name"]);
-				$mail->setSubject($subject);
+				$mail->setFrom($params->get("sendaddress", "info@clay-system.jp"), $params->get("sender", ""));
+				$mail->setTo($_POST[$params->get("email", "email")]);
+				$mail->setSubject($template->subject);
+				
+				// メール本文用にテンプレートを使う
+				$TEMPLATE_ENGINE = $_SERVER["CONFIGURE"]->TEMPLATE_ENGINE;
+				$templateEngine = new $TEMPLATE_ENGINE();
+				
+				$templateEngine->assign("u", FRAMEWORK_URL_BASE);
+				foreach($_SERVER as $name =>$value){
+					$templateEngine->assign($name, $value);
+				}
+				$body = $templateEngine->fetch("string:".$template->body);
 				$mail->addBody($body);
 				$mail->send();
-				if($index == 0){
-					$mail->reply();
-				}
 			}
-				
+			/*
+			// 送信通知用のメール処理
 			// メールボディを作成
 			$subject = "";
 			$body = "";
@@ -62,15 +68,13 @@ class Default_Forms_SendFormMail extends FrameworkModule{
 
 			foreach($result as $index => $group){
 				$mail = new SendMail();
-				$mail->setFrom($_POST[$params->get("email", "email")]);
+				$mail->setFrom($_SERVER["CONFIGURE"]["site_email"], $_SERVER["CONFIGURE"]["site_name"]);
 				$mail->setTo($group["email"], $group["manager_group_name"]);
 				$mail->setSubject($subject);
 				$mail->addBody($body);
 				$mail->send();
-				if($index == 0){
-					$mail->reply();
-				}
 			}
+			*/
 		}
 	}
 }

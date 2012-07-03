@@ -77,18 +77,18 @@ class Member_Login_Mobile extends FrameworkModule{
 				}
 			}
 			if(!empty($customer->customer_id)){
-				$_SESSION[Member_Setting::CUSTOMER_SESSION_KEY] = $customer->toArray();
+				$_SESSION[CUSTOMER_SESSION_KEY] = $customer->toArray();
 			}
 		}
 	
-		if(empty($_SESSION[Member_Setting::CUSTOMER_SESSION_KEY])){
+		if(empty($_SESSION[CUSTOMER_SESSION_KEY])){
 			if($params->get("error")){
 				throw new InvalidException(array("ログインに失敗しました"));
 			}elseif($params->get("redirect")){
 				throw new RedirectException();
 			}
 		}
-		$_SERVER["ATTRIBUTES"][$params->get("result", "customer")] = $_SESSION[Member_Setting::CUSTOMER_SESSION_KEY];
+		$_SERVER["ATTRIBUTES"][$params->get("result", "customer")] = $_SESSION[CUSTOMER_SESSION_KEY];
 	}
 }
 ?>
