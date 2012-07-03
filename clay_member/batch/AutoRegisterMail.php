@@ -71,7 +71,7 @@ class Member_AutoRegisterMail extends FrameworkModule{
 			$this->parseMail($data);
 			
 			//DELE n n番目のメッセージ削除
-			// $data = $this->sendCommand("DELE $i");
+			$data = $this->sendCommand("DELE $i");
 		}
 		
 		// メールサーバへの接続を切断する。
