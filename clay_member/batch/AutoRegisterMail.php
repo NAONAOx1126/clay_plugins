@@ -2,7 +2,7 @@
 /**
  * 空メールによりメール会員登録するバッチです。
  *
- * Ex: php batch.php Member.AutoRegisterMail members.clay info@clay-system.jp mail13.heteml.jp test@clay-system.jp mina-nao register
+ * Ex: /usr/bin/php batch.php "Member.AutoRegisterMail" <ホスト名> <メールアドレス> <メールサーバー> <ログイン> <パスワード> <テンプレート名>
  */
 class Member_AutoRegisterMail extends FrameworkModule{
 	private $socket;
