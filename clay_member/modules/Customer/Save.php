@@ -28,7 +28,9 @@ class Member_Customer_Save extends FrameworkModule{
 				foreach($_POST as $key => $value){
 					$customer->$key = $value;
 				}
+				
 				$customer->save();
+				$_POST["customer_id"] = $customer->customer_id;
 				
 				// 顧客のオプションを登録する。
 				if(isset($_POST["option"])){
