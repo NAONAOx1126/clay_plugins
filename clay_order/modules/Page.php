@@ -1,17 +1,17 @@
 <?php
 /**
- * ### Order.List
+ * ### Order.Page
  * 商品のリストを取得する。
  * @param item １ページあたりの件数
  * @param delta 現在ページの前後に表示するページ数
  * @param category【カテゴリタイプ】 商品に紐付けするカテゴリ（条件にしない場合は空文字を設定）
  * @param result 結果を設定する配列のキーワード
  */
-class Order_List extends FrameworkModule{
+class Order_Page extends FrameworkModule{
 	function execute($params){
-		// ローダーを初期化
 		$loader = new PluginLoader("Order");
-		
+		$loader->LoadSetting();
+
 		// ページャのオプションを設定
 		$option = array();
 		$option["mode"] = "Sliding";		// 現在ページにあわせて表示するページリストをシフトさせる。
@@ -26,53 +26,50 @@ class Order_List extends FrameworkModule{
 		$option["curPageSpanPre"] = "<font color=\"#000000\">";		// 現在ページのプレフィクス
 		$option["curPageSpanPost"] = "</font>";		// 現在ページのサフィックス
 		$option["clearIfVoid"] = false;			// １ページのみの場合のページリンクの出力の有無
-		$option["fileName"] = $_SERVER["TEMPLATE_NAME"];
-		$option["fixFileName"] = false;
 		
-		$order = $loader->loadModel("OrderModel");
-		
-		// パラメータのsortを並び順変更のキーとして利用
-		$sortKey = $_POST[$params->get("order", "order")];
-		unset($_POST[$params->get("order", "order")]);
+		// カテゴリが選択された場合、カテゴリの商品IDのリストを使う
 		$conditions = array();
-		foreach($_POST as $key => $value){
-			if(!empty($value)){
-				$conditions[$key] = $value;
+		if(is_array($_POST["search"])){
+			foreach($_POST["search"] as $key => $value){
+				if(!empty($value)){
+					$conditions[$key] = $value;
+				}
 			}
 		}
 		
-		// 取得する件数の上限をページャのオプションに追加
+		// 検索条件と並べ替えキー以外を無効化する。
+		if($params->get("clear", "0") == "1"){
+			if($params->check("sort_key")){
+				$_POST = array("search" => $conditions, $params->get("sort_key") => $_POST[$params->get("sort_key")]);
+			}else{
+				$_POST = array("search" => $conditions);
+			}
+		}
+				
+		// 並べ替え順序が指定されている場合に適用
+		$sortOrder = "";
+		$sortReverse = false;
+		if($params->check("sort_key")){
+			$sortOrder = $_POST[$params->get("sort_key")];
+			if(empty($sortOrder)){
+				$sortOrder = "create_time";
+				$sortReverse = true;
+			}elseif(preg_match("/^rev@/", $sortOrder) > 0){
+				list($dummy, $sortOrder) = explode("@", $sortOrder);
+				$sortReverse = true;
+			}
+		}
+		
+		// 商品データを検索する。
+		$order = $loader->LoadModel("OrderModel");
 		$option["totalItems"] = $order->countBy($conditions);
-		
-		// ページャーのインスタンスを作成
 		$pager = AdvancedPager::factory($option);
+		list($from, $to) = $pager->getOffsetByPageId();
+		$order->limit($option["perPage"], $from - 1);
+		$orders = $order->findAllBy($conditions, $sortOrder, $sortReverse);
 		
-		// 最終的に出力するページオブジェクトを生成
-		$page = array();
-		// ページャーからリンクをコピー
-		$page["links"] = $pager->links;
-		$page["links_object"] = $pager->getLinks();
-
-		// オプションから該当件数を取得
-		$page["totalItems"] = $options["totalItems"];
-
-		// ページ数をページャーから取得
-		$page["page_numbers"] = array(
-			"current" => $pager->getCurrentPageID(),
-			"total"   => $pager->numPages()
-		);
-
-		// 現在のページにおけるデータ全体に対するインデックスを取得
-		list($page["from"], $page["to"]) = $pager->getOffsetByPageId();
-
-		// 現在のページの実件数を取得
-		$page["limit"] = $page["to"] - $page["from"] +1;
-		
-		// 取得する件数を絞り込み
-		$order->limit($options["perPage"], $page["from"]-1);
-		$page["data"] = $order->findAllBy($conditions, $sortKey);
-
-		$_SERVER["ATTRIBUTES"][$params->get("result", "orders")] = $page;
+		$_SERVER["ATTRIBUTES"][$params->get("result", "orders")."_pager"] = $pager;
+		$_SERVER["ATTRIBUTES"][$params->get("result", "orders")] = $orders;
 	}
 }
 ?>
