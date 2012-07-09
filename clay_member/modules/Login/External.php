@@ -10,7 +10,7 @@
  */
 class Member_Login_External extends FrameworkModule{
 	function execute($params){
-		if(empty($_POST["external_id"]) && (!isset($_SESSION[CUSTOMER_SESSION_KEY]) || empty($_SESSION[CUSTOMER_SESSION_KEY]))){
+		if(!empty($_POST["external_id"]) || !isset($_SESSION[CUSTOMER_SESSION_KEY]) || empty($_SESSION[CUSTOMER_SESSION_KEY])){
 			// この機能で使用するモデルクラス
 			$loader = new PluginLoader("Member");
 			$loader->LoadSetting();
