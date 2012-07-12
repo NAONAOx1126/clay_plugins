@@ -17,10 +17,10 @@ class Base_Company_Detail extends FrameworkModule{
 	function execute($params){
 		// サイトデータを取得する。
 		$loader = new PluginLoader();
-		$site = $loader->loadModel("SiteModel");
-		$site->findByPrimaryKey($_POST["site_id"]);
+		$company = $loader->loadModel("CompanyModel");
+		$company->findByPrimaryKey($_POST["company_id"]);
 		
-		$_SERVER["ATTRIBUTES"][$params->get("result", "site")] = $site;
+		$_SERVER["ATTRIBUTES"][$params->get("result", "company")] = $company;
 	}
 }
 ?>

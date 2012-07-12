@@ -10,22 +10,21 @@
  */
 
 /**
- * ### Base.Company.List
+ * ### Base.Configure.List
  * サイトデータのリストを取得する。
  */
-class Base_Company_List extends FrameworkModule{
+class Base_Configure_List extends FrameworkModule{
 	function execute($params){
 		// サイトデータを取得する。
 		$loader = new PluginLoader();
-		if($_SESSION["OPERATOR"]["super_flg"] != 1){
-			$site = $loader->loadModel("SiteModel");
-			$site->findByPrimaryKey(array("site_id" => $_SERVER["CONFIGURE"]->site_id));
-			$companys = $site->companys();
-		}else{
-			$company = $loader->loadModel("CompanyModel");
-			$companys = $company->findAllBy(array());
+		$configure = $loader->loadModel("SiteConfigureModel");
+		$temp = $configure->findAllBySiteId($_SERVER["CONFIGURE"]->site_id);
+		$configures = array();
+		foreach($temp as $configure){
+			$configures[$configure->name] = $configure;
 		}
-		$_SERVER["ATTRIBUTES"][$params->get("result", "companys")] = $companys;
+		
+		$_SERVER["ATTRIBUTES"][$params->get("result", "configures")] = $configures;
 	}
 }
 ?>

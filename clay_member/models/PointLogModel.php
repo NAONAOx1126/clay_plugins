@@ -1,8 +1,4 @@
 <?php
-// この処理で使用するテーブルモデルをインクルード
-LoadModel("Setting", "Members");
-LoadTable("PointLogsTable", "Members");
-
 /**
  * ポイントログのモデルクラス
  */
@@ -27,16 +23,19 @@ class Member_PointLogModel extends DatabaseModel{
 		return $customer;
 	}
 	
-	function add($point, $commit = true){
+	function add($point, $comment = "", $commit = true){
 		$this->log_time = date("Y-m-d H:i:s");
-		$this->customer_id = $_SESSION[CUSTOMER_SESSION_KEY]->customer_id;
+		$this->customer_id = ($_SESSION[CUSTOMER_SESSION_KEY]["customer_id"] > 0)?$_SESSION[CUSTOMER_SESSION_KEY]["customer_id"]:$_POST["customer_id"];
 		$this->point = $point;
+		$this->comment = $comment;
 		if($commit){
 			$this->commit_flg = 1;
 		}else{
 			$this->commit_flg = 0;
 		}
-		parent::save();
+		if($this->customer_id > 0 && $this->point != 0){
+			parent::save();
+		}
 	}
 }
 ?>

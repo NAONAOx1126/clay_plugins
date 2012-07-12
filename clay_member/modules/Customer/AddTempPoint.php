@@ -6,7 +6,7 @@
  * @params type 設定する顧客種別
  * @params result 顧客情報をページで使うためのキー名
  */
-class Members_Customer_AddTempPoint extends FrameworkModule{
+class Member_Customer_AddTempPoint extends FrameworkModule{
 	function execute($params){
 		// ローダーの初期化
 		$loader = new PluginLoader("Member");
@@ -14,6 +14,7 @@ class Members_Customer_AddTempPoint extends FrameworkModule{
 		
 		// 設定するポイント
 		$point = $params->get("point", $_POST["point"]);
+		$pointComment = $params->get("point_comment", $_POST["point_comment"]);
 		
 		if(!empty($point) && is_numeric($point)){
 			// トランザクションの開始
@@ -22,11 +23,13 @@ class Members_Customer_AddTempPoint extends FrameworkModule{
 			try{
 				// ポイントログに書き込み
 				$pointLog = $loader->loadModel("PointLogModel");
-				$pointLog->add($point, false);
+				$pointLog->add($point, $pointComment, false);
 				
 				// エラーが無かった場合、処理をコミットする。
 				DBFactory::commit("member");
-					
+				
+				// ポイント登録した場合はPOSTから削除
+				$_POST["point"] = 0;
 			}catch(Exception $ex){
 				DBFactory::rollback("member");
 				throw $ex;

@@ -15,33 +15,24 @@ class Member_Customer_Delete extends FrameworkModule{
 			
 			try{
 				// 渡されたカテゴリIDのインスタンスを生成
-				$customer = $loader->loadModel("CustomerModel");
+				$welcome = $loader->loadModel("WelcomeModel");
 				
 				// カテゴリIDを配列に変換
-				if(!is_array($_POST["customer_id"])){
-					$_POST["customer_id"] = array($_POST["customer_id"]);
+				if(!is_array($_POST["welcome_id"])){
+					$_POST["welcome_id"] = array($_POST["welcome_id"]);
 				}
 				
 				// 指定されたカテゴリIDのデータを全削除
-				foreach($_POST["customer_id"] as $customer_id){
+				foreach($_POST["welcome_id"] as $welcome_id){
 					// カテゴリを削除
-					$customer->findByPrimaryKey($customer_id);
-					foreach($customer->customerOptions() as $customerOption){
-						$customerOption->delete();
-					}
-					foreach($customer->customerDelivers() as $customerDeliver){
-						$customerDeliver->delete();
-					}
-					foreach($customer->pointLogs() as $pointLog){
-						$pointLog->delete();
-					}
-					$customer->delete();
+					$welcome->findByPrimaryKey($welcome_id);
+					$welcome->delete();
 				}
 				
 				// エラーが無かった場合、処理をコミットする。
 				DBFactory::commit("member");
 				
-				unset($_POST["customer_id"]);
+				unset($_POST["welcome_id"]);
 				unset($_POST["delete"]);
 				
 				// 登録が正常に完了した場合には、ページをリロードする。

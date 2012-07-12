@@ -23,6 +23,18 @@ class Member_Customer_Save extends FrameworkModule{
 				if(!empty($_POST["customer_id"])){
 					$customer->findByPrimaryKey($_POST["customer_id"]);
 				}
+
+				// 新規登録時は登録ポイントを設定。
+				if(!($customer->customer_id > 0)){
+					if(empty($_POST["point"])){
+						$_POST["point"] = 0;
+					}
+					$rule = $loader->loadModel("PointRuleModel");
+					
+					// 新規登録時は登録ポイントを登録
+					$pointLog = $loader->loadModel("PointLogModel");
+					$pointLog->add($rule->getAddPoint(Member_PointRuleModel::RULE_ENTRY), $rule->getRuleName(Member_PointRuleModel::RULE_ENTRY), false);
+				}
 				
 				// 商品データをモデルに格納して保存する。
 				foreach($_POST as $key => $value){

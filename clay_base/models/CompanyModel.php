@@ -41,6 +41,23 @@ class Base_CompanyModel extends DatabaseModel{
 		return $companyOperator;		
 	}
 	
+	public function siteCompanys(){
+		$loader = new PluginLoader();
+		$siteCompany = $loader->loadModel("SiteCompanyModel");
+		return $siteCompany->findAllByCompany($this->company_id);
+		
+	}
+	
+	public function hasSite($site_id){
+		$loader = new PluginLoader();
+		$siteCompany = $loader->loadModel("SiteCompanyModel");
+		$siteCompany->findBySiteCompany($site_id, $this->company_id);
+		if($siteCompany->site_id > 0){
+			return true;
+		}
+		return false;
+	}
+	
 	public function site($site_id){
 		$loader = new PluginLoader();
 		$siteCompany = $loader->loadModel("SiteCompanyModel");
@@ -49,9 +66,7 @@ class Base_CompanyModel extends DatabaseModel{
 	}
 	
 	public function sites(){
-		$loader = new PluginLoader();
-		$siteCompany = $loader->loadModel("SiteCompanyModel");
-		$siteCompanys = $siteCompany->findAllByCompany($this->company_id);
+		$siteCompanys = $this->siteCompanys();
 		$result = array();
 		foreach($siteCompanys as $siteCompany){
 			$result[] = $siteCompany->site();

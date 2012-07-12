@@ -32,6 +32,18 @@ class Member_Welcome_Save extends FrameworkModule{
 		DBFactory::begin("member");
 		
 		try{
+			// 新規登録時は来店ポイントを設定。
+			if(!($welcome->welcome_id > 0)){
+				if(empty($_POST["point"])){
+					$_POST["point"] = 0;
+				}
+				$rule = $loader->loadModel("PointRuleModel");
+					
+				// 新規登録時は登録ポイントを登録
+				$pointLog = $loader->loadModel("PointLogModel");
+				$pointLog->add($rule->getAddPoint(Member_PointRuleModel::RULE_WELCOME), $rule->getRuleName(Member_PointRuleModel::RULE_WELCOME), false);
+			}
+		
 			// 登録データの保存
 			$welcome->save();
 			$_POST["welcome_id"] = $welcome->welcome_id;

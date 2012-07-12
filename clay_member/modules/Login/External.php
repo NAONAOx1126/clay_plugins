@@ -32,6 +32,16 @@ class Member_Login_External extends FrameworkModule{
 						}
 						$customer->save();
 						
+						// 新規登録時は登録ポイントを設定。
+						if(empty($_POST["point"])){
+							$_POST["point"] = 0;
+						}
+						$rule = $loader->loadModel("PointRuleModel");
+					
+						// 新規登録時は登録ポイントを登録
+						$pointLog = $loader->loadModel("PointLogModel");
+						$pointLog->add($rule->getAddPoint(Member_PointRuleModel::RULE_ENTRY), $rule->getRuleName(Member_PointRuleModel::RULE_ENTRY), false);
+		
 						// エラーが無かった場合、処理をコミットする。
 						DBFactory::commit("member");
 					}catch(Exception $ex){

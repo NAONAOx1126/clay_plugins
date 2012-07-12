@@ -58,7 +58,7 @@ class Member_CustomerModel extends DatabaseModel{
 	/**
 	 * 顧客オプションのリストを取得する。
 	*/
-	public function customerOptions($values = array(), $order = "", $reverse = false){
+	public function customerOptions($order = "", $reverse = false){
 		$loader = new PluginLoader("Member");
 		$customerOption = $loader->loadModel("CustomerOptionModel");
 		return $customerOption->findAllByCustomer($this->customer_id, $order, $reverse);
@@ -71,7 +71,7 @@ class Member_CustomerModel extends DatabaseModel{
 		return $customerOption;
 	}
 
-	public function customerDelivers($values = array(), $order = "", $reverse = false){
+	public function customerDelivers($order = "", $reverse = false){
 		$loader = new PluginLoader("Member");
 		$customerDeliver = $loader->loadModel("CustomerDeliverModel");
 		return $customerDeliver->findAllByCustomer($this->customer_id, $order, $reverse);

@@ -33,7 +33,11 @@ class Product_Category_List extends FrameworkModule{
 		
 		// カテゴリデータを検索する。
 		$category = $loader->LoadModel("CategoryModel");
-		$categories = $category->findAllByType($params->get("type"), $sortOrder, $sortReverse);
+		if($params->get("type", $_POST["category_type"]) > 0){
+			$categories = $category->findAllByType($params->get("type", $_POST["category_type"]), $sortOrder, $sortReverse);
+		}else{
+			$categories = $category->findAllBy(array(), $sortOrder, $sortReverse);
+		}
 		
 		$_SERVER["ATTRIBUTES"][$params->get("result", "categories")] = $categories;
 	}

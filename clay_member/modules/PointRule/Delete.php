@@ -3,7 +3,7 @@
  * ### Member.Customer.Delete
  * 商品を削除する。
  */
-class Member_Customer_Delete extends FrameworkModule{
+class Member_PointRule_Delete extends FrameworkModule{
 	function execute($params){
 		if(isset($_POST["delete"]) && !empty($_POST["delete"])){
 			// ローダーの初期化
@@ -15,33 +15,24 @@ class Member_Customer_Delete extends FrameworkModule{
 			
 			try{
 				// 渡されたカテゴリIDのインスタンスを生成
-				$customer = $loader->loadModel("CustomerModel");
+				$pointRule = $loader->loadModel("PointRuleModel");
 				
 				// カテゴリIDを配列に変換
-				if(!is_array($_POST["customer_id"])){
-					$_POST["customer_id"] = array($_POST["customer_id"]);
+				if(!is_array($_POST["point_rule_id"])){
+					$_POST["point_rule_id"] = array($_POST["point_rule_id"]);
 				}
 				
 				// 指定されたカテゴリIDのデータを全削除
-				foreach($_POST["customer_id"] as $customer_id){
+				foreach($_POST["point_rule_id"] as $point_rule_id){
 					// カテゴリを削除
-					$customer->findByPrimaryKey($customer_id);
-					foreach($customer->customerOptions() as $customerOption){
-						$customerOption->delete();
-					}
-					foreach($customer->customerDelivers() as $customerDeliver){
-						$customerDeliver->delete();
-					}
-					foreach($customer->pointLogs() as $pointLog){
-						$pointLog->delete();
-					}
-					$customer->delete();
+					$pointRule->findByPrimaryKey($point_rule_id);
+					$pointRule->delete();
 				}
 				
 				// エラーが無かった場合、処理をコミットする。
 				DBFactory::commit("member");
 				
-				unset($_POST["customer_id"]);
+				unset($_POST["point_rule_id"]);
 				unset($_POST["delete"]);
 				
 				// 登録が正常に完了した場合には、ページをリロードする。

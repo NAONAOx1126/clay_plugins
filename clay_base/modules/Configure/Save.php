@@ -10,26 +10,29 @@
  */
 
 /**
- * ### Base.Company.Delete
- * サイトのデータを削除する。
+ * ### Base.Configure.Save
+ * サイトのデータを保存する。
  */
-class Base_Company_Delete extends FrameworkModule{
+class Base_Configure_Save extends FrameworkModule{
 	function execute($params){
 		// サイトデータを取得する。
 		$loader = new PluginLoader();
-		$company = $loader->loadModel("CompanyModel");
-		$company->findByPrimaryKey($_POST["company_id"]);
+		$configure = $loader->loadModel("SiteConfigureModel");
 		
-		// トランザクションデータベースの取得
+		// トランザクションの開始
 		DBFactory::begin();
 		
 		try{
-			// 組織に関連するオペレータを削除
-			foreach($company->operators() as $operator){
-				$operator->delete();
+			foreach($_POST["configure"] as $key => $value){
+				$configure->findByPrimaryKey($_SERVER["CONFIGURE"]->site_id, $key);
+				if($configure->site_id > 0 && $configure->name == $key){
+					$configure->value = $value;
+				}else{
+					$configure = $loader->loadModel("SiteConfigureModel", array("site_id" => $_SERVER["CONFIGURE"]->site_id, "name" => $key, "value" => $value));
+				}
+				$configure->save();
 			}
-			$company->delete();
-					
+
 			// エラーが無かった場合、処理をコミットする。
 			DBFactory::commit();
 		}catch(Exception $e){

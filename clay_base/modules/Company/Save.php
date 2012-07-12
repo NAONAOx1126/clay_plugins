@@ -17,33 +17,46 @@ class Base_Company_Save extends FrameworkModule{
 	function execute($params){
 		// サイトデータを取得する。
 		$loader = new PluginLoader();
-		$site = $loader->loadModel("SiteModel");
-		$site->findByPrimaryKey($_POST["site_id"]);
+		$company = $loader->loadModel("CompanyModel");
+		$company->findByPrimaryKey($_POST["company_id"]);
 		foreach($_POST as $key => $value){
-			$site->$key = $value;
+			$company->$key = $value;
 		}
 		
 		// トランザクションの開始
 		DBFactory::begin();
 		
-		if($site->site_code == ""){
-			throw new InvalidException(array("サイトコードは必須です"));
-		}
-
-		$site2 = $loader->loadModel("SiteModel");
-		$site2->findBySiteCode($site->site_code);
-		if($site->site_id != $site2->site_id && $site->site_code == $site2->site_code){
-			throw new InvalidException(array("サイトコードは重複できません"));
-		}
-
-		$site2->findByDomainName($site->domain_name);
-		if($site->site_id != $site2->site_id && $site->domain_name == $site2->domain_name){
-			throw new InvalidException(array("ドメイン名は重複できません"));
+		if(empty($_POST["company_name"])){
+			throw new InvalidException(array("組織名は必須です"));
 		}
 		
 		try{
-			$site->save();
-					
+			$company->save();
+			
+			if(isset($_POST["site_id"]) && is_array($_POST["site_id"])){
+				$siteCompanys = $company->siteCompanys();
+				$saveSites = array();
+				$deleteSites = array();
+				foreach($siteCompanys as $siteCompany){
+					if(in_array($siteCompany->site_id, $_POST["site_id"])){
+						$saveSites[$siteCompany->site_id] = $siteCompany;
+					}else{
+						$deleteSites[$siteCompany->site_id] = $siteCompany;
+					}
+				}
+				foreach($_POST["site_id"] as $site_id){
+					if(!isset($saveSites[$site_id])){
+						$saveSites[$site_id] = $loader->loadModel("SiteCompanyModel", array("site_id" => $site_id, "company_id" => $company->company_id));
+					}
+				}
+				foreach($saveSites as $saveSite){
+					$saveSite->save();
+				}
+				foreach($deleteSites as $deleteSite){
+					$deleteSite->delete();
+				}
+			}
+
 			// エラーが無かった場合、処理をコミットする。
 			DBFactory::commit();
 		}catch(Exception $e){

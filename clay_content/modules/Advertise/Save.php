@@ -23,10 +23,11 @@ class Content_Advertise_Save extends FrameworkModule{
 				$advertise->advertise_code = $_POST["advertise_code"];
 				$advertise->advertise_price = $_POST["advertise_price"];
 				$advertise->advertise_name = $_POST["advertise_name"];
-				$advertise->advertise_start_time = $_POST["advertise_start_time"];
-				$advertise->advertise_end_time = $_POST["advertise_end_time"];
+				$advertise->advertise_start_time = date("Y-m-d 0:00:00", strtotime($_POST["advertise_start_time"]));
+				$advertise->advertise_end_time = date("Y-m-d 23:59:59", strtotime($_POST["advertise_end_time"]));
 				
 				// カテゴリを保存
+				$advertise->save();
 						
 				// エラーが無かった場合、処理をコミットする。
 				DBFactory::commit();
