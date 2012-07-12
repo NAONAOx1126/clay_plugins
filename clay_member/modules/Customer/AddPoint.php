@@ -6,7 +6,7 @@
  * @params type 設定する顧客種別
  * @params result 顧客情報をページで使うためのキー名
  */
-class Members_Customer_AddPoint extends FrameworkModule{
+class Member_Customer_AddPoint extends FrameworkModule{
 	function execute($params){
 		// ローダーの初期化
 		$loader = new PluginLoader("Member");
