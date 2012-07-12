@@ -29,8 +29,6 @@ class Member_PointRule_Save extends FrameworkModule{
 			$pointRule->point_rule_end_time .= " 23:59:59";
 		}
 		
-		print_r($pointRule);
-		
 		// トランザクションの開始
 		DBFactory::begin("member");
 		
