@@ -34,7 +34,7 @@ class Member_PointLogModel extends DatabaseModel{
 			$this->commit_flg = 0;
 		}
 		if($this->customer_id > 0 && $this->point != 0){
-			parent::save();
+			parent::create();
 		}
 	}
 }
