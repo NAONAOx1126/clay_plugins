@@ -37,7 +37,7 @@ class Order_OrderModel extends DatabaseModel{
 	
 	function details(){
 		$orderPackages = $this->packages();
-		$conditions = array("in:order_package_id" => array());
+		$conditions = array("in:order_package_id" => array("0"));
 		foreach($orderPackages as $orderPackage){
 			$conditions["in:order_package_id"][] = $orderPackage->order_package_id;
 		}
