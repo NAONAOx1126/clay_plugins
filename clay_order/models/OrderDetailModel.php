@@ -17,8 +17,12 @@ class Order_OrderDetailModel extends DatabaseModel{
 		parent::__construct($loader->loadTable("OrderDetailsTable"), $values);
 	}
 	
-	function findByPrimaryKey($order_package_id, $product_id, $option1_id = null, $option2_id = null, $option3_id = null, $option4_id = null){
-		$this->findBy(array("order_package_id" => $order_package_id, "product_id" => $product_id, "option1_id" => $option1_id, "option2_id" => $option2_id, "option3_id" => $option3_id, "option4_id" => $option4_id));
+	function findByPrimaryKey($order_detail_id){
+		$this->findBy(array("order_detail_id" => $order_detail_id));
+	}
+	
+	function findByPackageProduct($order_package_id, $product_code, $option1_code = null, $option2_code = null, $option3_code = null, $option4_code = null){
+		$this->findBy(array("order_package_id" => $order_package_id, "product_code" => $product_code, "option1_code" => $option1_code, "option2_code" => $option2_code, "option3_code" => $option3_code, "option4_code" => $option4_code));
 	}
 	
 	function findAllByOrderPackage($order_package_id){

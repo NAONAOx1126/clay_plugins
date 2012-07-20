@@ -33,6 +33,46 @@ class Order_Save extends FrameworkModule{
 				$order->save();
 				$_POST["order_id"] = $order->order_id;
 				
+				if(is_array($_POST["products"]) && !empty($_POST["products"])){
+					$orderPackage = $loader->LoadModel("OrderPackageModel");
+					if(!empty($_POST["order_id"])){
+						$orderPackages = $orderPackage->findAllByOrder($_POST["order_id"]);
+						if(count($orderPackages) > 0){
+							$_POST["order_package_id"] = $orderPackages[0]->order_package_id;
+						}else{
+							foreach($_POST as $key => $value){
+								$orderPackage->$key = $value;
+							}
+							$orderPackage->save();
+							$_POST["order_package_id"] = $orderPackage->order_package_id;
+						}
+						$orderDetail = $loader->LoadModel("OrderDetailModel");
+						if(!empty($_POST["order_package_id"])){
+							foreach($_POST["products"] as $product_code => $product){
+								$orderDetail->findByPackageProduct($_POST["order_package_id"], $product["product_code"]);
+								if($orderDetail->order_detail_id > 0){
+									$_POST["products"][$product_code]["order_detail_id"] = $orderDetail->order_detail_id;
+								}
+							}
+							$orderDetails = $orderDetail->findAllByOrderPackage($_POST["order_package_id"]);
+							foreach($orderDetails as $detail){
+								$detail->delete();
+							}
+							foreach($_POST["products"] as $product_code => $product){
+								$orderDetail = $loader->LoadModel("OrderDetailModel");
+								$orderDetail->order_package_id = $_POST["order_package_id"];
+								foreach($product as $key => $value){
+									$orderDetail->$key = $value;
+								}
+								$orderDetail->save();
+								if($orderDetail->order_detail_id > 0){
+									$_POST["products"][$product_code]["order_detail_id"] = $orderDetail->order_detail_id;
+								}
+							}
+						}
+					}
+				}
+				
 				// 購入後には累積購入ポイントを設定。
 				if(empty($_POST["point"])){
 					$_POST["point"] = 0;
