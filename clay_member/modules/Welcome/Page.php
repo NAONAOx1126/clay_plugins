@@ -62,7 +62,24 @@ class Member_Welcome_Page extends FrameworkModule{
 			}
 		}
 		
-		// 商品データを検索する。
+		// メールアドレスに対応する顧客IDのリストを取得する。
+		if(!empty($conditions["email"])){
+			$customer = $loader->loadModel("CustomerModel");
+			$customerConditions = array();
+			if(!empty($conditions["email"])){
+				$customerConditions["email"] = $conditions["email"];
+			}
+			$customers = $customer->findAllBy($customerConditions);
+			unset($conditions["email"]);
+			$conditions["in:customer_id"] = array("0");
+			if(is_array($customers)){
+				foreach($customers as $customer){
+					$conditions["in:customer_id"][] = $customer->customer_id;
+				}
+			}
+		}
+		
+		// 来店データを検索する。
 		$welcome = $loader->LoadModel("WelcomeModel");
 		$option["totalItems"] = $welcome->countBy($conditions);
 		$pager = AdvancedPager::factory($option);

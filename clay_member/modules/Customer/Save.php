@@ -33,7 +33,7 @@ class Member_Customer_Save extends FrameworkModule{
 					
 					// 新規登録時は登録ポイントを登録
 					$pointLog = $loader->loadModel("PointLogModel");
-					$pointLog->add($rule->getAddPoint(Member_PointRuleModel::RULE_ENTRY), $rule->getRuleName(Member_PointRuleModel::RULE_ENTRY), false);
+					$pointLog->addRuledPoint($rule, Member_PointRuleModel::RULE_ENTRY);
 				}
 				
 				// 商品データをモデルに格納して保存する。

@@ -71,9 +71,9 @@ class Member_Login_Mobile extends FrameworkModule{
 						$rule = $loader->loadModel("PointRuleModel");
 					
 						// 新規登録時は登録ポイントを登録
-						$pointLog = $loader->loadModel("PointLogModel");
 						$_POST["customer_id"] = $customer->customer_id;
-						$pointLog->add($rule->getAddPoint(Member_PointRuleModel::RULE_ENTRY), $rule->getRuleName(Member_PointRuleModel::RULE_ENTRY), false);
+						$pointLog = $loader->loadModel("PointLogModel");
+						$pointLog->addRuledPoint($rule, Member_PointRuleModel::RULE_ENTRY);
 		
 						// エラーが無かった場合、処理をコミットする。
 						DBFactory::commit("member");

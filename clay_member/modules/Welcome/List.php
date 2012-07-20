@@ -31,7 +31,6 @@ class Member_Welcome_List extends FrameworkModule{
 			}
 		}
 		
-		
 		// 並べ替え順序が指定されている場合に適用
 		$sortOrder = "";
 		$sortReverse = false;
@@ -46,9 +45,26 @@ class Member_Welcome_List extends FrameworkModule{
 			}
 		}
 		
+		// メールアドレスに対応する顧客IDのリストを取得する。
+		if(!empty($conditions["email"])){
+			$customer = $loader->loadModel("CustomerModel");
+			$customerConditions = array();
+			if(!empty($conditions["email"])){
+				$customerConditions["email"] = $conditions["email"];
+			}
+			$customers = $customer->findAllBy($customerConditions);
+			unset($conditions["email"]);
+			$conditions["in:customer_id"] = array("0");
+			if(is_array($customers)){
+				foreach($customers as $customer){
+					$conditions["in:customer_id"][] = $customer->customer_id;
+				}
+			}
+		}
+		
 		// 商品データを検索する。
 		$welcome = $loader->LoadModel("WelcomeModel");
-		$welcomes = $welcome->findAllBy($conditions, $sortOrder, $sortReverse);
+		$welcomes = $welcome->findAllByEmail($conditions, $sortOrder, $sortReverse);
 		
 		$_SERVER["ATTRIBUTES"][$params->get("result", "welcome")] = $welcomes;
 	}

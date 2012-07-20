@@ -40,8 +40,9 @@ class Member_Welcome_Save extends FrameworkModule{
 				$rule = $loader->loadModel("PointRuleModel");
 					
 				// 新規登録時は登録ポイントを登録
+				$customer = $welcome->customer();
 				$pointLog = $loader->loadModel("PointLogModel");
-				$pointLog->add($rule->getAddPoint(Member_PointRuleModel::RULE_WELCOME), $rule->getRuleName(Member_PointRuleModel::RULE_WELCOME), false);
+				$pointLog->addRuledPoint($rule, Member_PointRuleModel::RULE_WELCOME);
 			}
 		
 			// 登録データの保存

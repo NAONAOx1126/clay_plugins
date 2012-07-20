@@ -29,49 +29,7 @@ class Order_Save extends FrameworkModule{
 					$order->$key = $value;
 				}
 				
-				// 購入時は購入ポイントと初回購入ポイントを設定。
-				if(!($order->order_id > 0)){
-					if(empty($_POST["point"])){
-						$_POST["point"] = 0;
-					}
-					if($params->get("point", "0") == "1"){
-						DBFactory::begin("member");
-						try{
-							$memberLoader = new PluginLoader("Member");
-							$rule = $memberLoader->loadModel("PointRuleModel");
-							if($order->customer_id > 0){
-								$total = 0;
-								$preOrders = $order->findAllByCustomer($order->customer_id);
-								if(count($preOrders) == 0){
-									// 新規登録時は登録ポイントを登録
-									$pointLog = $memberLoader->loadModel("PointLogModel");
-									$pointLog->add($rule->getAddPoint(Member_PointRuleModel::RULE_FIRST_ORDER), $rule->getRuleName(Member_PointRuleModel::RULE_FIRST_ORDER), false);
-								}else{
-									foreach($preOrders as $preOrder){
-										$total += ($preOrder->subtotal > 0)?$preOrder->subtotal:$preOrder->total;
-									}
-								}
-								$total += ($order->subtotal > 0)?$order->subtotal:$order->total;
-								if($total > 0){
-									// 新規登録時は登録ポイントを登録
-									$pointLog = $memberLoader->loadModel("PointLogModel");
-									$pointLog->add($rule->getAddPoint(Member_PointRuleModel::RULE_TOTAL_SALES, $total), $rule->getRuleName(Member_PointRuleModel::RULE_TOTAL_SALES), false);
-								}
-							}
-							// 新規登録時は登録ポイントを登録
-							$pointLog = $memberLoader->loadModel("PointLogModel");
-							$order->add_point = $rule->getAddPoint(Member_PointRuleModel::RULE_ORDER_SALES, ($order->subtotal > 0)?$order->subtotal:$order->total);
-							$pointLog->add($rule->getAddPoint(Member_PointRuleModel::RULE_ORDER_SALES, ($order->subtotal > 0)?$order->subtotal:$order->total), $rule->getRuleName(Member_PointRuleModel::RULE_ORDER_SALES), false);
-
-							// エラーが無かった場合、処理をコミットする。
-							DBFactory::commit("member");
-						}catch(Exception $e){
-							DBFactory::rollback("member");
-							throw $e;
-						}
-					}
-				}
-		
+				$order_id_before = $order->order_id;
 				$order->save();
 				$_POST["order_id"] = $order->order_id;
 				
@@ -79,9 +37,46 @@ class Order_Save extends FrameworkModule{
 				if(empty($_POST["point"])){
 					$_POST["point"] = 0;
 				}
-				if($params->get("point", "0") == "1"){
-					$memberLoader = new PluginLoader("Member");
-					$rule = $memberLoader->loadModel("PointRuleModel");
+				// 最初の設定時のみ
+				if($params->get("point", "0") == "1" && !($order_id_before > 0)){
+					DBFactory::begin("member");
+					try{
+						$memberLoader = new PluginLoader("Member");
+						$rule = $memberLoader->loadModel("PointRuleModel");
+						if($order->customer_id > 0){
+							$total_pre = 0;
+							$total = 0;
+							$preOrders = $order->findAllByCustomer($order->customer_id);
+							if(count($preOrders) == 0 || $preOrders[0]->order_id == $order->order_id){
+								// 新規購入時は初回購入ポイントを登録
+								$pointLog = $memberLoader->loadModel("PointLogModel");
+								$pointLog->addRuledPoint($rule, Member_PointRuleModel::RULE_FIRST_ORDER);
+							}
+							if(count($preOrders) > 0){
+								foreach($preOrders as $preOrder){
+									if($preOrders[0]->order_id != $order->order_id){
+										$total_pre += ($preOrder->subtotal > 0)?$preOrder->subtotal:$preOrder->total;
+									}
+									$total += ($preOrder->subtotal > 0)?$preOrder->subtotal:$preOrder->total;
+								}
+							}
+							if($total > 0){
+								// 購入累計が所定金額を超えた場合にはポイント付与
+								$pointLog = $memberLoader->loadModel("PointLogModel");
+								$pointLog->addRuledPoint($rule, Member_PointRuleModel::RULE_TOTAL_SALES, $total, $total_pre);
+							}
+						}
+						// 購入時には購入金額に応じてポイント付与
+						$pointLog = $memberLoader->loadModel("PointLogModel");
+						$order->add_point = $rule->getAddPoint(Member_PointRuleModel::RULE_ORDER_SALES, ($order->subtotal > 0)?$order->subtotal:$order->total);
+						$pointLog->addRuledPoint($rule, Member_PointRuleModel::RULE_ORDER_SALES, ($order->subtotal > 0)?$order->subtotal:$order->total);
+
+						// エラーが無かった場合、処理をコミットする。
+						DBFactory::commit("member");
+					}catch(Exception $e){
+						DBFactory::rollback("member");
+						throw $e;
+					}
 				}
 				
 				// エラーが無かった場合、処理をコミットする。
