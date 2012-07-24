@@ -1,9 +1,9 @@
 <?php
 /**
- * ### Member.Customer.Delete
+ * ### Member.Welcome.Delete
  * 商品を削除する。
  */
-class Member_Customer_Delete extends FrameworkModule{
+class Member_Welcome_Delete extends FrameworkModule{
 	function execute($params){
 		if(isset($_POST["delete"]) && !empty($_POST["delete"])){
 			// ローダーの初期化

@@ -50,7 +50,7 @@ class Member_Welcome_List extends FrameworkModule{
 			$customer = $loader->loadModel("CustomerModel");
 			$customerConditions = array();
 			if(!empty($conditions["email"])){
-				$customerConditions["email"] = $conditions["email"];
+				$customerConditions["part:email"] = $conditions["email"];
 			}
 			$customers = $customer->findAllBy($customerConditions);
 			unset($conditions["email"]);

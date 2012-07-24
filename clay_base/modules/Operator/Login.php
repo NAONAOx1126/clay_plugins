@@ -50,7 +50,7 @@ class Base_Operator_Login extends FrameworkModule{
 				$_SESSION["OPERATOR"] = $companyOperator->toArray();
 			}else{
 				// ログインIDが渡っていない場合には認証しない
-				throw new InvalidException(array(""));
+				throw new InvalidException(array());
 			}
 		}
 		// 管理者モデルを復元する。
