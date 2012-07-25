@@ -55,6 +55,7 @@ class Member_PointLogModel extends DatabaseModel{
 	
 	public function addRuledPoint($rule, $ruleType, $ruleValue = null, $ruleValuePre = null){
 		// ルールからポイント情報を取得
+		$title = $rule->getRuleTitle($ruleType, $ruleValue, $ruleValuePre);
 		$point = $rule->getAddPoint($ruleType, $ruleValue, $ruleValuePre);
 		$pointDelay = $rule->isAddPointDelay($ruleType, $ruleValue, $ruleValuePre);
 		
@@ -76,8 +77,8 @@ class Member_PointLogModel extends DatabaseModel{
 					// 変更内容をデータベースに反映
 					$customer->save();
 				}
-					
-				$this->add($point, $rule->getRuleName($ruleType), !$pointDelay);
+				
+				$this->add($point, $title, !$pointDelay);
 				
 				// エラーが無かった場合、処理をコミットする。
 				DBFactory::commit("member");

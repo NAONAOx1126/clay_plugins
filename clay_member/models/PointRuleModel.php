@@ -51,6 +51,26 @@ class Member_PointRuleModel extends DatabaseModel{
 		$this->values = $this->values_org = $rules[0]->toArray();
 	}
 	
+	public function getRuleTitle($point_rule, $point_rule_value = null, $point_rule_value_pre = null){
+		$condition = array("point_rule" => $point_rule);
+		if($point_rule_value_pre != null){
+			$condition["gt:point_rule_min:0"] = $point_rule_value_pre;
+		}
+		if($point_rule_value != null){
+			$condition["le:point_rule_min:0"] = $point_rule_value;
+			$condition["ge:point_rule_max:999999999"] = $point_rule_value;
+		}
+		$condition["le:point_rule_start_time:0000-01-01 00:00:00"] = date("Y-m-d H:i:s");
+		$condition["ge:point_rule_end_time:9999-12-31 23:59:59"] = date("Y-m-d H:i:s");
+		$result = $this->findAllBy($condition, array("point_rule_min", "point_rule_start_time"), array(true, true));
+
+		if(is_array($result) && count($result) > 0){
+			$data = $result[0];
+			return $data->point_rule_name;
+		}
+		return "";
+	}
+
 	public function getAddPoint($point_rule, $point_rule_value = null, $point_rule_value_pre = null){
 		$condition = array("point_rule" => $point_rule);
 		if($point_rule_value_pre != null){
