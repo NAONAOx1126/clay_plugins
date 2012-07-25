@@ -32,7 +32,7 @@ class Member_Customer_AddPointUser extends FrameworkModule{
 						
 						// ポイントログに書き込み
 						$pointLog = $loader->loadModel("PointLogModel");
-						$pointLog->add($point, $_POST["comment"]);
+						$pointLog->addCustomer($customer->customer_id, $point, $_POST["comment"]);
 						
 						// エラーが無かった場合、処理をコミットする。
 						DBFactory::commit("member");
