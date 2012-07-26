@@ -8,6 +8,13 @@ class Member_WelcomeModel extends DatabaseModel{
 		parent::__construct($loader->loadTable("WelcomesTable"), $values);
 	}
 	
+	protected function appendWhere($select, $key, $value){
+		if(preg_match("/^(.+:)?welcome_date$/", $key) > 0){
+			$value = str_replace("-", "", $value);
+		}
+		return parent::appendWhere($select, $key, $value);
+	}
+	
 	public function findByPrimaryKey($welcome_id){
 		$this->findBy(array("welcome_id" => $welcome_id));
 	}
