@@ -54,13 +54,18 @@ class Member_PointLogModel extends DatabaseModel{
 	}
 	
 	public function addRuledPoint($rule, $ruleType, $ruleValue = null, $ruleValuePre = null){
+		$customer_id = ($_SESSION[CUSTOMER_SESSION_KEY]["customer_id"] > 0)?$_SESSION[CUSTOMER_SESSION_KEY]["customer_id"]:$_POST["customer_id"];
+		$this->addCustomerRuledPoint($customer_id, $rule, $ruleType, $ruleValue, $ruleValuePre);
+	}
+	
+	public function addCustomerRuledPoint($customer_id, $rule, $ruleType, $ruleValue = null, $ruleValuePre = null){
 		// ルールからポイント情報を取得
 		$title = $rule->getRuleTitle($ruleType, $ruleValue, $ruleValuePre);
 		$point = $rule->getAddPoint($ruleType, $ruleValue, $ruleValuePre);
 		$pointDelay = $rule->isAddPointDelay($ruleType, $ruleValue, $ruleValuePre);
 		
 		// ユーザー情報を取得
-		$this->customer_id = ($_SESSION[CUSTOMER_SESSION_KEY]["customer_id"] > 0)?$_SESSION[CUSTOMER_SESSION_KEY]["customer_id"]:$_POST["customer_id"];
+		$this->customer_id = $customer_id;
 		$customer = $this->customer();
 		
 		// ポイントが0の場合は処理をスキップ

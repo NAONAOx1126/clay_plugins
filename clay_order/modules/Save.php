@@ -90,7 +90,7 @@ class Order_Save extends FrameworkModule{
 							if(count($preOrders) == 0 || $preOrders[0]->order_id == $order->order_id){
 								// 新規購入時は初回購入ポイントを登録
 								$pointLog = $memberLoader->loadModel("PointLogModel");
-								$pointLog->addRuledPoint($rule, Member_PointRuleModel::RULE_FIRST_ORDER);
+								$pointLog->addCustomerRuledPoint($order->customer_id, $rule, Member_PointRuleModel::RULE_FIRST_ORDER);
 							}
 							if(count($preOrders) > 0){
 								foreach($preOrders as $preOrder){
@@ -103,13 +103,13 @@ class Order_Save extends FrameworkModule{
 							if($total > 0){
 								// 購入累計が所定金額を超えた場合にはポイント付与
 								$pointLog = $memberLoader->loadModel("PointLogModel");
-								$pointLog->addRuledPoint($rule, Member_PointRuleModel::RULE_TOTAL_SALES, $total, $total_pre);
+								$pointLog->addCustomerRuledPoint($order->customer_id, $rule, Member_PointRuleModel::RULE_TOTAL_SALES, $total, $total_pre);
 							}
 						}
 						// 購入時には購入金額に応じてポイント付与
 						$pointLog = $memberLoader->loadModel("PointLogModel");
 						$order->add_point = $rule->getAddPoint(Member_PointRuleModel::RULE_ORDER_SALES, ($order->subtotal > 0)?$order->subtotal:$order->total);
-						$pointLog->addRuledPoint($rule, Member_PointRuleModel::RULE_ORDER_SALES, ($order->subtotal > 0)?$order->subtotal:$order->total);
+						$pointLog->addCustomerRuledPoint($order->customer_id, $rule, Member_PointRuleModel::RULE_ORDER_SALES, ($order->subtotal > 0)?$order->subtotal:$order->total);
 
 						// エラーが無かった場合、処理をコミットする。
 						DBFactory::commit("member");
