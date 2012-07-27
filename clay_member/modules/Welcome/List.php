@@ -46,14 +46,22 @@ class Member_Welcome_List extends FrameworkModule{
 		}
 		
 		// メールアドレスに対応する顧客IDのリストを取得する。
-		if(!empty($conditions["email"])){
+		if(!empty($conditions["email"]) || !empty($conditions["customer_name"]) || !empty($conditions["customer_name_kana"])){
 			$customer = $loader->loadModel("CustomerModel");
 			$customerConditions = array();
 			if(!empty($conditions["email"])){
 				$customerConditions["part:email"] = $conditions["email"];
 			}
+			if(!empty($conditions["customer_name"])){
+				$customerConditions["part:sei+mei"] = $conditions["customer_name"];
+			}
+			if(!empty($conditions["customer_name_kana"])){
+				$customerConditions["part:sei_kana+mei_kana"] = $conditions["customer_name_kana"];
+			}
 			$customers = $customer->findAllBy($customerConditions);
 			unset($conditions["email"]);
+			unset($conditions["customer_name"]);
+			unset($conditions["customer_name_kana"]);
 			$conditions["in:customer_id"] = array("0");
 			if(is_array($customers)){
 				foreach($customers as $customer){
