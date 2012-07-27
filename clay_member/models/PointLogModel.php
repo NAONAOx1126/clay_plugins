@@ -66,7 +66,6 @@ class Member_PointLogModel extends DatabaseModel{
 		
 		// ユーザー情報を取得
 		$this->customer_id = $customer_id;
-		print_r($this->toArray());
 		$customer = $this->customer();
 		
 		// ポイントが0の場合は処理をスキップ
