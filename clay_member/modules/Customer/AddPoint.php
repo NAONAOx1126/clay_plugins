@@ -28,7 +28,7 @@ class Member_Customer_AddPoint extends FrameworkModule{
 				
 				// ポイントログに書き込み
 				$pointLog = $loader->loadModel("PointLogModel");
-				$pointLog->add($point);
+				$pointLog->add($_SESSION[CUSTOMER_SESSION_KEY]->customer_id, $point);
 				
 				// エラーが無かった場合、処理をコミットする。
 				DBFactory::commit("member");

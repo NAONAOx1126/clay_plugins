@@ -23,9 +23,9 @@ class Member_PointLogModel extends DatabaseModel{
 		return $customer;
 	}
 	
-	public function add($point, $comment = "", $commit = true){
+	public function add($customer_id, $point, $comment = "", $commit = true){
 		$this->log_time = date("Y-m-d H:i:s");
-		$this->customer_id = ($_SESSION[CUSTOMER_SESSION_KEY]["customer_id"] > 0)?$_SESSION[CUSTOMER_SESSION_KEY]["customer_id"]:$_POST["customer_id"];
+		$this->customer_id = $customer_id;
 		$this->point = $point;
 		$this->comment = $comment;
 		if($commit){
@@ -66,6 +66,7 @@ class Member_PointLogModel extends DatabaseModel{
 		
 		// ユーザー情報を取得
 		$this->customer_id = $customer_id;
+		print_r($this->toArray());
 		$customer = $this->customer();
 		
 		// ポイントが0の場合は処理をスキップ
@@ -83,7 +84,7 @@ class Member_PointLogModel extends DatabaseModel{
 					$customer->save();
 				}
 				
-				$this->add($point, $title, !$pointDelay);
+				$this->add($customer_id, $point, $title, !$pointDelay);
 				
 				// エラーが無かった場合、処理をコミットする。
 				DBFactory::commit("member");

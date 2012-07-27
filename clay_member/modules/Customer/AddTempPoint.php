@@ -23,7 +23,7 @@ class Member_Customer_AddTempPoint extends FrameworkModule{
 			try{
 				// ポイントログに書き込み
 				$pointLog = $loader->loadModel("PointLogModel");
-				$pointLog->add($point, $pointComment, false);
+				$pointLog->add($_SESSION[CUSTOMER_SESSION_KEY]->customer_id, $point, $pointComment, false);
 				
 				// エラーが無かった場合、処理をコミットする。
 				DBFactory::commit("member");
