@@ -88,6 +88,12 @@ class Member_CustomerModel extends DatabaseModel{
 		$serialLog = $loader->loadModel("SerialLogModel");
 		return $serialLog->findAllByCustomer($this->customer_id, $order, $reverse);
 	}
+
+	public function welcomeSuggests($order = "", $reverse = false){
+		$loader = new PluginLoader("Member");
+		$welcomeSuggest = $loader->loadModel("WelcomeSuggestModel");
+		return $welcomeSuggest->findAllByCustomer($this->customer_id, $order, $reverse);
+	}
 	
 	/**
 	 * 都道府県の名前を取得

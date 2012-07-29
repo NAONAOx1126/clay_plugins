@@ -47,5 +47,11 @@ class Member_WelcomeModel extends DatabaseModel{
 		$order->findByPrimaryKey($this->order_id);
 		return $order;
 	}
+	
+	public function welcomeSuggests($order = "", $reverse = false){
+		$loader = new PluginLoader("Member");
+		$welcomeSuggest = $loader->loadModel("WelcomeSuggestModel");
+		return $welcomeSuggest->findAllByWelcome($this->welcome_id, $order, $reverse);
+	}
 }
 ?>
