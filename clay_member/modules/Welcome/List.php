@@ -70,11 +70,15 @@ class Member_Welcome_List extends FrameworkModule{
 			}
 		}
 		
+		if($params->check("commit")){
+			$conditions["commit_flg"] = $params->get("commit");
+		}
+		
 		// 商品データを検索する。
 		$welcome = $loader->LoadModel("WelcomeModel");
 		$welcomes = $welcome->findAllByEmail($conditions, $sortOrder, $sortReverse);
 		
-		$_SERVER["ATTRIBUTES"][$params->get("result", "welcome")] = $welcomes;
+		$_SERVER["ATTRIBUTES"][$params->get("result", "welcomes")] = $welcomes;
 	}
 }
 ?>

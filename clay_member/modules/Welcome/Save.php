@@ -23,6 +23,8 @@ class Member_Welcome_Save extends FrameworkModule{
 		// データを登録する。
 		$welcome->welcome_date = date("Ymd");
 		$welcome->customer_id = $_SESSION[CUSTOMER_SESSION_KEY]["customer_id"];
+		$oldCommit = $welcome->commit_flg;
+		$welcome->commit_flg = $params->get("commit", "1");
 		// 商品データをモデルに格納して保存する。
 		foreach($_POST as $key => $value){
 			$welcome->$key = $value;
@@ -33,7 +35,7 @@ class Member_Welcome_Save extends FrameworkModule{
 		
 		try{
 			// 新規登録時は来店ポイントを設定。
-			if(!($welcome->welcome_id > 0)){
+			if(!($welcome->welcome_id > 0) || ($oldCommit == "0" && $welcome->commit_flg == "1")){
 				if(empty($_POST["point"])){
 					$_POST["point"] = 0;
 				}
@@ -43,6 +45,9 @@ class Member_Welcome_Save extends FrameworkModule{
 				$customer = $welcome->customer();
 				$pointLog = $loader->loadModel("PointLogModel");
 				$pointLog->addRuledPoint($rule, Member_PointRuleModel::RULE_WELCOME);
+				
+				// 来店処理した日時を設定
+				$welcome->commit_time = date("Y-m-d H:i:s");
 			}
 		
 			// 登録データの保存

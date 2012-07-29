@@ -87,6 +87,10 @@ class Member_Welcome_Page extends FrameworkModule{
 			}
 		}
 		
+		if($params->check("commit")){
+			$conditions["commit_flg"] = $params->get("commit");
+		}
+		
 		// 来店データを検索する。
 		$welcome = $loader->LoadModel("WelcomeModel");
 		$option["totalItems"] = $welcome->countBy($conditions);
