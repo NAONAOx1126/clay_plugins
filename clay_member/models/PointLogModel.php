@@ -58,9 +58,13 @@ class Member_PointLogModel extends DatabaseModel{
 		$this->addCustomerRuledPoint($customer_id, $rule, $ruleType, $ruleValue, $ruleValuePre);
 	}
 	
-	public function addCustomerRuledPoint($customer_id, $rule, $ruleType, $ruleValue = null, $ruleValuePre = null){
+	public function addCustomerRuledPoint($customer_id, $rule, $ruleType, $ruleValue = null, $ruleValuePre = null, $comment = ""){
 		// ルールからポイント情報を取得
-		$title = $rule->getRuleTitle($ruleType, $ruleValue, $ruleValuePre);
+		if(!empty($comment)){
+			$title = $comment;
+		}else{
+			$title = $rule->getRuleTitle($ruleType, $ruleValue, $ruleValuePre);
+		}
 		$point = $rule->getAddPoint($ruleType, $ruleValue, $ruleValuePre);
 		$pointDelay = $rule->isAddPointDelay($ruleType, $ruleValue, $ruleValuePre);
 		
