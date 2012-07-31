@@ -24,9 +24,13 @@ class Member_PointRule_Save extends FrameworkModule{
 		
 		if(preg_match("/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/", $pointRule->point_rule_start_time) > 0){
 			$pointRule->point_rule_start_time .= " 00:00:00";
+		}else{
+			$pointRule->point_rule_start_time = null;
 		}
 		if(preg_match("/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/", $pointRule->point_rule_end_time) > 0){
 			$pointRule->point_rule_end_time .= " 23:59:59";
+		}else{
+			$pointRule->point_rule_end_time = null;
 		}
 		
 		// トランザクションの開始
