@@ -25,7 +25,7 @@ class Base_Checks_Alnums extends FrameworkModule{
 		if(!is_array($_SERVER["ERRORS"])){
 			$_SERVER["ERRORS"] = array();
 		}
-		if(!ctype_alnum($_SERVER["POST"][$params->get("key")])){
+		if(!empty($_SERVER["POST"][$params->get("key")]) && !ctype_alnum($_SERVER["POST"][$params->get("key")])){
 			$_SERVER["ERRORS"][$params->get("key")] = $params->get("value").$params->get("suffix", "は半角英数字で入力してください。");
 		}
 	}
