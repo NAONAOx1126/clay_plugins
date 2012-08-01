@@ -159,7 +159,7 @@ class Member_AutoRegisterMail extends FrameworkModule{
 				// 新規登録時は登録ポイントを登録
 				$rule = $loader->loadModel("PointRuleModel");
 				$pointLog = $loader->loadModel("PointLogModel");
-				$pointLog->add($customer->customer_id, $rule->getAddPoint(Member_PointRuleModel::RULE_ENTRY), $rule->getRuleName(Member_PointRuleModel::RULE_ENTRY), false);
+				$pointLog->addCustomerRuledPoint($customer->customer_id, $rule, Member_PointRuleModel::RULE_ENTRY);
 						
 				// エラーが無かった場合、処理をコミットする。
 				DBFactory::commit("member");
