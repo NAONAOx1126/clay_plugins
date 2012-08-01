@@ -40,7 +40,7 @@ class Member_Login_Form extends FrameworkModule{
 					// 新規登録時は登録ポイントを登録
 					$_POST["customer_id"] = $customer->customer_id;
 					$pointLog = $loader->loadModel("PointLogModel");
-					$pointLog->addRuledPoint($rule, Member_PointRuleModel::RULE_ENTRY);
+					$pointLog->addCustomerRuledPoint($customer->customer_id, $rule, Member_PointRuleModel::RULE_ENTRY);
 		
 					// エラーが無かった場合、処理をコミットする。
 					DBFactory::commit("member");
