@@ -1,8 +1,4 @@
 <?php
-// この機能で使用するモデルクラス
-LoadModel("Setting", "Members");
-LoadModel("CustomerModel", "Members");
-
 /**
  * 必須入力のチェックを行うCheckパッケージのクラスです。
  * PHP5.3以上での動作のみ保証しています。
@@ -16,32 +12,36 @@ LoadModel("CustomerModel", "Members");
  * @version   1.0.0
  */
 
-class Members_Checks_UniqueEmail extends FrameworkModule{
+class Member_Checks_UniqueEmail extends FrameworkModule{
 	function execute($params){
 		if(!is_array($_SERVER["ERRORS"])){
 			$_SERVER["ERRORS"] = array();
 		}
 		
-		$customer = new CustomerModel();
-		if(empty($_SERVER["ERRORS"]["email"]) && !empty($_POST["email"])){
+		$loader = new PluginLoader("Member");
+		$loader->LoadSetting();
+
+		// 商品データを検索する。
+		$customer = $loader->LoadModel("CustomerModel");
+		if(!empty($_POST["email"])){
 			$customer->findByEmail($_POST["email"]);
-			if(!empty($customer->customer_id) && $_POST["customer_id"] != $customer->customer_id){
-				$_SERVER["ERRORS"]["email"] = "このメールアドレスは既に登録されております。";
+			if($customer->customer_id > 0 && $_POST["customer_id"] != $customer->customer_id){
+				throw new InvalidException(array("このメールアドレスは既に登録されております。"));
 			}else{
 				$customer->findByEmailMobile($_POST["email"]);
-				if(!empty($customer->customer_id) && $_POST["customer_id"] != $customer->customer_id){
-					$_SERVER["ERRORS"]["email"] = "このメールアドレスは既に登録されております。";
+				if($customer->customer_id > 0 && $_POST["customer_id"] != $customer->customer_id){
+					throw new InvalidException(array("このメールアドレスは既に登録されております。"));
 				}
 			}
 		}
-		if(empty($_SERVER["ERRORS"]["email"]) && !empty($_POST["email_mobile"])){
+		if(!empty($_POST["email_mobile"])){
 			$customer->findByEmail($_POST["email_mobile"]);
-			if(!empty($customer->customer_id) && $_POST["customer_id"] != $customer->customer_id){
-				$_SERVER["ERRORS"]["email"] = "このメールアドレスは既に登録されております。";
+			if($customer->customer_id > 0 && $_POST["customer_id"] != $customer->customer_id){
+				throw new InvalidException(array("このメールアドレスは既に登録されております。"));
 			}else{
 				$customer->findByEmailMobile($_POST["email_mobile"]);
-				if(!empty($customer->customer_id) && $_POST["customer_id"] != $customer->customer_id){
-					$_SERVER["ERRORS"]["email"] = "このメールアドレスは既に登録されております。";
+				if($customer->customer_id > 0 && $_POST["customer_id"] != $customer->customer_id){
+					throw new InvalidException(array("このメールアドレスは既に登録されております。"));
 				}
 			}
 		}
