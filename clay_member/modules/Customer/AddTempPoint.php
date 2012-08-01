@@ -13,7 +13,7 @@ class Member_Customer_AddTempPoint extends FrameworkModule{
 		$loader->LoadSetting();
 		
 		// 設定するポイント
-		$point = $params->get("point", $_POST["point"]);
+		$point = $params->get("point", $_POST["add_point"]);
 		$pointComment = $params->get("point_comment", $_POST["point_comment"]);
 		
 		if(!empty($point) && is_numeric($point)){
@@ -27,9 +27,6 @@ class Member_Customer_AddTempPoint extends FrameworkModule{
 				
 				// エラーが無かった場合、処理をコミットする。
 				DBFactory::commit("member");
-				
-				// ポイント登録した場合はPOSTから削除
-				$_POST["point"] = 0;
 			}catch(Exception $ex){
 				DBFactory::rollback("member");
 				throw $ex;

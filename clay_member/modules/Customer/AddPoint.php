@@ -13,7 +13,7 @@ class Member_Customer_AddPoint extends FrameworkModule{
 		$loader->LoadSetting();
 		
 		// 設定するポイント
-		$point = $params->get("point", $_POST["point"]);
+		$point = $params->get("point", $_POST["add_point"]);
 		
 		if(!empty($point) && is_numeric($point)){
 			// トランザクションの開始

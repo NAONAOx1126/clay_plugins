@@ -17,7 +17,7 @@ class Member_Customer_AddPointUser extends FrameworkModule{
 			$customer->findByPrimaryKey($_POST["customer_id"]);
 			if($customer->customer_id > 0){
 				// 設定するポイント
-				$point = $params->get("point", $_POST["point"]);
+				$point = $params->get("point", $_POST["add_point"]);
 				
 				if(!empty($point) && is_numeric($point)){
 					// トランザクションの開始
