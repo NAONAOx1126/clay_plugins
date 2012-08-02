@@ -29,18 +29,27 @@ class Base_Forms_MergeDateColumns extends FrameworkModule{
 			$_POST[$params->get("result")] .= sprintf("%02d", $_POST[$params->get("month")]);
 			$_POST[$params->get("result")] .= "-";
 			$_POST[$params->get("result")] .= sprintf("%02d", $_POST[$params->get("day")]);
-		}
-		if($params->check("hour") && isset($_POST[$params->get("hour")]) && is_numeric($_POST[$params->get("hour")])
-			&& $params->check("minute") && isset($_POST[$params->get("minute")]) && is_numeric($_POST[$params->get("minute")])){
-			if(!empty($_POST[$params->get("result")])){
-				$_POST[$params->get("result")] .= " ";
+			if(date("Y-m-d", strtotime($_POST[$params->get("result")])) != $_POST[$params->get("result")]){
+				throw new InvalidException("日付の指定が正しくありません。");
 			}
-			$_POST[$params->get("result")] .= sprintf("%02d", $_POST[$params->get("hour")]);
-			$_POST[$params->get("result")] .= ":";
-			$_POST[$params->get("result")] .= sprintf("%02d", $_POST[$params->get("minute")]);
-			if($params->check("second") && isset($_POST[$params->get("second")]) && is_numeric($_POST[$params->get("second")])){
+			if($params->check("hour") && isset($_POST[$params->get("hour")]) && is_numeric($_POST[$params->get("hour")])
+				&& $params->check("minute") && isset($_POST[$params->get("minute")]) && is_numeric($_POST[$params->get("minute")])){
+				if(!empty($_POST[$params->get("result")])){
+					$_POST[$params->get("result")] .= " ";
+				}
+				$_POST[$params->get("result")] .= sprintf("%02d", $_POST[$params->get("hour")]);
 				$_POST[$params->get("result")] .= ":";
-				$_POST[$params->get("result")] .= sprintf("%02d", $_POST[$params->get("second")]);
+				$_POST[$params->get("result")] .= sprintf("%02d", $_POST[$params->get("minute")]);
+				if(date("Y-m-d H:i", strtotime($_POST[$params->get("result")])) != $_POST[$params->get("result")]){
+					throw new InvalidException("日付の指定が正しくありません。");
+				}
+				if($params->check("second") && isset($_POST[$params->get("second")]) && is_numeric($_POST[$params->get("second")])){
+					$_POST[$params->get("result")] .= ":";
+					$_POST[$params->get("result")] .= sprintf("%02d", $_POST[$params->get("second")]);
+					if(date("Y-m-d H:i:s", strtotime($_POST[$params->get("result")])) != $_POST[$params->get("result")]){
+						throw new InvalidException("日付の指定が正しくありません。");
+					}
+				}
 			}
 		}
 	}
