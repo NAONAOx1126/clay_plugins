@@ -6,9 +6,34 @@
  */
 class Google_Calendar_TodayEvents extends FrameworkModule{
 	function execute($params){
-		if(isset($_SERVER["GOOGLE"]["Client"]) && $_SERVER["GOOGLE"]["Client"]->getAccessToken() && isset($_POST["calendar_id"])){
-			$events = $_SERVER["GOOGLE"]["Calendar"]->events->listEvents($_POST["calendar_id"], array("orderBy" => "startTime", "singleEvents" => true, "timeMin" => date("Y-m-d")."T00:00:00.000Z", "timeMax" => date("Y-m-d")."T23:59:59.999Z"));
-			$_SERVER["ATTRIBUTES"]["events"] = $events["items"];
+		if(isset($_SERVER["GOOGLE"]["Client"]) && isset($_POST["calendar_id"])){
+			// Zendの初期化
+			require_once("Zend/Loader.php");
+			Zend_Loader::loadClass("Zend_Gdata");
+			Zend_Loader::loadClass("Zend_Gdata_Calendar");
+			
+			$service = new Zend_Gdata_Calendar($_SERVER["GOOGLE"]["Client"]);
+			$query = $service->newEventQuery();
+			$user = substr($_POST["calendar_id"], strrpos($_POST["calendar_id"], "/") + 1);
+			$query->setUser($user);
+			$query->setProjection("full");
+			$query->setVisibility("private");
+			$query->setOrderby("starttime");
+			$query->setStartMin(date("Y-m-d"));
+			$query->setStartMax(date("Y-m-d", strtotime("+1 day")));
+
+			try {
+				$events = $service->getCalendarEventFeed($query);
+				
+				$_SERVER["ATTRIBUTES"]["events"] = $events;
+		    } catch (Zend_Gdata_App_Exception $e) {
+		        echo "エラー: " . $e->getMessage();
+		    }
+			/*
+			$events = $service->getCalendarEventFeed($query);
+			
+			$_SERVER["ATTRIBUTES"]["events"] = $events;
+			*/
 		}
 	}
 }

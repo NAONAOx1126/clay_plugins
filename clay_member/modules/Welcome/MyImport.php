@@ -12,12 +12,12 @@ class Member_Welcome_MyImport extends FrameworkModule{
 		$loader = new PluginLoader("Member");
 		$loader->LoadSetting();
 		
-		if($_SESSION["OPERATOR"]["operator_id"] > 0 && is_array($_SERVER["ATTRIBUTES"]["events"])){
+		if($_SESSION["OPERATOR"]["operator_id"] > 0 && is_object($_SERVER["ATTRIBUTES"]["events"])){
 			foreach($_SERVER["ATTRIBUTES"]["events"] as $event){
-				if(preg_match("/^[^0-9]+([0-9]+)[^0-9]+/", $event["summary"], $params) > 0){
+				if(preg_match("/^[^0-9]+([0-9]+)[^0-9]+/", $event->title, $params) > 0){
 					$customer_id = $params[1];
-					$reserve_start = substr($event["start"]["dateTime"], 0, 10)." ".substr($event["start"]["dateTime"], 11, 8);
-					$reserve_end = substr($event["end"]["dateTime"], 0, 10)." ".substr($event["end"]["dateTime"], 11, 8);
+					$reserve_start = substr($event->when[0]->startTime, 0, 10)." ".substr($event->when[0]->startTime, 11, 8);
+					$reserve_end = substr($event->when[0]->endTime, 0, 10)." ".substr($event->when[0]->endTime, 11, 8);
 					$welcome_date = date("Ymd", strtotime($reserve_start));
 					$welcome = $loader->loadModel("WelcomeModel");
 					$welcome->findByWelcomeCustomer($welcome_date, $customer_id);
@@ -26,8 +26,8 @@ class Member_Welcome_MyImport extends FrameworkModule{
 					$welcome->operator_id = $_SESSION["OPERATOR"]["operator_id"];
 					$welcome->reserve_start = $reserve_start;
 					$welcome->reserve_end = $reserve_end;
-					$welcome->reserve_title = $event["summary"];
-					$welcome->reserve_comment = $event["description"];
+					$welcome->reserve_title = $event->title;
+					$welcome->reserve_comment = $event->content;
 					if(!($welcome->welcome_id > 0)){
 						$welcome->commit_flg = 0;
 					}
