@@ -109,7 +109,7 @@ class Order_Save extends FrameworkModule{
 							// 購入時には購入金額に応じてポイント付与
 							$pointLog = $memberLoader->loadModel("PointLogModel");
 							$order->add_point = $rule->getAddPoint(Member_PointRuleModel::RULE_ORDER_SALES, ($order->subtotal > 0)?$order->subtotal:$order->total);
-							$pointLog->addCustomerRuledPoint($order->customer_id, $rule, Member_PointRuleModel::RULE_ORDER_SALES, ($order->subtotal > 0)?$order->subtotal:$order->total, null, $order->shop_comment);
+							$pointLog->addCustomerRuledPoint($order->customer_id, $rule, Member_PointRuleModel::RULE_ORDER_SALES, ($order->subtotal > 0)?$order->subtotal:$order->total, null, $order->shop_comment."(".(($order->subtotal > 0)?$order->subtotal:$order->total).")");
 						}
 
 						// エラーが無かった場合、処理をコミットする。
