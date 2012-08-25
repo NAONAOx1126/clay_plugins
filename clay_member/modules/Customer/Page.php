@@ -14,20 +14,9 @@ class Member_Customer_Page extends FrameworkModule{
 		$loader = new PluginLoader("Member");
 		$loader->LoadSetting();
 
-		// ページャのオプションを設定
-		$option = array();
-		$option["mode"] = "Sliding";		// 現在ページにあわせて表示するページリストをシフトさせる。
-		$option["perPage"] = $params->get("item", "10");			// １ページあたりの件数
-		$option["delta"] = $params->get("delta", "3");				// 現在ページの前後に表示するページ番号の数（Slidingの場合は2n+1ページ分表示）
-		$option["prevImg"] = "<";			// 前のページ用のテキスト
-		$option["nextImg"] = ">";			// 次のページ用のテキスト
-		$option["prevAccessKey"] = "*";			// 前のページ用のアクセスキー
-		$option["nextAccessKey"] = "#";			// 次のページ用のアクセスキー
-		$option["firstPageText"] = "<<"; 	// 最初のページ用のテキスト
-		$option["lastPageText"] = ">>";		// 最後のページ用のテキスト
-		$option["curPageSpanPre"] = "<font color=\"#000000\">";		// 現在ページのプレフィクス
-		$option["curPageSpanPost"] = "</font>";		// 現在ページのサフィックス
-		$option["clearIfVoid"] = false;			// １ページのみの場合のページリンクの出力の有無
+		// ページャの初期化
+		$pager = new TemplatePager($params->get("_pager_mode", TemplatePager::PAGE_SLIDE), $params->get("_pager_per_page", 20), $params->get("_pager_displays", 3));
+		$pager->importTemplates($params);
 		
 		// カテゴリが選択された場合、カテゴリの商品IDのリストを使う
 		$conditions = array();
@@ -62,12 +51,10 @@ class Member_Customer_Page extends FrameworkModule{
 			}
 		}
 		
-		// 商品データを検索する。
+		// 顧客データを検索する。
 		$customer = $loader->LoadModel("CustomerModel");
-		$option["totalItems"] = $customer->countBy($conditions);
-		$pager = AdvancedPager::factory($option);
-		list($from, $to) = $pager->getOffsetByPageId();
-		$customer->limit($option["perPage"], $from - 1);
+		$pager->setDataSize($customer->countBy($conditions));
+		$customer->limit($pager->getPageSize(), $pager->getCurrentFirstOffset());
 		$customers = $customer->findAllBy($conditions, $sortOrder, $sortReverse);
 		
 		$_SERVER["ATTRIBUTES"][$params->get("result", "customers")."_pager"] = $pager;

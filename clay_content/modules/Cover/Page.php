@@ -11,20 +11,9 @@ class Content_Cover_Page extends FrameworkModule{
 		$loader = new PluginLoader("Content");
 		$loader->LoadSetting();
 
-		// ページャのオプションを設定
-		$option = array();
-		$option["mode"] = "Sliding";		// 現在ページにあわせて表示するページリストをシフトさせる。
-		$option["perPage"] = $params->get("item", "10");			// １ページあたりの件数
-		$option["delta"] = $params->get("delta", "3");				// 現在ページの前後に表示するページ番号の数（Slidingの場合は2n+1ページ分表示）
-		$option["prevImg"] = "<";			// 前のページ用のテキスト
-		$option["nextImg"] = ">";			// 次のページ用のテキスト
-		$option["prevAccessKey"] = "*";			// 前のページ用のアクセスキー
-		$option["nextAccessKey"] = "#";			// 次のページ用のアクセスキー
-		$option["firstPageText"] = "<<"; 	// 最初のページ用のテキスト
-		$option["lastPageText"] = ">>";		// 最後のページ用のテキスト
-		$option["curPageSpanPre"] = "<font color=\"#000000\">";		// 現在ページのプレフィクス
-		$option["curPageSpanPost"] = "</font>";		// 現在ページのサフィックス
-		$option["clearIfVoid"] = false;			// １ページのみの場合のページリンクの出力の有無
+		// ページャの初期化
+		$pager = new TemplatePager($params->get("_pager_mode", TemplatePager::PAGE_SLIDE), $params->get("_pager_per_page", 20), $params->get("_pager_displays", 3));
+		$pager->importTemplates($params);
 		
 		// 並べ替え順序が指定されている場合に適用
 		$sortOrder = "";
@@ -48,10 +37,8 @@ class Content_Cover_Page extends FrameworkModule{
 		
 		// カテゴリデータを検索する。
 		$cover = $loader->LoadModel("CoverModel");
-		$option["totalItems"] = $cover->countBy(array());
-		$pager = AdvancedPager::factory($option);
-		list($from, $to) = $pager->getOffsetByPageId();
-		$cover->limit($option["perPage"], $from - 1);
+		$pager->setDataSize($cover->countBy(array()));
+		$cover->limit($pager->getPageSize(), $pager->getCurrentFirstOffset());
 		$covers = $cover->findAllBy(array(), $sortOrder, $sortReverse);
 		
 		$_SERVER["ATTRIBUTES"][$params->get("result", "covers")."_pager"] = $pager;
