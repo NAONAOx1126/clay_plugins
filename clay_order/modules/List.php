@@ -33,38 +33,10 @@ class Order_List extends FrameworkModule{
 			}
 		}
 		
-		// 取得する件数の上限をページャのオプションに追加
-		$option["totalItems"] = $order->countBy($conditions);
-		
-		// ページャーのインスタンスを作成
-		$pager = AdvancedPager::factory($option);
-		
-		// 最終的に出力するページオブジェクトを生成
-		$page = array();
-		// ページャーからリンクをコピー
-		$page["links"] = $pager->links;
-		$page["links_object"] = $pager->getLinks();
+		// データを取得する。
+		$orders = $order->findAllBy($conditions, $sortKey);
 
-		// オプションから該当件数を取得
-		$page["totalItems"] = $options["totalItems"];
-
-		// ページ数をページャーから取得
-		$page["page_numbers"] = array(
-			"current" => $pager->getCurrentPageID(),
-			"total"   => $pager->numPages()
-		);
-
-		// 現在のページにおけるデータ全体に対するインデックスを取得
-		list($page["from"], $page["to"]) = $pager->getOffsetByPageId();
-
-		// 現在のページの実件数を取得
-		$page["limit"] = $page["to"] - $page["from"] +1;
-		
-		// 取得する件数を絞り込み
-		$order->limit($options["perPage"], $page["from"]-1);
-		$page["data"] = $order->findAllBy($conditions, $sortKey);
-
-		$_SERVER["ATTRIBUTES"][$params->get("result", "orders")] = $page;
+		$_SERVER["ATTRIBUTES"][$params->get("result", "orders")] = $orders;
 	}
 }
 ?>
