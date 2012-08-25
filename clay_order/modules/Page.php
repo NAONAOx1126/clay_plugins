@@ -13,7 +13,7 @@ class Order_Page extends FrameworkModule{
 		$loader->LoadSetting();
 
 		// ページャの初期化
-		$pager = new TemplatePager($params->get("_pager_mode", TemplatePager::PAGE_SLIDE), $params->get("_pager_per_page", 20), $params->get("_pager_displays", 3));
+		$pager = new TemplatePager($params->get("_pager_mode", TemplatePager::PAGE_SLIDE), $params->get("_pager_dispmode", TemplatePager::DISPLAY_ATTR), $params->get("_pager_per_page", 20), $params->get("_pager_displays", 3));
 		$pager->importTemplates($params);
 		
 		// カテゴリが選択された場合、カテゴリの商品IDのリストを使う

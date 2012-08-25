@@ -12,7 +12,7 @@ class Content_Cover_Page extends FrameworkModule{
 		$loader->LoadSetting();
 
 		// ページャの初期化
-		$pager = new TemplatePager($params->get("_pager_mode", TemplatePager::PAGE_SLIDE), $params->get("_pager_per_page", 20), $params->get("_pager_displays", 3));
+		$pager = new TemplatePager($params->get("_pager_mode", TemplatePager::PAGE_SLIDE), $params->get("_pager_dispmode", TemplatePager::DISPLAY_ATTR), $params->get("_pager_per_page", 20), $params->get("_pager_displays", 3));
 		$pager->importTemplates($params);
 		
 		// 並べ替え順序が指定されている場合に適用
