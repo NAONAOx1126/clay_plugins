@@ -69,9 +69,11 @@ class Order_RepeaterOrderDetailModel extends DatabaseModel{
 					case "gt":
 					case "ge":
 						$value = date("Y-m-d 00:00:00", strtotime($value));
+						break;
 					case "lt":
 					case "le":
 						$value = date("Y-m-d 23:59:59", strtotime($value));
+						break;
 				}
 			}
 		}
