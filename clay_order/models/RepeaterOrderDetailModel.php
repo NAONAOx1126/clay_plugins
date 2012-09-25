@@ -69,10 +69,10 @@ class Order_RepeaterOrderDetailModel extends DatabaseModel{
 			switch($op){
 				case "gt":
 				case "ge":
-					$value = date("Y-m-d 00:00:00", strtotime($value));
+					$value = $op.":".date("Y-m-d 00:00:00", strtotime($value)).":".$default;
 				case "lt":
 				case "le":
-					$value = date("Y-m-d 23:59:59", strtotime($value));
+					$value = $op.":".date("Y-m-d 23:59:59", strtotime($value)).":".$default;
 			}
 		}
 		return parent::appendWhere($select, $key, $value);
