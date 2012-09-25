@@ -60,16 +60,16 @@ class Order_RepeaterOrderPaymentModel extends DatabaseModel{
 	
 	protected function appendWhere($select, $key, $value){
 		if(strpos($key, ":") > 0){
-			list($op, $key, $default) = explode(":", $key, 3);
-		}
-		if($key == "order_time" && preg_match("/^[0-9]+-[0-9]+-[0-9]+$/", $value) > 0){
-			switch($op){
-				case "gt":
-				case "ge":
-					$value = $op.":".date("Y-m-d 00:00:00", strtotime($value)).":".$default;
-				case "lt":
-				case "le":
-					$value = $op.":".date("Y-m-d 23:59:59", strtotime($value)).":".$default;
+			list($op, $key2, $default) = explode(":", $key, 3);
+			if($key2 == "order_time" && preg_match("/^[0-9]+-[0-9]+-[0-9]+$/", $value) > 0){
+				switch($op){
+					case "gt":
+					case "ge":
+						$value = date("Y-m-d 00:00:00", strtotime($value));
+					case "lt":
+					case "le":
+						$value = date("Y-m-d 23:59:59", strtotime($value));
+				}
 			}
 		}
 		return parent::appendWhere($select, $key, $value);
