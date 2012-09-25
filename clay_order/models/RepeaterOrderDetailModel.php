@@ -60,5 +60,22 @@ class Order_RepeaterOrderDetailModel extends DatabaseModel{
 	function findAllByOrderPackage($order_package_id){
 		return $this->findAllBy(array("order_package_id" => $order_package_id));
 	}
+	
+	protected function appendWhere($select, $key, $value){
+		if(strpos($key, ":") > 0){
+			list($op, $key, $default) = explode(":", $key, 3);
+		}
+		if($key == "order_time" && preg_match("/^[0-9]+-[0-9]+-[0-9]+$/", $value) > 0){
+			switch($op){
+				case "gt":
+				case "ge":
+					$value = date("Y-m-d 00:00:00", strtotime($value));
+				case "lt":
+				case "le":
+					$value = date("Y-m-d 23:59:59", strtotime($value));
+			}
+		}
+		return parent::appendWhere($select, $key, $value);
+	}
 }
 ?>

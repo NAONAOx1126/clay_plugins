@@ -7,7 +7,20 @@
  * @param flag 検索条件とするフラグ
  * @param result 結果を設定する配列のキーワード
  */
-class Member_Customer_List extends FrameworkModule{
+class Member_Customer_List extends FrameworkListModule{
+	
+	function getModelName(){
+		return "CustomerModel";	
+	}
+	
+	function getDefaultResultKey(){
+		return "customers";
+	}
+	
+	function getLoader(){
+		return new PluginLoader("Member");
+	}
+	
 	function execute($params){
 		$loader = new PluginLoader("Member");
 		$loader->LoadSetting();
