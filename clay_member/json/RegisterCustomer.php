@@ -1,5 +1,8 @@
 <?php
 class Member_RegisterCustomer{
+	// 更新系の処理のため、キャッシュを無効化
+	public $disable_cache = true;
+	
 	public function execute(){
 		// 商品プラグインの初期化
 		$loader = new PluginLoader("Member");

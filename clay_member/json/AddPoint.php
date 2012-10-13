@@ -1,5 +1,8 @@
 <?php
 class Member_AddPoint{
+	// 更新系の処理のため、キャッシュを無効化
+	public $disable_cache = true;
+	
 	public function execute(){
 		// 商品プラグインの初期化
 		$loader = new PluginLoader("Member");
@@ -11,7 +14,7 @@ class Member_AddPoint{
 		
 			if($customer->customer_id > 0){
 				// 設定するポイント
-				$point = $params->get("point", $_POST["point"]);
+				$point = $_POST["point"];
 				
 				if(!empty($point) && is_numeric($point)){
 					// トランザクションの開始
