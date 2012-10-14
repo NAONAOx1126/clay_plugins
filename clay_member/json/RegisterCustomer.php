@@ -24,6 +24,7 @@ class Member_RegisterCustomer{
 		try{
 			// 登録データの保存
 			$customer->save();
+			$customer->findByPrimaryKey($customer->customer_id);
 			
 			// エラーが無かった場合、処理をコミットする。
 			DBFactory::commit("member");
