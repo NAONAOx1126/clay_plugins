@@ -15,18 +15,6 @@ class Member_RegisterCustomer{
 			$customer->findByEmail($_POST["email"]);
 		}
 
-		// 新規登録時は登録ポイントを設定。
-		if(!($customer->customer_id > 0)){
-			if(empty($_POST["point"])){
-				$_POST["point"] = 0;
-			}
-			$rule = $loader->loadModel("PointRuleModel");
-			
-			// 新規登録時は登録ポイントを登録
-			$pointLog = $loader->loadModel("PointLogModel");
-			$pointLog->addRuledPoint($rule, Member_PointRuleModel::RULE_ENTRY);
-		}
-		
 		foreach($_POST as $key => $value){
 			$customer->$key = $value;
 		}
@@ -34,8 +22,21 @@ class Member_RegisterCustomer{
 		DBFactory::begin("member");
 		
 		try{
+			// 登録前の顧客IDを保持
+			$preCustomerId = $customer->customer_id;
+			
 			// 登録データの保存
 			$customer->save();
+			
+			// 新規登録時は登録ポイントを設定。
+			if(!($preCustomerId > 0)){
+				$rule = $loader->loadModel("PointRuleModel");
+				
+				// 新規登録時は登録ポイントを登録
+				$pointLog = $loader->loadModel("PointLogModel");
+				$pointLog->addCustomerRuledPoint($customer->customer_id, $rule, Member_PointRuleModel::RULE_ENTRY);
+			}
+			
 			$customer->findByPrimaryKey($customer->customer_id);
 			
 			// エラーが無かった場合、処理をコミットする。
