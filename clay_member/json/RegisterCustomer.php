@@ -14,6 +14,18 @@ class Member_RegisterCustomer{
 			// メールアドレスが一致した場合も同一ユーザーとみなす。
 			$customer->findByEmail($_POST["email"]);
 		}
+
+		// 新規登録時は登録ポイントを設定。
+		if(!($customer->customer_id > 0)){
+			if(empty($_POST["point"])){
+				$_POST["point"] = 0;
+			}
+			$rule = $loader->loadModel("PointRuleModel");
+			
+			// 新規登録時は登録ポイントを登録
+			$pointLog = $loader->loadModel("PointLogModel");
+			$pointLog->addRuledPoint($rule, Member_PointRuleModel::RULE_ENTRY);
+		}
 		
 		foreach($_POST as $key => $value){
 			$customer->$key = $value;
