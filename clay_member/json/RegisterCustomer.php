@@ -44,7 +44,6 @@ class Member_RegisterCustomer{
 				
 		}catch(Exception $ex){
 			DBFactory::rollback("member");
-			throw $ex;
 		}
 		return $customer->toArray();
 	}

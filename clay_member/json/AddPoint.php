@@ -31,12 +31,17 @@ class Member_AddPoint{
 						$pointLog = $loader->loadModel("PointLogModel");
 						$pointLog->addCustomer($customer->customer_id, $point, $_POST["comment"]);
 						
-						// エラーが無かった場合、処理をコミットする。
-						DBFactory::commit("member");
+						$customer->findByPrimaryKey($customer->customer_id);
+						if($customer->point >= 0){
+							// エラーが無く、変更後のポイントが0以上の場合、処理をコミットする。
+							DBFactory::commit("member");
+						}else{
+							DBFactory::rollback("member");
+							$customer->findByPrimaryKey($customer->customer_id);
+						}
 							
 					}catch(Exception $ex){
 						DBFactory::rollback("member");
-						throw $ex;
 					}
 				}
 			}
