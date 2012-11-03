@@ -21,15 +21,15 @@ class Base_Site_Delete extends Clay_Plugin_Module{
 		$site->findByPrimaryKey($_POST["site_id"]);
 		
 		// トランザクションの開始
-		DBFactory::begin();
+		Clay_Database_Factory::begin();
 		
 		try{
 			$site->delete();
 					
 			// エラーが無かった場合、処理をコミットする。
-			DBFactory::commit();
+			Clay_Database_Factory::commit();
 		}catch(Exception $e){
-			DBFactory::rollBack();
+			Clay_Database_Factory::rollBack();
 			throw $e;
 		}
 	}

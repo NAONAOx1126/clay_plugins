@@ -11,7 +11,7 @@ class Content_News_Save extends Clay_Plugin_Module{
 			$loader->LoadSetting();
 			
 			// トランザクションの開始
-			DBFactory::begin();
+			Clay_Database_Factory::begin();
 			
 			try{
 				// POSTされたデータを元にモデルを作成
@@ -29,14 +29,14 @@ class Content_News_Save extends Clay_Plugin_Module{
 				$news->save();
 						
 				// エラーが無かった場合、処理をコミットする。
-				DBFactory::commit();
+				Clay_Database_Factory::commit();
 				
 				unset($_POST["save"]);
 				
 				// 登録が正常に完了した場合には、ページをリロードする。
 				$this->reload();
 			}catch(Exception $e){
-				DBFactory::rollback();
+				Clay_Database_Factory::rollback();
 				unset($_POST["save"]);
 				throw $e;
 			}

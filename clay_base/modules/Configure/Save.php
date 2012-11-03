@@ -20,7 +20,7 @@ class Base_Configure_Save extends Clay_Plugin_Module{
 		$configure = $loader->loadModel("SiteConfigureModel");
 		
 		// トランザクションの開始
-		DBFactory::begin();
+		Clay_Database_Factory::begin();
 		
 		try{
 			foreach($_POST["configure"] as $key => $value){
@@ -34,9 +34,9 @@ class Base_Configure_Save extends Clay_Plugin_Module{
 			}
 
 			// エラーが無かった場合、処理をコミットする。
-			DBFactory::commit();
+			Clay_Database_Factory::commit();
 		}catch(Exception $e){
-			DBFactory::rollBack();
+			Clay_Database_Factory::rollBack();
 			throw $e;
 		}
 	}

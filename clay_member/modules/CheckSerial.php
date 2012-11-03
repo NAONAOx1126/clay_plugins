@@ -45,7 +45,7 @@ class Members_CheckSerial extends Clay_Plugin_Module{
 				}
 				
 				// トランザクションの開始
-				DBFactory::begin("member");
+				Clay_Database_Factory::begin("member");
 				
 				try{
 					// 顧客データモデルを初期化
@@ -59,9 +59,9 @@ class Members_CheckSerial extends Clay_Plugin_Module{
 					$log->save();
 					
 					// エラーが無かった場合、処理をコミットする。
-					DBFactory::commit("member");
+					Clay_Database_Factory::commit("member");
 				}catch(Exception $ex){
-					DBFactory::rollback("member");
+					Clay_Database_Factory::rollback("member");
 					throw $ex;
 				}
 			}

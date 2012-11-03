@@ -18,7 +18,7 @@ class Product_Import extends Clay_Plugin_Module{
 		if($params->check("key") && is_array($_SERVER["ATTRIBUTES"][$params->get("key")])){
 			try{
 				// トランザクションの開始
-				DBFactory::begin("product");
+				Clay_Database_Factory::begin("product");
 				
 				// ローダーを初期化
 				$loader = new Clay_Plugin("Product");
@@ -49,9 +49,9 @@ class Product_Import extends Clay_Plugin_Module{
 				$product = $loader->loadModel("ProductModel");
 				$productList = $product->saveAll($productList);
 				
-				DBFactory::commit("product");
+				Clay_Database_Factory::commit("product");
 			}catch(Exception $e){
-				DBFactory::rollback("product");
+				Clay_Database_Factory::rollback("product");
 			}
 		}
 	}

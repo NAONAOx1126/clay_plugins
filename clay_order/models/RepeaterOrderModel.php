@@ -19,17 +19,17 @@ class Order_RepeaterOrderModel extends Clay_Plugin_Model{
 	
 	public function reconstruct(){
 		// データを再構築する。
-		DBFactory::begin("order");
+		Clay_Database_Factory::begin("order");
 		try{
-			$connection = DBFactory::getConnection("order");
+			$connection = Clay_Database_Factory::getConnection("order");
 			$connection->query("TRUNCATE `shop_repeater_orders`");
 			$sql = "INSERT INTO `shop_repeater_orders` SELECT `shop_orders`.*, count(`counter`.`order_id`) AS `order_repeat`";
 			$sql .= " FROM `shop_orders` LEFT JOIN `shop_orders` AS `counter` ON `shop_orders`.`order_email` = `counter`.`order_email` AND `shop_orders`.`order_time` > `counter`.`order_time`";
 			$sql .= " GROUP BY `shop_orders`.`order_id` ORDER BY count(`counter`.`order_id`)";
 			$connection->query($sql);
-			DBFactory::commit("order");
+			Clay_Database_Factory::commit("order");
 		}catch(Expception $e){
-			DBFactory::rollback("order");
+			Clay_Database_Factory::rollback("order");
 		}
 		
 	}

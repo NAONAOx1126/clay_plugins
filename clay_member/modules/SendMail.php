@@ -16,7 +16,7 @@ class Members_SendMail extends Clay_Plugin_Module{
 	function execute($params){
 		if($params->check("mail")){
 			// トランザクションの開始
-			DBFactory::begin("member");
+			Clay_Database_Factory::begin("member");
 			
 			try{
 				// 登録完了メール送信
@@ -50,10 +50,10 @@ class Members_SendMail extends Clay_Plugin_Module{
 				$sendMail->addBody($body);
 				$sendMail->send();
 				$sendMail->reply();
-				DBFactory::commit("member");
+				Clay_Database_Factory::commit("member");
 			}catch(Exception $ex){
 				unset($_POST["regist"]);
-				DBFactory::rollback("member");
+				Clay_Database_Factory::rollback("member");
 				throw $ex;
 			}
 		}

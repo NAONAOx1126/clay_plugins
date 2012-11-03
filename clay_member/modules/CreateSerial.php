@@ -69,7 +69,7 @@ class Members_CreateSerial extends Clay_Plugin_Module{
 				}
 
 				// トランザクションの開始
-				DBFactory::begin("member");
+				Clay_Database_Factory::begin("member");
 				
 				try{
 					// 顧客データモデルを初期化
@@ -82,13 +82,13 @@ class Members_CreateSerial extends Clay_Plugin_Module{
 					$option->save();
 					
 					// エラーが無かった場合、処理をコミットする。
-					DBFactory::commit("member");
+					Clay_Database_Factory::commit("member");
 	
 					// 結果を登録する。
 					$_SESSION[CUSTOMER_SESSION_KEY]->$optionKey = $serial;
 					$_SERVER["ATTRIBUTES"][$params->get("result", "customer")]= $_SESSION[CUSTOMER_SESSION_KEY];					
 				}catch(Exception $ex){
-					DBFactory::rollback("member");
+					Clay_Database_Factory::rollback("member");
 					throw $ex;
 				}
 			}

@@ -17,8 +17,8 @@ class Order_AddOrder{
 		$memberLoader->LoadSetting();
 
 		// トランザクションの開始
-		DBFactory::begin("order");
-		DBFactory::begin("member");
+		Clay_Database_Factory::begin("order");
+		Clay_Database_Factory::begin("member");
 	
 		try{
 			// 受注データを検索する。
@@ -196,16 +196,16 @@ class Order_AddOrder{
 			}
 
 			// エラーが無かった場合、処理をコミットする。
-			DBFactory::commit("order");
-			DBFactory::commit("member");
+			Clay_Database_Factory::commit("order");
+			Clay_Database_Factory::commit("member");
 			if($order->customer_id > 0){
 				$customer = $memberLoader->loadModel("CustomerModel");
 				$customer->findByPrimaryKey($order->customer_id);
 				return $customer->toArray();
 			}
 		}catch(Exception $e){
-			DBFactory::rollback("order");
-			DBFactory::rollback("member");
+			Clay_Database_Factory::rollback("order");
+			Clay_Database_Factory::rollback("member");
 			throw $e;
 		}
 		return array();

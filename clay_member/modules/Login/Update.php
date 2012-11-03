@@ -19,7 +19,7 @@ class Member_Login_Update extends Clay_Plugin_Module{
 		
 		if($customer->customer_id > 0){
 			// トランザクションの開始
-			DBFactory::begin("member");
+			Clay_Database_Factory::begin("member");
 			
 			try{
 				// データを登録する。
@@ -29,9 +29,9 @@ class Member_Login_Update extends Clay_Plugin_Module{
 				$customer->save();
 				
 				// エラーが無かった場合、処理をコミットする。
-				DBFactory::commit("member");
+				Clay_Database_Factory::commit("member");
 			}catch(Exception $ex){
-				DBFactory::rollback("member");
+				Clay_Database_Factory::rollback("member");
 				throw $ex;
 			}
 		}

@@ -17,7 +17,7 @@ class Member_Customer_AddPoint extends Clay_Plugin_Module{
 		
 		if(!empty($point) && is_numeric($point)){
 			// トランザクションの開始
-			DBFactory::begin("member");
+			Clay_Database_Factory::begin("member");
 			
 			try{
 				// タイプ設定を追加した場合、ポイントを追加する。
@@ -31,10 +31,10 @@ class Member_Customer_AddPoint extends Clay_Plugin_Module{
 				$pointLog->add($_SESSION[CUSTOMER_SESSION_KEY]->customer_id, $point);
 				
 				// エラーが無かった場合、処理をコミットする。
-				DBFactory::commit("member");
+				Clay_Database_Factory::commit("member");
 					
 			}catch(Exception $ex){
-				DBFactory::rollback("member");
+				Clay_Database_Factory::rollback("member");
 				throw $ex;
 			}
 		}

@@ -17,7 +17,7 @@ class Members_Retire extends Clay_Plugin_Module{
 	function execute($params){
 		if(isset($_POST["retire"])){
 			// トランザクションの開始
-			DBFactory::begin("member");
+			Clay_Database_Factory::begin("member");
 			
 			try{
 				// オプションデータを削除
@@ -40,12 +40,12 @@ class Members_Retire extends Clay_Plugin_Module{
 				$customer->delete();
 				
 				// エラーが無かった場合、処理をコミットする。
-				DBFactory::commit("member");
+				Clay_Database_Factory::commit("member");
 	
 				// セッションをクリア
 				unset($_SESSION[CUSTOMER_SESSION_KEY]);
 			}catch(Exception $ex){
-				DBFactory::rollback("member");
+				Clay_Database_Factory::rollback("member");
 				throw $ex;
 			}
 		}

@@ -57,7 +57,7 @@ class Member_Login_Mobile extends Clay_Plugin_Module{
 				// 該当するデータが無い場合はデータを作成
 				if($params->get("auto", "0") == "1"){
 					// トランザクションの開始
-					DBFactory::begin("member");
+					Clay_Database_Factory::begin("member");
 					
 					try{
 						// データを登録する。
@@ -76,10 +76,10 @@ class Member_Login_Mobile extends Clay_Plugin_Module{
 						$pointLog->addCustomerRuledPoint($customer->customer_id, $rule, Member_PointRuleModel::RULE_ENTRY);
 		
 						// エラーが無かった場合、処理をコミットする。
-						DBFactory::commit("member");
+						Clay_Database_Factory::commit("member");
 					}catch(Exception $ex){
 						unset($_POST["regist"]);
-						DBFactory::rollback("member");
+						Clay_Database_Factory::rollback("member");
 						throw $ex;
 					}
 					

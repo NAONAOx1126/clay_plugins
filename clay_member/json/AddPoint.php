@@ -18,7 +18,7 @@ class Member_AddPoint{
 				
 				if(!empty($point) && is_numeric($point)){
 					// トランザクションの開始
-					DBFactory::begin("member");
+					Clay_Database_Factory::begin("member");
 					
 					try{
 						// タイプ設定を追加した場合、ポイントを追加する。
@@ -34,14 +34,14 @@ class Member_AddPoint{
 						$customer->findByPrimaryKey($customer->customer_id);
 						if($customer->point >= 0){
 							// エラーが無く、変更後のポイントが0以上の場合、処理をコミットする。
-							DBFactory::commit("member");
+							Clay_Database_Factory::commit("member");
 						}else{
-							DBFactory::rollback("member");
+							Clay_Database_Factory::rollback("member");
 							$customer->findByPrimaryKey($customer->customer_id);
 						}
 							
 					}catch(Exception $ex){
-						DBFactory::rollback("member");
+						Clay_Database_Factory::rollback("member");
 					}
 				}
 			}

@@ -19,9 +19,9 @@ class Order_RepeaterOrderDetailModel extends Clay_Plugin_Model{
 
 	public function reconstruct(){
 		// データを再構築する。
-		DBFactory::begin("order");
+		Clay_Database_Factory::begin("order");
 		try{
-			$connection = DBFactory::getConnection("order");
+			$connection = Clay_Database_Factory::getConnection("order");
 			$connection->query("TRUNCATE `shop_repeater_order_details`");
 			$sql = "INSERT INTO `shop_repeater_order_details` SELECT `shop_orders`.`order_id` AS `order_id`,`shop_orders`.`order_code` AS `order_code`,`shop_orders`.`customer_id` AS `customer_id`,";
 			$sql .= "`shop_orders`.`order_time` AS `order_time`,`shop_orders`.`order_sei` AS `order_sei`,`shop_orders`.`order_mei` AS `order_mei`,`shop_orders`.`order_sei_kana` AS `order_sei_kana`,";
@@ -47,9 +47,9 @@ class Order_RepeaterOrderDetailModel extends Clay_Plugin_Model{
 			$sql .= " LEFT JOIN `shop_orders` AS `counter` ON `shop_orders`.`order_email` = `counter`.`order_email` and `shop_orders`.`order_time` > `counter`.`order_time`";
 			$sql .= " GROUP BY `shop_order_details`.`order_detail_id` ORDER BY COUNT(`counter`.`order_id`)";
 			$connection->query($sql);
-			DBFactory::commit("order");
+			Clay_Database_Factory::commit("order");
 		}catch(Expception $e){
-			DBFactory::rollback("order");
+			Clay_Database_Factory::rollback("order");
 		}
 	}
 		

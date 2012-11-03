@@ -17,7 +17,7 @@ class Members_Regist extends Clay_Plugin_Module{
 	function execute($params){
 		if(isset($_POST["regist"]) && !empty($_SESSION["INPUT_DATA"])){
 			// トランザクションの開始
-			DBFactory::begin("member");
+			Clay_Database_Factory::begin("member");
 			
 			try{
 				if($params->check("unique")){
@@ -49,13 +49,13 @@ class Members_Regist extends Clay_Plugin_Module{
 				}
 				
 				// エラーが無かった場合、処理をコミットする。
-				DBFactory::commit("member");
+				Clay_Database_Factory::commit("member");
 	
 				// 結果を設定
 				$_SERVER["ATTRIBUTES"][$params->get("result", "customer")]= $_SESSION[CUSTOMER_SESSION_KEY] = $customer;					
 			}catch(Exception $ex){
 				unset($_POST["regist"]);
-				DBFactory::rollback("member");
+				Clay_Database_Factory::rollback("member");
 				throw $ex;
 			}
 		}

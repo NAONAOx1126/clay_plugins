@@ -15,7 +15,7 @@ class Order_Save extends Clay_Plugin_Module{
 			$loader->LoadSetting();
 	
 			// トランザクションの開始
-			DBFactory::begin("order");
+			Clay_Database_Factory::begin("order");
 		
 			try{
 				// 商品データを検索する。
@@ -79,7 +79,7 @@ class Order_Save extends Clay_Plugin_Module{
 				}
 				// 最初の設定時のみ
 				if($params->get("point", "0") == "1" && !($order_id_before > 0)){
-					DBFactory::begin("member");
+					Clay_Database_Factory::begin("member");
 					try{
 						$memberLoader = new Clay_Plugin("Member");
 						$rule = $memberLoader->loadModel("PointRuleModel");
@@ -113,17 +113,17 @@ class Order_Save extends Clay_Plugin_Module{
 						}
 
 						// エラーが無かった場合、処理をコミットする。
-						DBFactory::commit("member");
+						Clay_Database_Factory::commit("member");
 					}catch(Exception $e){
-						DBFactory::rollback("member");
+						Clay_Database_Factory::rollback("member");
 						throw $e;
 					}
 				}
 				
 				// エラーが無かった場合、処理をコミットする。
-				DBFactory::commit("order");
+				Clay_Database_Factory::commit("order");
 			}catch(Exception $e){
-				DBFactory::rollback("order");
+				Clay_Database_Factory::rollback("order");
 				throw $e;
 			}
 		}

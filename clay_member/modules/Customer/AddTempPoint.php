@@ -18,7 +18,7 @@ class Member_Customer_AddTempPoint extends Clay_Plugin_Module{
 		
 		if(!empty($point) && is_numeric($point)){
 			// トランザクションの開始
-			DBFactory::begin("member");
+			Clay_Database_Factory::begin("member");
 			
 			try{
 				// ポイントログに書き込み
@@ -26,9 +26,9 @@ class Member_Customer_AddTempPoint extends Clay_Plugin_Module{
 				$pointLog->add($_SESSION[CUSTOMER_SESSION_KEY]->customer_id, $point, $pointComment, false);
 				
 				// エラーが無かった場合、処理をコミットする。
-				DBFactory::commit("member");
+				Clay_Database_Factory::commit("member");
 			}catch(Exception $ex){
-				DBFactory::rollback("member");
+				Clay_Database_Factory::rollback("member");
 				throw $ex;
 			}
 		}

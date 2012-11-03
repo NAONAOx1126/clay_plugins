@@ -19,9 +19,9 @@ class Order_RepeaterOrderPaymentModel extends Clay_Plugin_Model{
 
 	public function reconstruct(){
 		// データを再構築する。
-		DBFactory::begin("order");
+		Clay_Database_Factory::begin("order");
 		try{
-			$connection = DBFactory::getConnection("order");
+			$connection = Clay_Database_Factory::getConnection("order");
 			$connection->query("TRUNCATE `shop_repeater_order_payments`");
 			$sql = "INSERT INTO `shop_repeater_order_payments` SELECT `shop_orders`.`order_email` AS `order_email`,`shop_order_payments`.`order_payment_id` AS `order_payment_id`,`shop_order_payments`.`order_id` AS `order_id`,";
 			$sql .= "`shop_order_payments`.`payment_id` AS `payment_id`,`shop_order_payments`.`payment_card_company` AS `payment_card_company`,";
@@ -37,9 +37,9 @@ class Order_RepeaterOrderPaymentModel extends Clay_Plugin_Model{
 			$sql .= " LEFT JOIN `shop_orders` AS `counter` ON `shop_orders`.`order_email` = `counter`.`order_email` and `shop_orders`.`order_time` > `counter`.`order_time`";
 			$sql .= " GROUP BY `shop_order_payments`.`order_payment_id` ORDER BY count(`counter`.`order_id`)";
 			$connection->query($sql);
-			DBFactory::commit("order");
+			Clay_Database_Factory::commit("order");
 		}catch(Expception $e){
-			DBFactory::rollback("order");
+			Clay_Database_Factory::rollback("order");
 		}
 	}
 	

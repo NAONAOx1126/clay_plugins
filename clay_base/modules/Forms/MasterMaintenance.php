@@ -42,7 +42,7 @@ class Base_Forms_MasterMaintenance extends Clay_Plugin_Module{
 			// 削除処理
 			if(isset($_POST["delete"])){
 				// トランザクションの開始
-				DBFactory::begin();
+				Clay_Database_Factory::begin();
 				
 				try{
 					// DBのデータを削除
@@ -54,9 +54,9 @@ class Base_Forms_MasterMaintenance extends Clay_Plugin_Module{
 					}
 					$delete->execute();
 					// コミット
-					DBFactory::commit();
+					Clay_Database_Factory::commit();
 				}catch(Exception $e){
-					DBFactory::rollback();
+					Clay_Database_Factory::rollback();
 				}
 			}
 			
@@ -94,7 +94,7 @@ class Base_Forms_MasterMaintenance extends Clay_Plugin_Module{
 				}
 				
 				// トランザクションの開始
-				DBFactory::begin();
+				Clay_Database_Factory::begin();
 				
 				try{
 					// DBの内容をクリア
@@ -111,9 +111,9 @@ class Base_Forms_MasterMaintenance extends Clay_Plugin_Module{
 						$insert->execute($data);
 					}
 					// コミット
-					DBFactory::commit();
+					Clay_Database_Factory::commit();
 				}catch(Exception $e){
-					DBFactory::rollback();
+					Clay_Database_Factory::rollback();
 				}
 			}
 			

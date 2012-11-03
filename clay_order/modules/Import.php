@@ -18,7 +18,7 @@ class Order_Import extends Clay_Plugin_Module{
 		if($params->check("key") && is_array($_SERVER["ATTRIBUTES"][$params->get("key")])){
 			try{
 				// トランザクションの開始
-				DBFactory::begin("order");
+				Clay_Database_Factory::begin("order");
 				
 				// ローダーを初期化
 				$loader = new Clay_Plugin("Order");
@@ -110,9 +110,9 @@ class Order_Import extends Clay_Plugin_Module{
 				// 注文詳細データを上書き
 				$orderDetail = $loader->loadModel("OrderDetailModel");
 				$list = $orderDetail->saveAll($list);
-				DBFactory::commit("order");
+				Clay_Database_Factory::commit("order");
 			}catch(Exception $e){
-				DBFactory::rollback("order");
+				Clay_Database_Factory::rollback("order");
 			}
 		}
 	}

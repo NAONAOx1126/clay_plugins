@@ -1,7 +1,7 @@
 <?php
 class Order_PaymentChargesTable extends Clay_Plugin_Table{
 	function __construct(){
-		$this->db = DBFactory::getConnection("order");
+		$this->db = Clay_Database_Factory::getConnection("order");
 		parent::__construct("shop_payment_charges", "order");
 	}
 }

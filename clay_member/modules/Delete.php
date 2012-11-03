@@ -19,7 +19,7 @@ class Members_Delete extends Clay_Plugin_Module{
 	function execute($params){
 		if(isset($_POST["delete"]) && isset($_POST["customer_id"]) && !empty($_POST["customer_id"])){
 			// トランザクションの開始
-			DBFactory::begin("member");
+			Clay_Database_Factory::begin("member");
 			
 			try{
 				// 配送情報を削除
@@ -49,9 +49,9 @@ class Members_Delete extends Clay_Plugin_Module{
 				$customer->delete();
 				
 				// エラーが無かった場合、処理をコミットする。
-				DBFactory::commit("member");
+				Clay_Database_Factory::commit("member");
 			}catch(Exception $ex){
-				DBFactory::rollback("member");
+				Clay_Database_Factory::rollback("member");
 				throw $ex;
 			}
 		}

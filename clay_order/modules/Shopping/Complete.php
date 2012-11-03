@@ -21,7 +21,7 @@ class Shopping_Shopping_Complete extends Clay_Plugin_Module{
 			// 購入完了後処理
 			if(!empty($_POST["post_regist"])){
 				// トランザクションの開始
-				DBFactory::begin("order");
+				Clay_Database_Factory::begin("order");
 			
 				try{
 					// 受注完了メール用に受注データを取得する。
@@ -68,7 +68,7 @@ class Shopping_Shopping_Complete extends Clay_Plugin_Module{
 						}
 
 						// エラーが無かった場合、次のページへ
-						DBFactory::commit("order");
+						Clay_Database_Factory::commit("order");
 						
 						// 確定したら、カートの中身をクリアする。
 						unset($_SESSION["cart"]);
@@ -79,7 +79,7 @@ class Shopping_Shopping_Complete extends Clay_Plugin_Module{
 						throw new Clay_Exception_Invalid(array("既に注文完了しております。"));
 					}
 				}catch(Exception $ex){
-					DBFactory::rollback("order");
+					Clay_Database_Factory::rollback("order");
 					throw $ex;
 				}
 			}

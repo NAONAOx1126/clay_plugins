@@ -23,7 +23,7 @@ class Shopping_Shopping_Contents extends Clay_Plugin_Module{
 			// 購入完了処理を行う。(ダウンロードコンテンツ用）
 			if(!empty($_POST[$mode])){
 				// トランザクションの開始
-				DBFactory::begin("order");
+				Clay_Database_Factory::begin("order");
 				
 				try{
 					// 仮受注テーブルにデータを設定する
@@ -68,7 +68,7 @@ class Shopping_Shopping_Contents extends Clay_Plugin_Module{
 					}
 					
 					// エラーが無かった場合、処理をコミットする。
-					DBFactory::commit("order");
+					Clay_Database_Factory::commit("order");
 	
 					// 支払い合計額が0円以上の場合は、決済を実行する。
 					if($_SESSION[CUSTOMER_SESSION_KEY]->payment_total > 0){
@@ -86,7 +86,7 @@ class Shopping_Shopping_Contents extends Clay_Plugin_Module{
 					}
 				}catch(Exception $ex){
 					unset($_POST["regist"]);
-					DBFactory::rollback("order");
+					Clay_Database_Factory::rollback("order");
 					throw $ex;
 				}
 			}

@@ -59,16 +59,16 @@ class Member_Login_Android extends Clay_Plugin_Module{
 				}
 				
 				// トランザクションの開始
-				DBFactory::begin("member");
+				Clay_Database_Factory::begin("member");
 				
 				try{
 					// データを保存
 					$customer->save();
 					
 					// エラーが無かった場合、処理をコミットする。
-					DBFactory::commit("member");
+					Clay_Database_Factory::commit("member");
 				}catch(Exception $e){
-					DBFactory::rollback("member");
+					Clay_Database_Factory::rollback("member");
 					throw $e;
 				}
 			}

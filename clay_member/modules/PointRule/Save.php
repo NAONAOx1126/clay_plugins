@@ -34,7 +34,7 @@ class Member_PointRule_Save extends Clay_Plugin_Module{
 		}
 		
 		// トランザクションの開始
-		DBFactory::begin("member");
+		Clay_Database_Factory::begin("member");
 		
 		try{
 			// 登録データの保存
@@ -42,10 +42,10 @@ class Member_PointRule_Save extends Clay_Plugin_Module{
 			$_POST["point_rule_id"] = $pointRule->point_rule_id;
 			
 			// エラーが無かった場合、処理をコミットする。
-			DBFactory::commit("member");
+			Clay_Database_Factory::commit("member");
 				
 		}catch(Exception $ex){
-			DBFactory::rollback("member");
+			Clay_Database_Factory::rollback("member");
 			throw $ex;
 		}
 	}

@@ -21,7 +21,7 @@ class Base_Company_Delete extends Clay_Plugin_Module{
 		$company->findByPrimaryKey($_POST["company_id"]);
 		
 		// トランザクションデータベースの取得
-		DBFactory::begin();
+		Clay_Database_Factory::begin();
 		
 		try{
 			// 組織に関連するオペレータを削除
@@ -31,9 +31,9 @@ class Base_Company_Delete extends Clay_Plugin_Module{
 			$company->delete();
 					
 			// エラーが無かった場合、処理をコミットする。
-			DBFactory::commit();
+			Clay_Database_Factory::commit();
 		}catch(Exception $e){
-			DBFactory::rollBack();
+			Clay_Database_Factory::rollBack();
 			throw $e;
 		}
 	}

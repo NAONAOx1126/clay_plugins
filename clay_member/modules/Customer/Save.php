@@ -15,7 +15,7 @@ class Member_Customer_Save extends Clay_Plugin_Module{
 			$loader->LoadSetting();
 	
 			// トランザクションの開始
-			DBFactory::begin("member");
+			Clay_Database_Factory::begin("member");
 		
 			try{
 				// 商品データを検索する。
@@ -70,9 +70,9 @@ class Member_Customer_Save extends Clay_Plugin_Module{
 				unset($_POST["save"]);
 				
 				// エラーが無かった場合、処理をコミットする。
-				DBFactory::commit("member");
+				Clay_Database_Factory::commit("member");
 			}catch(Exception $e){
-				DBFactory::rollback("member");
+				Clay_Database_Factory::rollback("member");
 				unset($_POST["save"]);
 				throw $e;
 			}

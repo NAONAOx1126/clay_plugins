@@ -11,7 +11,7 @@ class Content_News_Delete extends Clay_Plugin_Module{
 			$loader->LoadSetting();
 			
 			// トランザクションの開始
-			DBFactory::begin();
+			Clay_Database_Factory::begin();
 			
 			try{
 				// 渡されたカテゴリIDのインスタンスを生成
@@ -30,7 +30,7 @@ class Content_News_Delete extends Clay_Plugin_Module{
 				}
 				
 				// エラーが無かった場合、処理をコミットする。
-				DBFactory::commit();
+				Clay_Database_Factory::commit();
 				
 				unset($_POST["news_id"]);
 				unset($_POST["delete"]);
@@ -38,7 +38,7 @@ class Content_News_Delete extends Clay_Plugin_Module{
 				// 登録が正常に完了した場合には、ページをリロードする。
 				$this->reload();
 			}catch(Exception $e){
-				DBFactory::rollback();
+				Clay_Database_Factory::rollback();
 				unset($_POST["news_id"]);
 				unset($_POST["delete"]);
 				throw $e;

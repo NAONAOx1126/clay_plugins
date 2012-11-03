@@ -21,7 +21,7 @@ class Product_ProductProfitModel extends Clay_Plugin_Model{
 
 	public function reconstruct(){
 		// データを再構築する。
-		$connection = DBFactory::getConnection("order");
+		$connection = Clay_Database_Factory::getConnection("order");
 		$sql = "SELECT `shop_order_details`.`product_code`";
 		$sql .= ", sum(FLOOR(`shop_order_details`.`price` * POW(0.5, FLOOR(datediff(NOW(), `shop_orders`.`order_time`) / 7)))) AS `efficient_profit`";
 		$sql .= ", sum(`shop_order_details`.`price`) AS `total_profit`";
@@ -31,9 +31,9 @@ class Product_ProductProfitModel extends Clay_Plugin_Model{
 		$result = $connection->query($sql);
 		$list = $result->fetchAll();
 		
-		DBFactory::begin("product");
+		Clay_Database_Factory::begin("product");
 		try{
-			$connection = DBFactory::getConnection("product");
+			$connection = Clay_Database_Factory::getConnection("product");
 			$connection->query("TRUNCATE `shop_product_profits`");
 			$sql = "INSERT INTO `shop_product_profits`(`product_code`, `efficient_profit`, `total_profit`) VALUES (?, ?, ?)";
 			$connection->query($sql);
@@ -47,9 +47,9 @@ class Product_ProductProfitModel extends Clay_Plugin_Model{
 			$sql .= " WHERE `shop_product_profits`.`product_code` = `shop_products`.`product_code`";
 			$connection->query($sql);
 	
-			DBFactory::commit("product");
+			Clay_Database_Factory::commit("product");
 		}catch(Expception $e){
-			DBFactory::rollback("product");
+			Clay_Database_Factory::rollback("product");
 		}
 	}
 }

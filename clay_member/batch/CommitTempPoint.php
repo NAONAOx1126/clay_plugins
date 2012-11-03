@@ -16,7 +16,7 @@ class Member_CommitTempPoint extends Clay_Plugin_Module{
 		
 		foreach($pointLogs as $pointLog){
 			// トランザクションの開始
-			DBFactory::begin("member");
+			Clay_Database_Factory::begin("member");
 			
 			try{
 				// 新規登録時は登録ポイントを登録
@@ -30,9 +30,9 @@ class Member_CommitTempPoint extends Clay_Plugin_Module{
 				$pointLog->save();
 						
 				// エラーが無かった場合、処理をコミットする。
-				DBFactory::commit("member");
+				Clay_Database_Factory::commit("member");
 			}catch(Exception $ex){
-				DBFactory::rollback("member");
+				Clay_Database_Factory::rollback("member");
 				throw $ex;
 			}
 		}

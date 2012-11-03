@@ -12,7 +12,7 @@ class Member_RetireCustomer{
 		$customer->findByPrimaryKey($_POST["customer_id"]);
 		
 		// トランザクションの開始
-		DBFactory::begin("member");
+		Clay_Database_Factory::begin("member");
 		
 		try{
 			if($customer->customer_id > 0 && $customer->email == $_POST["email"]){
@@ -21,10 +21,10 @@ class Member_RetireCustomer{
 			}
 			
 			// エラーが無かった場合、処理をコミットする。
-			DBFactory::commit("member");
+			Clay_Database_Factory::commit("member");
 				
 		}catch(Exception $ex){
-			DBFactory::rollback("member");
+			Clay_Database_Factory::rollback("member");
 		}
 		return $customer->toArray();
 	}

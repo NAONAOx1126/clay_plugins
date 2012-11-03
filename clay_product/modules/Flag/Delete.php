@@ -11,7 +11,7 @@ class Product_Flag_Delete extends Clay_Plugin_Module{
 			$loader->LoadSetting();
 			
 			// トランザクションの開始
-			DBFactory::begin("product");
+			Clay_Database_Factory::begin("product");
 			
 			try{
 				// 渡されたカテゴリIDのインスタンスを生成
@@ -30,7 +30,7 @@ class Product_Flag_Delete extends Clay_Plugin_Module{
 				}
 				
 				// エラーが無かった場合、処理をコミットする。
-				DBFactory::commit("product");
+				Clay_Database_Factory::commit("product");
 				
 				unset($_POST["flag_id"]);
 				unset($_POST["delete"]);
@@ -38,7 +38,7 @@ class Product_Flag_Delete extends Clay_Plugin_Module{
 				// 登録が正常に完了した場合には、ページをリロードする。
 				$this->reload();
 			}catch(Exception $e){
-				DBFactory::rollback("product");
+				Clay_Database_Factory::rollback("product");
 				unset($_POST["flag_id"]);
 				unset($_POST["delete"]);
 				throw $e;

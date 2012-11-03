@@ -11,7 +11,7 @@ class Member_Customer_Delete extends Clay_Plugin_Module{
 			$loader->LoadSetting();
 			
 			// トランザクションの開始
-			DBFactory::begin("member");
+			Clay_Database_Factory::begin("member");
 			
 			try{
 				// 渡されたカテゴリIDのインスタンスを生成
@@ -39,7 +39,7 @@ class Member_Customer_Delete extends Clay_Plugin_Module{
 				}
 				
 				// エラーが無かった場合、処理をコミットする。
-				DBFactory::commit("member");
+				Clay_Database_Factory::commit("member");
 				
 				unset($_POST["customer_id"]);
 				unset($_POST["delete"]);
@@ -47,7 +47,7 @@ class Member_Customer_Delete extends Clay_Plugin_Module{
 				// 登録が正常に完了した場合には、ページをリロードする。
 				$this->reload();
 			}catch(Exception $e){
-				DBFactory::rollback("member");
+				Clay_Database_Factory::rollback("member");
 				unset($_POST["category_id"]);
 				unset($_POST["delete"]);
 				throw $e;

@@ -19,7 +19,7 @@ class Member_RegisterCustomer{
 			$customer->$key = $value;
 		}
 		// トランザクションの開始
-		DBFactory::begin("member");
+		Clay_Database_Factory::begin("member");
 		
 		try{
 			// 登録前の顧客IDを保持
@@ -40,10 +40,10 @@ class Member_RegisterCustomer{
 			$customer->findByPrimaryKey($customer->customer_id);
 			
 			// エラーが無かった場合、処理をコミットする。
-			DBFactory::commit("member");
+			Clay_Database_Factory::commit("member");
 				
 		}catch(Exception $ex){
-			DBFactory::rollback("member");
+			Clay_Database_Factory::rollback("member");
 		}
 		return $customer->toArray();
 	}

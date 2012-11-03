@@ -75,7 +75,7 @@ class Member_PointLogModel extends Clay_Plugin_Model{
 		// ポイントが0の場合は処理をスキップ
 		if($point != 0){
 			// トランザクションの開始
-			DBFactory::begin("member");
+			Clay_Database_Factory::begin("member");
 			
 			try{
 				// 即時反映の時はポイントデータを加算
@@ -90,10 +90,10 @@ class Member_PointLogModel extends Clay_Plugin_Model{
 				$this->add($customer_id, $point, $title, !$pointDelay);
 				
 				// エラーが無かった場合、処理をコミットする。
-				DBFactory::commit("member");
+				Clay_Database_Factory::commit("member");
 					
 			}catch(Exception $ex){
-				DBFactory::rollback("member");
+				Clay_Database_Factory::rollback("member");
 				throw $ex;
 			}
 		}

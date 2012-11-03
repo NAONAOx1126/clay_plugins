@@ -31,7 +31,7 @@ class Member_Welcome_Save extends Clay_Plugin_Module{
 		}
 		
 		// トランザクションの開始
-		DBFactory::begin("member");
+		Clay_Database_Factory::begin("member");
 		
 		try{
 			// 新規登録時は来店ポイントを設定。
@@ -55,10 +55,10 @@ class Member_Welcome_Save extends Clay_Plugin_Module{
 			$_POST["welcome_id"] = $welcome->welcome_id;
 			
 			// エラーが無かった場合、処理をコミットする。
-			DBFactory::commit("member");
+			Clay_Database_Factory::commit("member");
 				
 		}catch(Exception $ex){
-			DBFactory::rollback("member");
+			Clay_Database_Factory::rollback("member");
 			throw $ex;
 		}
 	}

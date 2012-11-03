@@ -24,7 +24,7 @@ class Base_Site_Save extends Clay_Plugin_Module{
 		}
 		
 		// トランザクションの開始
-		DBFactory::begin();
+		Clay_Database_Factory::begin();
 		
 		if($site->site_code == ""){
 			throw new Clay_Exception_Invalid(array("サイトコードは必須です"));
@@ -45,9 +45,9 @@ class Base_Site_Save extends Clay_Plugin_Module{
 			$site->save();
 					
 			// エラーが無かった場合、処理をコミットする。
-			DBFactory::commit();
+			Clay_Database_Factory::commit();
 		}catch(Exception $e){
-			DBFactory::rollBack();
+			Clay_Database_Factory::rollBack();
 			throw $e;
 		}
 	}

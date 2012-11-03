@@ -11,7 +11,7 @@ class Product_Seller_Save extends Clay_Plugin_Module{
 			$loader->LoadSetting();
 			
 			// トランザクションの開始
-			DBFactory::begin("product");
+			Clay_Database_Factory::begin("product");
 			
 			try{
 				// POSTされたデータを元にモデルを作成
@@ -26,11 +26,11 @@ class Product_Seller_Save extends Clay_Plugin_Module{
 				$seller->save();
 						
 				// エラーが無かった場合、処理をコミットする。
-				DBFactory::commit("product");
+				Clay_Database_Factory::commit("product");
 				
 				unset($_POST["save"]);
 			}catch(Exception $e){
-				DBFactory::rollback("product");
+				Clay_Database_Factory::rollback("product");
 				unset($_POST["save"]);
 				throw $e;
 			}

@@ -11,7 +11,7 @@ class Member_Contract_Save extends Clay_Plugin_Module{
 			$loader->LoadSetting();
 			
 			// トランザクションの開始
-			DBFactory::begin("member");
+			Clay_Database_Factory::begin("member");
 			
 			try{
 				// POSTされたデータを元にモデルを作成
@@ -28,11 +28,11 @@ class Member_Contract_Save extends Clay_Plugin_Module{
 				$contract->save();
 						
 				// エラーが無かった場合、処理をコミットする。
-				DBFactory::commit("member");
+				Clay_Database_Factory::commit("member");
 				
 				unset($_POST["save"]);
 			}catch(Exception $e){
-				DBFactory::rollback("member");
+				Clay_Database_Factory::rollback("member");
 				unset($_POST["save"]);
 				throw $e;
 			}

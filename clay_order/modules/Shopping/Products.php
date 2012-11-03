@@ -22,7 +22,7 @@ class Shopping_Shopping_Purchase extends Clay_Plugin_Module{
 			}
 		
 			// トランザクションの開始
-			DBFactory::begin("order");
+			Clay_Database_Factory::begin("order");
 			
 			try{
 				// セッションから、受注用の情報を構築する。
@@ -75,7 +75,7 @@ class Shopping_Shopping_Purchase extends Clay_Plugin_Module{
 					Registers::TempOrderDetails($details, $stockKeys, "quantity");
 		
 					// エラーが無かった場合、処理をコミットする。
-					DBFactory::commit("order");
+					Clay_Database_Factory::commit("order");
 					
 					// 注文IDをクッキーに保存する。（決済完了せず、前の画面に戻った場合は在庫を戻す）
 					setcookie("inprocess_order_id", $order["order_id"], time() + 365 * 24 * 3600);
@@ -93,7 +93,7 @@ class Shopping_Shopping_Purchase extends Clay_Plugin_Module{
 				}
 			}catch(Exception $ex){
 				unset($_POST["regist"]);
-				DBFactory::rollback("order");
+				Clay_Database_Factory::rollback("order");
 				throw $ex;
 			}
 		}
@@ -101,7 +101,7 @@ class Shopping_Shopping_Purchase extends Clay_Plugin_Module{
 		// 購入完了後処理
 		if(!empty($_POST["post_regist"])){
 			// トランザクションの開始
-			DBFactory::begin("order");
+			Clay_Database_Factory::begin("order");
 		
 			try{
 				// 受注完了メール用に受注データを取得する。
@@ -115,7 +115,7 @@ class Shopping_Shopping_Purchase extends Clay_Plugin_Module{
 					Mails::Order($_SERVER["CONFIGURE"]["SITE"]["order_mail_subject"], $_SERVER["CONFIGURE"]["SITE"]["order_mail_header"], $_SERVER["CONFIGURE"]["SITE"]["order_mail_footer"], $order, $_SERVER["CONFIGURE"]["SITE"]);
 							
 					// エラーが無かった場合、次のページへ
-					DBFactory::commit("order");
+					Clay_Database_Factory::commit("order");
 					
 					// 確定したら、カートの中身をクリアする。
 					unset($_SESSION["cart"]);
@@ -129,7 +129,7 @@ class Shopping_Shopping_Purchase extends Clay_Plugin_Module{
 					throw new Clay_Exception_Invalid(array("カートの中身がありません"));
 				}
 			}catch(Exception $ex){
-				DBFactory::rollback("order");
+				Clay_Database_Factory::rollback("order");
 				throw $ex;
 			}
 		}

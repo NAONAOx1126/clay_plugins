@@ -15,7 +15,7 @@ class Product_Save extends Clay_Plugin_Module{
 			$loader->LoadSetting();
 	
 			// トランザクションの開始
-			DBFactory::begin("product");
+			Clay_Database_Factory::begin("product");
 		
 			try{
 				// 商品データを検索する。
@@ -113,9 +113,9 @@ class Product_Save extends Clay_Plugin_Module{
 				unset($_POST["save"]);
 				
 				// エラーが無かった場合、処理をコミットする。
-				DBFactory::commit("product");
+				Clay_Database_Factory::commit("product");
 			}catch(Exception $e){
-				DBFactory::rollback("product");
+				Clay_Database_Factory::rollback("product");
 				unset($_POST["save"]);
 				throw $e;
 			}

@@ -38,7 +38,7 @@ class File_Csv_Upload extends Clay_Plugin_Module{
 					// アップロードログを書き込み
 					try{
 						// トランザクションの開始
-						DBFactory::begin("file");
+						Clay_Database_Factory::begin("file");
 						
 						// アップロードログを生成
 						$uploadLog = $loader->loadModel("UploadLogModel");
@@ -47,9 +47,9 @@ class File_Csv_Upload extends Clay_Plugin_Module{
 						$uploadLog->upload_size = $_FILES[$params->get("key")]["size"];
 						$uploadLog->save();
 
-						DBFactory::commit("file");
+						Clay_Database_Factory::commit("file");
 					}catch(Exception $e){
-						DBFactory::rollback("file");
+						Clay_Database_Factory::rollback("file");
 					}
 					
 					// アップロードファイルを開く
