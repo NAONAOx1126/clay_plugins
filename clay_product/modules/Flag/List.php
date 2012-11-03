@@ -4,10 +4,10 @@
  * 商品フラグのリストを取得する。
  * @param result 結果を設定する配列のキーワード
  */
-class Product_Flag_List extends FrameworkModule{
+class Product_Flag_List extends Clay_Plugin_Module{
 	function execute($params){
 		// ローダーの初期化
-		$loader = new PluginLoader("Product");
+		$loader = new Clay_Plugin("Product");
 		$loader->LoadSetting();
 		
 		// 並べ替え順序が指定されている場合に適用

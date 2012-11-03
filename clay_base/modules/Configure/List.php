@@ -13,10 +13,10 @@
  * ### Base.Configure.List
  * サイトデータのリストを取得する。
  */
-class Base_Configure_List extends FrameworkModule{
+class Base_Configure_List extends Clay_Plugin_Module{
 	function execute($params){
 		// サイトデータを取得する。
-		$loader = new PluginLoader();
+		$loader = new Clay_Plugin();
 		$configure = $loader->loadModel("SiteConfigureModel");
 		$temp = $configure->findAllBySiteId($_SERVER["CONFIGURE"]->site_id);
 		$configures = array();

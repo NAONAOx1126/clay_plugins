@@ -5,10 +5,10 @@
  * @param type 抽出するカテゴリのタイプ（指定しない場合は全タイプから抽出）
  * @param result 結果を設定する配列のキーワード
  */
-class Content_Advertise_List extends FrameworkModule{
+class Content_Advertise_List extends Clay_Plugin_Module{
 	function execute($params){
 		// ローダーの初期化
-		$loader = new PluginLoader("Content");
+		$loader = new Clay_Plugin("Content");
 		$loader->LoadSetting();
 		
 		// 並べ替え順序が指定されている場合に適用

@@ -14,9 +14,9 @@
  * 管理画面のログイン処理を実行する。
  * 
  */
-class Base_Operator_Login extends FrameworkModule{
+class Base_Operator_Login extends Clay_Plugin_Module{
 	function execute($params){
-		$loader = new PluginLoader();
+		$loader = new Clay_Plugin();
 		if(empty($_SESSION["OPERATOR"])){
 			if(!empty($_POST["login_id"])){
 				// 管理者モデルを取得する。

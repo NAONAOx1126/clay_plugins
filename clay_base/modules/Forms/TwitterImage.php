@@ -15,7 +15,7 @@
  *
  * @param image POSTに引き継ぐためのキー名
  */
-class Base_Forms_TwitterImage extends FrameworkModule{
+class Base_Forms_TwitterImage extends Clay_Plugin_Module{
 	function execute($params){
 		// twitterとimageのパラメータは必須
 		if($params->check("image") && !empty($_SERVER["Twitter"]["user"]->profile_image_url)){

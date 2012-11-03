@@ -12,7 +12,7 @@ LoadModel("CustomerModel", "Members");
  * @params auto 1を設定すると、携帯の個体番号が渡っていた場合、自動でユーザー情報を作成する
  * @params result 顧客情報をページで使うためのキー名
  */
-class Members_CustomerDetail extends FrameworkModule{
+class Members_CustomerDetail extends Clay_Plugin_Module{
 	function execute($params){
 		// カスタマモデルを使用して顧客情報を取得
 		$customer = new CustomerModel();

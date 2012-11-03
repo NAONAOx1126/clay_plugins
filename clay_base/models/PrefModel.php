@@ -12,12 +12,12 @@
 /**
  * 都道府県のデータモデルです。。
  */
-class Base_PrefModel extends DatabaseModel{
+class Base_PrefModel extends Clay_Plugin_Model{
 	/**
 	 * コンストラクタ
 	 */
 	function __construct($values = array()){
-		$loader = new PluginLoader();
+		$loader = new Clay_Plugin();
 		parent::__construct($loader->loadTable("PrefsTable"), $values);
 	}
 	

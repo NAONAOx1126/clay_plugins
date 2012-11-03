@@ -2,7 +2,7 @@
 class Product_RankingProducts{
 	public function execute(){
 		// 商品プラグインの初期化
-		$loader = new PluginLoader("Product");
+		$loader = new Clay_Plugin("Product");
 		$loader->LoadSetting();
 		
 		// 検索条件を設定

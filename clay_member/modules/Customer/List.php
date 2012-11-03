@@ -7,7 +7,7 @@
  * @param flag 検索条件とするフラグ
  * @param result 結果を設定する配列のキーワード
  */
-class Member_Customer_List extends FrameworkListModule{
+class Member_Customer_List extends Clay_Plugin_Module_List{
 	
 	function getModelName(){
 		return "CustomerModel";	
@@ -18,11 +18,11 @@ class Member_Customer_List extends FrameworkListModule{
 	}
 	
 	function getLoader(){
-		return new PluginLoader("Member");
+		return new Clay_Plugin("Member");
 	}
 	
 	function execute($params){
-		$loader = new PluginLoader("Member");
+		$loader = new Clay_Plugin("Member");
 		$loader->LoadSetting();
 
 		// カテゴリが選択された場合、カテゴリの商品IDのリストを使う

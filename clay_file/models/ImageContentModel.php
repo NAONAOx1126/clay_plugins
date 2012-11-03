@@ -5,7 +5,7 @@ LoadTable("ImageContentsTable", "File");
 /**
  * 顧客情報のモデルクラス
  */
-class ImageContentModel extends DatabaseModel{
+class ImageContentModel extends Clay_Plugin_Model{
 	function __construct($values = array()){
 		parent::__construct(new ImageContentsTable(), $values);
 	}

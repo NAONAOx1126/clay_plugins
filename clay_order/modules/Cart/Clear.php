@@ -2,7 +2,7 @@
 // ショッピングカートの設定を取得
 LoadModel("Setting", "Shopping");
 
-class Shopping_Cart_Clear extends FrameworkModule{
+class Shopping_Cart_Clear extends Clay_Plugin_Module{
 	function execute($param){
 		// パラメータを取得する。
 		$mode = $param->get("mode", "clear_cart");

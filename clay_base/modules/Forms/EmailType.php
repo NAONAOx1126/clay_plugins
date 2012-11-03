@@ -17,14 +17,14 @@
  * @param target 対象とするメールアドレスのキー
  * @param result ドメイン照合結果を格納するカラム
  */
-class Base_Forms_EmailType extends FrameworkModule{
+class Base_Forms_EmailType extends Clay_Plugin_Module{
 	function execute($params){
 		if(isset($_SERVER["ATTRIBUTES"][$params->get("key")]) && is_array($_SERVER["ATTRIBUTES"][$params->get("key")])){
 			foreach($_SERVER["ATTRIBUTES"][$params->get("key")] as $index => $data){
 				if(preg_match("/@(.+)$/", $data[$params->get("target")], $p)){
 					// メールアドレスのドメインを取得する。
 					$domain = $p[1];
-					$loader = new PluginLoader();
+					$loader = new Clay_Plugin();
 					$mobileDomain = $loader->loadModel("MobileDomainModel");
 					$mobileDomain->findByMobileDomain($domain);
 					if($mobileDomain->mobile_domain_id > 0){

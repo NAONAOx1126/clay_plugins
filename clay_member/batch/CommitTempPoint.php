@@ -4,10 +4,10 @@
  *
  * Ex: /usr/bin/php batch.php "Member.CommitTempPoint" <ホスト名>
  */
-class Member_CommitTempPoint extends FrameworkModule{
+class Member_CommitTempPoint extends Clay_Plugin_Module{
 	public function execute($argv){
 		// この機能で使用するモデルクラス
-		$loader = new PluginLoader("Member");
+		$loader = new Clay_Plugin("Member");
 		$loader->LoadSetting();
 		
 		// ポイントログモデルから未確定ポイントログを抽出

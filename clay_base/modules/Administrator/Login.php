@@ -13,9 +13,9 @@
  * ### Base.Administrator.Login
  * 管理画面のログイン処理を実行する。
  */
-class Base_Administrator_Login extends FrameworkModule{
+class Base_Administrator_Login extends Clay_Plugin_Module{
 	function execute($params){
-		$loader = new PluginLoader();
+		$loader = new Clay_Plugin();
 		if(empty($_SESSION["ADMINISTRATOR"])){
 			// 管理者モデルを取得する。
 			$site = $loader->loadModel("SiteModel");

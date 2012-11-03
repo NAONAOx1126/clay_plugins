@@ -3,11 +3,11 @@
  * ### Product.Category.Save
  * 商品カテゴリを登録する。
  */
-class Product_Category_Save extends FrameworkModule{
+class Product_Category_Save extends Clay_Plugin_Module{
 	function execute($params){
 		if(isset($_POST["save"]) && !empty($_POST["save"])){
 			// ローダーの初期化
-			$loader = new PluginLoader("Product");
+			$loader = new Clay_Plugin("Product");
 			$loader->LoadSetting();
 			
 			// トランザクションの開始

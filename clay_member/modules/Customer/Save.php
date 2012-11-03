@@ -7,11 +7,11 @@
  * @param category【カテゴリタイプ】 商品に紐付けするカテゴリ（条件にしない場合は空文字を設定）
  * @param result 結果を設定する配列のキーワード
  */
-class Member_Customer_Save extends FrameworkModule{
+class Member_Customer_Save extends Clay_Plugin_Module{
 	function execute($params){
 		if(isset($_POST["save"])){
 			// 商品情報を登録する。
-			$loader = new PluginLoader("Member");
+			$loader = new Clay_Plugin("Member");
 			$loader->LoadSetting();
 	
 			// トランザクションの開始

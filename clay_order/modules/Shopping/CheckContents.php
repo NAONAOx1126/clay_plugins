@@ -13,7 +13,7 @@ LoadModel("OrderDetailModel", "Shopping");
 LoadModel("ProductModel", "Shopping");
 LoadModel("ProductOptionModel", "Shopping");
 
-class Shopping_Shopping_CheckContents extends FrameworkModule{
+class Shopping_Shopping_CheckContents extends Clay_Plugin_Module{
 	function execute($params){
 		// コンテンツ商品用に一度購入した商品を除外する処理。
 		$orderDetails = OrderDetailModel::getCustomerOrders($_SESSION[CUSTOMER_SESSION_KEY]->customer_id);

@@ -7,9 +7,9 @@
  * @param flag 検索条件とするフラグ
  * @param result 結果を設定する配列のキーワード
  */
-class Product_List extends FrameworkModule{
+class Product_List extends Clay_Plugin_Module{
 	function execute($params){
-		$loader = new PluginLoader("Product");
+		$loader = new Clay_Plugin("Product");
 		$loader->LoadSetting();
 
 		// カテゴリが選択された場合、カテゴリの商品IDのリストを使う

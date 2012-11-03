@@ -35,7 +35,7 @@ LoadModel("Setting", "Members");
  * @since PHP 5.2
  * @version 1.0.0
  */
-class Shopping_Shopping_Epsillon extends FrameworkModule{
+class Shopping_Shopping_Epsillon extends Clay_Plugin_Module{
 	function execute($params){
 		if(empty($_POST["order_id"]) && empty($_POST["order_number"]) && !empty($_POST["trans_code"])){
 			// 仮受注データを取得

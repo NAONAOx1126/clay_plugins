@@ -2,7 +2,7 @@
 /**
  * ポイント付与ルールのモデル
  */
-class Member_PointRuleModel extends DatabaseModel{
+class Member_PointRuleModel extends Clay_Plugin_Model{
 	const RULE_ENTRY = "entry";
 	const RULE_FIRST_ORDER = "first_order";
 	const RULE_WELCOME = "welcome";
@@ -10,7 +10,7 @@ class Member_PointRuleModel extends DatabaseModel{
 	const RULE_TOTAL_SALES = "total_sales";
 	
 	public function __construct($values = array()){
-		$loader = new PluginLoader("Member");
+		$loader = new Clay_Plugin("Member");
 		parent::__construct($loader->loadTable("PointRulesTable"), $values);
 	}
 	

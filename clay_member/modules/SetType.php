@@ -13,7 +13,7 @@ LoadModel("TypeModel", "Members");
  * @params type 設定する顧客種別
  * @params result 顧客情報をページで使うためのキー名
  */
-class Members_SetType extends FrameworkModule{
+class Members_SetType extends Clay_Plugin_Module{
 	function execute($params){
 		// 設定するタイプのID
 		$type_id = $params->get("type", $_POST["type"]);

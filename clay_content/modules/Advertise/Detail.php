@@ -5,10 +5,10 @@
  * @param type 抽出するカテゴリのタイプ（指定しない場合は全タイプから抽出）
  * @param result 結果を設定する配列のキーワード
  */
-class Content_Advertise_Detail extends FrameworkModule{
+class Content_Advertise_Detail extends Clay_Plugin_Module{
 	function execute($params){
 		// 登録されているカテゴリタイプのリストを取得
-		$loader = new PluginLoader("Content");
+		$loader = new Clay_Plugin("Content");
 		$loader->LoadSetting();
 		
 		// カテゴリデータを検索する。

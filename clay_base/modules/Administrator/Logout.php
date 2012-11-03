@@ -13,7 +13,7 @@
  * ### Base.Administrator.Logout
  * マスター管理画面のログアウト処理を実行する。
  */
-class Base_Administrator_Logout extends FrameworkModule{
+class Base_Administrator_Logout extends Clay_Plugin_Module{
 	function execute($params){
 		unset($_SESSION["ADMINISTRATOR"]);
 	}

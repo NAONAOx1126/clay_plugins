@@ -2,9 +2,9 @@
 /**
  * 顧客情報のモデルクラス
  */
-class Product_ProductSellerModel extends DatabaseModel{
+class Product_ProductSellerModel extends Clay_Plugin_Model{
 	function __construct($values = array()){
-		$loader = new PluginLoader("Product");
+		$loader = new Clay_Plugin("Product");
 		parent::__construct($loader->loadTable("ProductSellersTable"), $values);
 	}
 	
@@ -13,7 +13,7 @@ class Product_ProductSellerModel extends DatabaseModel{
 	}
 	
 	function products($order = "", $reverse = false){
-		$loader = new PluginLoader("Product");
+		$loader = new Clay_Plugin("Product");
 		$model = $loader->loadModel("ProductModel");
 		return $model->findAllBySeller($this->seller_id, $order, $reverse);
 	}

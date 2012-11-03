@@ -3,11 +3,11 @@
  * ### Content.News.Save
  * カバー画像を登録する。
  */
-class Content_News_Save extends FrameworkModule{
+class Content_News_Save extends Clay_Plugin_Module{
 	function execute($params){
 		if(isset($_POST["save"]) && !empty($_POST["save"])){
 			// ローダーの初期化
-			$loader = new PluginLoader("Content");
+			$loader = new Clay_Plugin("Content");
 			$loader->LoadSetting();
 			
 			// トランザクションの開始

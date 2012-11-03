@@ -2,9 +2,9 @@
 /**
  * 顧客情報のモデルクラス
  */
-class Member_CustomerModel extends DatabaseModel{
+class Member_CustomerModel extends Clay_Plugin_Model{
 	public function __construct($values = array()){
-		$loader = new PluginLoader("Member");
+		$loader = new Clay_Plugin("Member");
 		parent::__construct($loader->loadTable("CustomersTable"), $values);
 	}
 	
@@ -36,13 +36,13 @@ class Member_CustomerModel extends DatabaseModel{
 	 * 顧客契約のリストを取得する。
 	*/
 	public function customerContracts($order = "", $reverse = false){
-		$loader = new PluginLoader("Member");
+		$loader = new Clay_Plugin("Member");
 		$customerContract = $loader->loadModel("CustomerContractModel");
 		return $customerContract->findAllByCustomer($this->customer_id, $order, $reverse);
 	}
 
 	function contracts($values = array(), $values = array(), $order = "", $reverse = false){
-		$loader = new PluginLoader("Member");
+		$loader = new Clay_Plugin("Member");
 		$customerContracts = $this->customerContracts();
 		if(!is_array($values)){
 			$values = array();
@@ -59,38 +59,38 @@ class Member_CustomerModel extends DatabaseModel{
 	 * 顧客オプションのリストを取得する。
 	*/
 	public function customerOptions($order = "", $reverse = false){
-		$loader = new PluginLoader("Member");
+		$loader = new Clay_Plugin("Member");
 		$customerOption = $loader->loadModel("CustomerOptionModel");
 		return $customerOption->findAllByCustomer($this->customer_id, $order, $reverse);
 	}
 	
 	public function customerOption($option_name){
-		$loader = new PluginLoader("Member");
+		$loader = new Clay_Plugin("Member");
 		$customerOption = $loader->loadModel("CustomerOptionModel");
 		$customerOption->findByPrimaryKey($this->customer_id, $option_name);
 		return $customerOption;
 	}
 
 	public function customerDelivers($order = "", $reverse = false){
-		$loader = new PluginLoader("Member");
+		$loader = new Clay_Plugin("Member");
 		$customerDeliver = $loader->loadModel("CustomerDeliverModel");
 		return $customerDeliver->findAllByCustomer($this->customer_id, $order, $reverse);
 	}
 	
 	public function pointLogs($order = "", $reverse = false){
-		$loader = new PluginLoader("Member");
+		$loader = new Clay_Plugin("Member");
 		$pointLog = $loader->loadModel("PointLogModel");
 		return $pointLog->findAllByCustomer($this->customer_id, $order, $reverse);
 	}
 	
 	public function serialLogs($order = "", $reverse = false){
-		$loader = new PluginLoader("Member");
+		$loader = new Clay_Plugin("Member");
 		$serialLog = $loader->loadModel("SerialLogModel");
 		return $serialLog->findAllByCustomer($this->customer_id, $order, $reverse);
 	}
 
 	public function welcomeSuggests($order = "", $reverse = false){
-		$loader = new PluginLoader("Member");
+		$loader = new Clay_Plugin("Member");
 		$welcomeSuggest = $loader->loadModel("WelcomeSuggestModel");
 		return $welcomeSuggest->findAllByCustomer($this->customer_id, $order, $reverse);
 	}
@@ -99,7 +99,7 @@ class Member_CustomerModel extends DatabaseModel{
 	 * 都道府県の名前を取得
 	 */
 	 function pref_name($pref_name = null){
-		$loader = new PluginLoader();
+		$loader = new Clay_Plugin();
 		$pref = $loader->loadModel("PrefModel");
 		// 引数を渡した場合はIDを登録
 		if($pref_name != null){

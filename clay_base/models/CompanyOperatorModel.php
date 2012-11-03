@@ -12,12 +12,12 @@
 /**
  * 管理画面ユーザーのモデルです。
  */
-class Base_CompanyOperatorModel extends DatabaseModel{
+class Base_CompanyOperatorModel extends Clay_Plugin_Model{
 	/**
 	 * コンストラクタ
 	 */
 	public function __construct($values = array()){
-		$loader = new PluginLoader();
+		$loader = new Clay_Plugin();
 		parent::__construct($loader->loadTable("CompanyOperatorsTable"), $values);
 	}
 	
@@ -46,7 +46,7 @@ class Base_CompanyOperatorModel extends DatabaseModel{
 	 * オペレータの管理対象となっているサイトを検索する。
 	 */
 	public function sites(){
-		$loader = new PluginLoader();
+		$loader = new Clay_Plugin();
 		$site = $loader->loadModel("SiteModel");
 		if(!$this->isSuper()){
 			$site->findByPrimaryKey($this->site_id);
@@ -68,7 +68,7 @@ class Base_CompanyOperatorModel extends DatabaseModel{
 	 * オペレータの所属する組織のデータを取得する。
 	 */
 	public function company(){
-		$loader = new PluginLoader();
+		$loader = new Clay_Plugin();
 		$company = $loader->loadModel("CompanyModel");
 		$company->findByPrimaryKey($this->company_id);
 		return $company;

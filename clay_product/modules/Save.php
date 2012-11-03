@@ -7,11 +7,11 @@
  * @param category【カテゴリタイプ】 商品に紐付けするカテゴリ（条件にしない場合は空文字を設定）
  * @param result 結果を設定する配列のキーワード
  */
-class Product_Save extends FrameworkModule{
+class Product_Save extends Clay_Plugin_Module{
 	function execute($params){
 		if(isset($_POST["save"])){
 			// 商品情報を登録する。
-			$loader = new PluginLoader("Product");
+			$loader = new Clay_Plugin("Product");
 			$loader->LoadSetting();
 	
 			// トランザクションの開始
@@ -126,7 +126,7 @@ class Product_Save extends FrameworkModule{
 		if(is_array($option)){
 			if(isset($option["stock"])){
 				// データを登録
-				$loader = new PluginLoader("Product");
+				$loader = new Clay_Plugin("Product");
 				$insert = new DatabaseInsert($loader->LoadModel("ProductOptionsTable"));
 				$data = array(
 					"product_id" => $product->product_id, 

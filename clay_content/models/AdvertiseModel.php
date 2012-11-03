@@ -2,9 +2,9 @@
 /**
  * 広告のモデルクラス
  */
-class Content_AdvertiseModel extends DatabaseModel{
+class Content_AdvertiseModel extends Clay_Plugin_Model{
 	public function __construct($values = array()){
-		$loader = new PluginLoader("Content");
+		$loader = new Clay_Plugin("Content");
 		parent::__construct($loader->loadTable("AdvertisesTable"), $values);
 	}
 	

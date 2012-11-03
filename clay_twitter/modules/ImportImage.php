@@ -2,7 +2,7 @@
 // この機能で使用するモデルクラス
 LoadModel("Setting", "Members");
 
-class Members_Twitter_ImportImage extends FrameworkModule{
+class Members_Twitter_ImportImage extends Clay_Plugin_Module{
 	function execute($params){
 		if(!isset($_SESSION["INPUT_DATA"][$params->get("key", "profile_image")]) && !empty($_SESSION[TWITTER_SESSION_KEY])){
 			$image = $_SESSION[TWITTER_SESSION_KEY]->original_image_url;

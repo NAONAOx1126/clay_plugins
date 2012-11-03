@@ -7,9 +7,9 @@
  * @param flag 検索条件とするフラグ
  * @param result 結果を設定する配列のキーワード
  */
-class Member_Welcome_MyList extends FrameworkModule{
+class Member_Welcome_MyList extends Clay_Plugin_Module{
 	function execute($params){
-		$loader = new PluginLoader("Member");
+		$loader = new Clay_Plugin("Member");
 		$loader->LoadSetting();
 		
 		$conditions = array();

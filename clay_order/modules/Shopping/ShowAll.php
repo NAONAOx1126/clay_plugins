@@ -2,7 +2,7 @@
 // ショッピングカートの設定を取得
 LoadModel("ShoppingSettings", "Shopping");
 
-class Shopping_Customer_ShowAll extends FrameworkModule{
+class Shopping_Customer_ShowAll extends Clay_Plugin_Module{
 	function execute($param){
 		$copyKey = $param->get("copy", "copy");
 		$customerSessionKey = $params->get("session", "Shopping_Customer");

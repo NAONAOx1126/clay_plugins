@@ -11,9 +11,9 @@ class Order_AddOrder{
 		$_POST = (array) json_decode(stripslashes($_POST["order"]));
 		
 		// 商品情報を登録する。
-		$loader = new PluginLoader("Order");
+		$loader = new Clay_Plugin("Order");
 		$loader->LoadSetting();
-		$memberLoader = new PluginLoader("Member");
+		$memberLoader = new Clay_Plugin("Member");
 		$memberLoader->LoadSetting();
 
 		// トランザクションの開始

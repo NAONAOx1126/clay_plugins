@@ -15,7 +15,7 @@ LoadModel("ImageContentModel", "File");
  * @version   1.0.0
  */
 
-class File_Image_Create extends FrameworkModule{
+class File_Image_Create extends Clay_Plugin_Module{
 	function execute($params){
 		if($params->check("key")){
 			// 画像設定を取得

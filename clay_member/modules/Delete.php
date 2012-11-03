@@ -15,7 +15,7 @@ LoadModel("CustomerTypeModel", "Members");
  * @params auto 1を設定すると、携帯の個体番号が渡っていた場合、自動でユーザー情報を作成する
  * @params result 顧客情報をページで使うためのキー名
  */
-class Members_Delete extends FrameworkModule{
+class Members_Delete extends Clay_Plugin_Module{
 	function execute($params){
 		if(isset($_POST["delete"]) && isset($_POST["customer_id"]) && !empty($_POST["customer_id"])){
 			// トランザクションの開始

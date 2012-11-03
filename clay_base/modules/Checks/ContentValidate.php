@@ -16,7 +16,7 @@
  * @param key チェック対象のキー名
  * @param message エラーメッセージ
  */
-class Base_Checks_ContentValidate extends FrameworkModule{
+class Base_Checks_ContentValidate extends Clay_Plugin_Module{
 	/**
 	 * モジュールのエンドポイント
 	 */

@@ -3,11 +3,11 @@
  * ### Member.Contract.Save
  * 契約を登録する。
  */
-class Member_Contract_Save extends FrameworkModule{
+class Member_Contract_Save extends Clay_Plugin_Module{
 	function execute($params){
 		if(isset($_POST["save"]) && !empty($_POST["save"])){
 			// ローダーの初期化
-			$loader = new PluginLoader("Member");
+			$loader = new Clay_Plugin("Member");
 			$loader->LoadSetting();
 			
 			// トランザクションの開始

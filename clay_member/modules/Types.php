@@ -3,7 +3,7 @@
 LoadModel("Setting", "Members");
 LoadModel("TypeModel", "Members");
 
-class Members_Types extends FrameworkModule{
+class Members_Types extends Clay_Plugin_Module{
 	function execute($params){
 		// 顧客種別のリストを取得
 		$result = TypeModel::getSelectable($_SESSION[CUSTOMER_SESSION_KEY]->customer_id);

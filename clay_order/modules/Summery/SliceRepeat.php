@@ -6,7 +6,7 @@
  * @param summery サマリーに相当するカラムを指定
  * @param result 結果を設定する配列のキーワード
  */
-class Order_Summery_SliceRepeat extends FrameworkModule{
+class Order_Summery_SliceRepeat extends Clay_Plugin_Module{
 	function execute($params){
 		if($params->check("key")){
 			// まず、リストを前月と当月のデータに絞り込む

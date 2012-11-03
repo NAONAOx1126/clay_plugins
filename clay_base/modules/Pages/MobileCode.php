@@ -12,7 +12,7 @@
 /**
  * 携帯の個体番号をPOSTパラメータに取り込む。
  */
-class Base_Pages_MobileCode extends FrameworkModule{
+class Base_Pages_MobileCode extends Clay_Plugin_Module{
 	function execute($params){
 		if($params->check("code")){
 			// アクセスしてきたモバイルIDを取得

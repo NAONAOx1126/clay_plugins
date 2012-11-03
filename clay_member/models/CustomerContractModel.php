@@ -2,9 +2,9 @@
 /**
  * 顧客契約のモデルクラス
  */
-class Member_CustomerContractModel extends DatabaseModel{
+class Member_CustomerContractModel extends Clay_Plugin_Model{
 	public function __construct($values = array()){
-		$loader = new PluginLoader("Member");
+		$loader = new Clay_Plugin("Member");
 		parent::__construct($loader->loadTable("CustomerContractsTable"), $values);
 	}
 	
@@ -21,14 +21,14 @@ class Member_CustomerContractModel extends DatabaseModel{
 	}
 	
 	public function customer(){
-		$loader = new PluginLoader("Member");
+		$loader = new Clay_Plugin("Member");
 		$customer = $loader->loadModel("CustomerModel");
 		$customer->findByPrimaryKey($this->customer_id);
 		return $customer;
 	}
 	
 	public function contract(){
-		$loader = new PluginLoader("Member");
+		$loader = new Clay_Plugin("Member");
 		$contract = $loader->loadModel("ContractModel");
 		$contract->findByPrimaryKey($this->contract_id);
 		return $contract;

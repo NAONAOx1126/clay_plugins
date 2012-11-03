@@ -13,7 +13,7 @@ LoadModel("OrderDetailModel", "Shopping");
 LoadModel("ProductModel", "Shopping");
 LoadModel("ProductOptionModel", "Shopping");
 
-class Shopping_Shopping_Contents extends FrameworkModule{
+class Shopping_Shopping_Contents extends Clay_Plugin_Module{
 	function execute($params){
 		// 除去した結果、もしくはカートの中が空でない場合は購入処理を続行。
 		if(!empty($_SESSION[CART_SESSION_KEY])){

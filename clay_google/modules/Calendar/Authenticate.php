@@ -4,7 +4,7 @@
  * Googleのカレンダーの予定一覧を取得する。
  * @param result 結果を設定する配列のキーワード
  */
-class Google_Calendar_Authenticate extends FrameworkModule{
+class Google_Calendar_Authenticate extends Clay_Plugin_Module{
 	function execute($params){
 		// Zendの初期化
 		require_once("Zend/Loader.php");

@@ -9,9 +9,9 @@
  * @param flag 検索条件とするフラグ
  * @param result 結果を設定する配列のキーワード
  */
-class Product_Page extends FrameworkModule{
+class Product_Page extends Clay_Plugin_Module{
 	function execute($params){
-		$loader = new PluginLoader("Product");
+		$loader = new Clay_Plugin("Product");
 		$loader->LoadSetting();
 
 		// ページャの初期化

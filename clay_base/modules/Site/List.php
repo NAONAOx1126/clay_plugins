@@ -13,10 +13,10 @@
  * ### Base.Site.List
  * サイトデータのリストを取得する。
  */
-class Base_Site_List extends FrameworkModule{
+class Base_Site_List extends Clay_Plugin_Module{
 	function execute($params){
 		// サイトデータを取得する。
-		$loader = new PluginLoader();
+		$loader = new Clay_Plugin();
 		$site = $loader->loadModel("SiteModel");
 		
 		$condition = array();

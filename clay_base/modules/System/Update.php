@@ -13,10 +13,10 @@
  * ### Base.System.Update
  * システムをアップデートする。
  */
-class Base_System_Update extends FrameworkModule{
+class Base_System_Update extends Clay_Plugin_Module{
 	function execute($params){
 		// サイトデータを取得する。
-		$loader = new PluginLoader();
+		$loader = new Clay_Plugin();
 		
 		// 実行するディレクトリを取得する。
 		switch($_POST["type"]){

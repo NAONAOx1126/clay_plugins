@@ -2,9 +2,9 @@
 /**
  * シリアル発行ログのモデルクラス
  */
-class Member_SerialLogModel extends DatabaseModel{
+class Member_SerialLogModel extends Clay_Plugin_Model{
 	public function __construct($values = array()){
-		$loader = new PluginLoader("Member");
+		$loader = new Clay_Plugin("Member");
 		parent::__construct($loader->loadTable("SerialLogsTable"), $values);
 	}
 	
@@ -17,7 +17,7 @@ class Member_SerialLogModel extends DatabaseModel{
 	}
 	
 	public function customer(){
-		$loader = new PluginLoader("Member");
+		$loader = new Clay_Plugin("Member");
 		$customer = $loader->loadModel("CustomerModel");
 		$customer->findByPrimaryKey($this->customer_id);
 		return $customer;

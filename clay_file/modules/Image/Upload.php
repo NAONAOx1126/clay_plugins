@@ -16,13 +16,13 @@
  * @param key ファイルのCSV形式を特定するためのキー
  * @param skip ヘッダとして読み込みをスキップする行数
  */
-class File_Image_Upload extends FrameworkModule{
+class File_Image_Upload extends Clay_Plugin_Module{
 	function execute($params){
 		// 実行時間制限を解除
 		ini_set("max_execution_time", 0);
 		
 		// ローダーを初期化
-		$loader = new PluginLoader("File");
+		$loader = new Clay_Plugin("File");
 		
 		$images = array();
 		if(is_array($_POST[$params->get("key", "upload")])){

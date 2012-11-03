@@ -2,9 +2,9 @@
 /**
  * カテゴリ情報のモデルクラス
  */
-class Product_ProductCategoryModel extends DatabaseModel{
+class Product_ProductCategoryModel extends Clay_Plugin_Model{
 	function __construct($values = array()){
-		$loader = new PluginLoader("Product");
+		$loader = new Clay_Plugin("Product");
 		parent::__construct($loader->loadTable("ProductCategoriesTable"), $values);
 	}
 	
@@ -21,14 +21,14 @@ class Product_ProductCategoryModel extends DatabaseModel{
 	}
 	
 	function product(){
-		$loader = new PluginLoader("Product");
+		$loader = new Clay_Plugin("Product");
 		$product = $loader->loadModel("ProductModel");
 		$product->findByPrimaryKey($this->product_id);
 		return $product;
 	}
 
 	function category(){
-		$loader = new PluginLoader("Product");
+		$loader = new Clay_Plugin("Product");
 		$category = $loader->loadModel("CategoryModel");
 		$category->findByPrimaryKey($this->category_id);
 		return $category;

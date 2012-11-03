@@ -13,10 +13,10 @@
  * ### Base.Company.List
  * サイトデータのリストを取得する。
  */
-class Base_Company_List extends FrameworkModule{
+class Base_Company_List extends Clay_Plugin_Module{
 	function execute($params){
 		// サイトデータを取得する。
-		$loader = new PluginLoader();
+		$loader = new Clay_Plugin();
 		if($_SESSION["OPERATOR"]["super_flg"] != 1){
 			$site = $loader->loadModel("SiteModel");
 			$site->findByPrimaryKey(array("site_id" => $_SERVER["CONFIGURE"]->site_id));

@@ -2,9 +2,9 @@
 /**
  * 契約のモデルクラス
  */
-class Movabletype_EntryMetaModel extends DatabaseModel{
+class Movabletype_EntryMetaModel extends Clay_Plugin_Model{
 	public function __construct($values = array()){
-		$loader = new PluginLoader("Movabletype");
+		$loader = new Clay_Plugin("Movabletype");
 		parent::__construct($loader->loadTable("EntryMetasTable"), $values);
 	}
 	
@@ -17,7 +17,7 @@ class Movabletype_EntryMetaModel extends DatabaseModel{
 	}
 	
 	function entry(){
-		$loader = new PluginLoader("Movabletype");
+		$loader = new Clay_Plugin("Movabletype");
 		$entry = $loader->loadModel("EntryModel");
 		$entry->findByPrimaryKey($this->entry_meta_entry_id);
 		return $entry;

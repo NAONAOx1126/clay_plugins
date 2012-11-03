@@ -16,7 +16,7 @@ LoadModel("CustomerModel", "Members");
  * @version   1.0.0
  */
 
-class Members_Checks_UniqueOption extends FrameworkModule{
+class Members_Checks_UniqueOption extends Clay_Plugin_Module{
 	function execute($params){
 		if(!is_array($_SERVER["ERRORS"])){
 			$_SERVER["ERRORS"] = array();

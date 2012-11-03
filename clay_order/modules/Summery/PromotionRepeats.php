@@ -6,11 +6,11 @@
  * @param summery サマリーに相当するカラムを指定
  * @param result 結果を設定する配列のキーワード
  */
-class Order_Summery_PromotionRepeats extends FrameworkModule{
+class Order_Summery_PromotionRepeats extends Clay_Plugin_Module{
 	function execute($params){
 		// ローダーを初期化
-		$loader = new PluginLoader("Order");
-		$ploader = new PluginLoader("Product");
+		$loader = new Clay_Plugin("Order");
+		$ploader = new Clay_Plugin("Product");
 		
 		// テーブルのインスタンスを作成する。
 		$promoDetail = $loader->loadTable("RepeaterOrderDetailsTable");

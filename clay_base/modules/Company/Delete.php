@@ -13,10 +13,10 @@
  * ### Base.Company.Delete
  * サイトのデータを削除する。
  */
-class Base_Company_Delete extends FrameworkModule{
+class Base_Company_Delete extends Clay_Plugin_Module{
 	function execute($params){
 		// サイトデータを取得する。
-		$loader = new PluginLoader();
+		$loader = new Clay_Plugin();
 		$company = $loader->loadModel("CompanyModel");
 		$company->findByPrimaryKey($_POST["company_id"]);
 		

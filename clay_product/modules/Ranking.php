@@ -11,7 +11,7 @@ LoadModel("ProductModel", "Shopping");
  * @param category【カテゴリタイプ】 商品に紐付けするカテゴリ（条件にしない場合は空文字を設定）
  * @param result 結果を設定する配列のキーワード
  */
-class Shopping_Product_Ranking extends FrameworkModule{
+class Shopping_Product_Ranking extends Clay_Plugin_Module{
 	function execute($params){
 		// ページャのオプションを設定
 		$option = array();

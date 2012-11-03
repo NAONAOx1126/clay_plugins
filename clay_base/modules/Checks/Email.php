@@ -17,7 +17,7 @@
  * @param value チェック対象の名称
  * @param suffix エラーメッセージのサフィックス
  */
-class Base_Checks_Email extends FrameworkModule{
+class Base_Checks_Email extends Clay_Plugin_Module{
 	/**
 	 * モジュールのエンドポイント
 	 */

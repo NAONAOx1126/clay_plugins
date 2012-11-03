@@ -14,7 +14,7 @@ LoadModel("CustomerOptionModel", "Members");
  * @params auto 1を設定すると、携帯の個体番号が渡っていた場合、自動でユーザー情報を作成する
  * @params result 顧客情報をページで使うためのキー名
  */
-class Members_Twitter_AutoLogin extends FrameworkModule{
+class Members_Twitter_AutoLogin extends Clay_Plugin_Module{
 	function execute($params){
 		// モバイルIDが渡った場合にはユーザ情報を取得する。
 		if(!empty($_SESSION[TWITTER_SESSION_KEY]->id)){

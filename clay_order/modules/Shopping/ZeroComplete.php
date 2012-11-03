@@ -32,7 +32,7 @@
  * @since PHP 5.2
  * @version 1.0.0
  */
-class Shopping_Shopping_ZeroComplete extends FrameworkModule{
+class Shopping_Shopping_ZeroComplete extends Clay_Plugin_Module{
 	function execute($params){
 		// ゼロ決済からのアドレスの場合のみ処理する。
 		if($_SERVER["REMOTE_ADDR"] == "210.164.6.67" || $_SERVER["REMOTE_ADDR"] == "202.221.139.50"){

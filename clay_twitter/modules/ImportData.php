@@ -2,7 +2,7 @@
 // この機能で使用するモデルクラス
 LoadModel("Setting", "Members");
 
-class Members_Twitter_ImportData extends FrameworkModule{
+class Members_Twitter_ImportData extends Clay_Plugin_Module{
 	function execute($params){
 		if(!empty($_SESSION[TWITTER_SESSION_KEY]) && $params->check("from")){
 			$from = $params->get("from");

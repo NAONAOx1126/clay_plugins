@@ -12,12 +12,12 @@
 /**
  * サイトDB接続情報のデータモデルです。
  */
-class Base_SiteConnectionModel extends DatabaseModel{
+class Base_SiteConnectionModel extends Clay_Plugin_Model{
 	/**
 	 * コンストラクタ
 	 */
 	function __construct($values = array()){
-		$loader = new PluginLoader();
+		$loader = new Clay_Plugin();
 		parent::__construct($loader->loadTable("SiteConnectionsTable"), $values);
 	}
 	

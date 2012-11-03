@@ -32,7 +32,7 @@
  * @since PHP 5.2
  * @version 1.0.0
  */
-class Shopping_Shopping_EpsillonComplete extends FrameworkModule{
+class Shopping_Shopping_EpsillonComplete extends Clay_Plugin_Module{
 	function execute($params){
 		if(empty($_POST["order_id"]) && empty($_POST["order_number"]) && !empty($_POST["trans_code"])){
 			// HTTP_Requestの初期化

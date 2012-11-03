@@ -16,7 +16,7 @@
  * @param columns シートのカラム名
  * @param key シートのデータとして使用する変数キー名
  */
-class File_Excel_CreateSheet extends FrameworkModule{
+class File_Excel_CreateSheet extends Clay_Plugin_Module{
 	function execute($params){
 		// データ一括取得のため、処理期限を無効化
 		ini_set("max_execution_time", 0);

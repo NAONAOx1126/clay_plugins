@@ -13,7 +13,7 @@
  * @version   1.0.0
  * @param key ファイルのCSV形式を特定するためのキー
  */
-class Product_Download extends FrameworkModule{
+class Product_Download extends Clay_Plugin_Module{
 	function execute($params){
 		if($params->check("key")){
 			// データ一括取得のため、処理期限を無効化

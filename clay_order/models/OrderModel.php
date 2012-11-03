@@ -11,9 +11,9 @@
  * @license http://www.apache.org/licenses/LICENSE-2.0.html Apache License, Version 2.0
  * @version   1.0.0
  */
-class Order_OrderModel extends DatabaseModel{
+class Order_OrderModel extends Clay_Plugin_Model{
 	function __construct($values = array()){
-		$loader = new PluginLoader("Order");
+		$loader = new Clay_Plugin("Order");
 		parent::__construct($loader->loadTable("OrdersTable"), $values);
 	}
 	
@@ -30,7 +30,7 @@ class Order_OrderModel extends DatabaseModel{
 	}
 	
 	function packages(){
-		$loader = new PluginLoader("Order");
+		$loader = new Clay_Plugin("Order");
 		$orderPackage = $loader->loadModel("OrderPackageModel");
 		return $orderPackage->findAllByOrder($this->order_id);
 	}
@@ -41,13 +41,13 @@ class Order_OrderModel extends DatabaseModel{
 		foreach($orderPackages as $orderPackage){
 			$conditions["in:order_package_id"][] = $orderPackage->order_package_id;
 		}
-		$loader = new PluginLoader("Order");
+		$loader = new Clay_Plugin("Order");
 		$orderDetail = $loader->loadModel("OrderDetailModel");
 		return $orderDetail->findAllBy($conditions);
 	}
 	
 	function payments(){
-		$loader = new PluginLoader("Order");
+		$loader = new Clay_Plugin("Order");
 		$orderPayment = $loader->loadModel("OrderPaymentModel");
 		return $orderPayment->findAllByOrder($this->order_id);
 	}

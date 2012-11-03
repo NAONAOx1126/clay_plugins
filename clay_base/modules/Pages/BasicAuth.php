@@ -18,7 +18,7 @@
  * @param text 認証ダイアログのメッセージ
  * @param error エラー時のメッセージ
  */
-class Base_Pages_BasicAuth extends FrameworkModule{
+class Base_Pages_BasicAuth extends Clay_Plugin_Module{
 	function execute($params){
 		if($params->check("login") && $params->check("password")){
 			if($_SERVER["PHP_AUTH_USER"] != $params->get("login") || $_SERVER["PHP_AUTH_PW"] != $params->get("password")) {

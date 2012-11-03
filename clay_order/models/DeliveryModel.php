@@ -11,9 +11,9 @@
  * @license http://www.apache.org/licenses/LICENSE-2.0.html Apache License, Version 2.0
  * @version   1.0.0
  */
-class Order_DeliveryModel extends DatabaseModel{
+class Order_DeliveryModel extends Clay_Plugin_Model{
 	function __construct($values = array()){
-		$loader = new PluginLoader("Order");
+		$loader = new Clay_Plugin("Order");
 		parent::__construct($loader->loadTable("DeliveriesTable"), $values);
 	}
 	
@@ -27,7 +27,7 @@ class Order_DeliveryModel extends DatabaseModel{
 	function findByDeliveryArea($delivery_id, $pref_id = ""){
 		$this->findBy(array("delivery_id" => $delivery_id));
 		if(!empty($pref_id)){
-			$loader = new PluginLoader("Order");
+			$loader = new Clay_Plugin("Order");
 			$deliveryArea = $loader->loadModel("DeliveryAreaModel");
 			$deliveryArea->findByPrimaryKey($delivery_id, $pref_id);
 			if($deliveryArea->delivery_id == $delivery_id && $deliveryArea->pref == $pref_id){

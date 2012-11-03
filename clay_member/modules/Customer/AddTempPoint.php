@@ -6,10 +6,10 @@
  * @params type 設定する顧客種別
  * @params result 顧客情報をページで使うためのキー名
  */
-class Member_Customer_AddTempPoint extends FrameworkModule{
+class Member_Customer_AddTempPoint extends Clay_Plugin_Module{
 	function execute($params){
 		// ローダーの初期化
-		$loader = new PluginLoader("Member");
+		$loader = new Clay_Plugin("Member");
 		$loader->LoadSetting();
 		
 		// 設定するポイント

@@ -13,10 +13,10 @@
  * ### Base.Site.Delete
  * サイトのデータを削除する。
  */
-class Base_Site_Delete extends FrameworkModule{
+class Base_Site_Delete extends Clay_Plugin_Module{
 	function execute($params){
 		// サイトデータを取得する。
-		$loader = new PluginLoader();
+		$loader = new Clay_Plugin();
 		$site = $loader->loadModel("SiteModel");
 		$site->findByPrimaryKey($_POST["site_id"]);
 		

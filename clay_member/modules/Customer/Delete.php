@@ -3,11 +3,11 @@
  * ### Member.Customer.Delete
  * 商品を削除する。
  */
-class Member_Customer_Delete extends FrameworkModule{
+class Member_Customer_Delete extends Clay_Plugin_Module{
 	function execute($params){
 		if(isset($_POST["delete"]) && !empty($_POST["delete"])){
 			// ローダーの初期化
-			$loader = new PluginLoader("Member");
+			$loader = new Clay_Plugin("Member");
 			$loader->LoadSetting();
 			
 			// トランザクションの開始

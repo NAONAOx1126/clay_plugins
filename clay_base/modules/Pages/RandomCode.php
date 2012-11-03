@@ -12,7 +12,7 @@
 /**
  * ランダムな英数からなるコードを発行します。一意性は保証されません。
  */
-class Base_Pages_RandomCode extends FrameworkModule{
+class Base_Pages_RandomCode extends Clay_Plugin_Module{
 	function execute($params){
 		if($params->check("code")){
 			$result = "";

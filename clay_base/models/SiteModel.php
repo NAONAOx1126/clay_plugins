@@ -12,12 +12,12 @@
 /**
  * サイト情報のデータモデルです。
  */
-class Base_SiteModel extends DatabaseModel{
+class Base_SiteModel extends Clay_Plugin_Model{
 	/**
 	 * コンストラクタ
 	 */
 	public function __construct($values = array()){
-		$loader = new PluginLoader();
+		$loader = new Clay_Plugin();
 		parent::__construct($loader->loadTable("SitesTable"), $values);
 	}
 	
@@ -60,7 +60,7 @@ class Base_SiteModel extends DatabaseModel{
 	}
 
 	public function companys(){
-		$loader = new PluginLoader();
+		$loader = new Clay_Plugin();
 		$siteCompany = $loader->loadModel("SiteCompanyModel");
 		$siteCompanys = $siteCompany->findAllByCompany($this->company_id);
 		$result = array();
@@ -74,7 +74,7 @@ class Base_SiteModel extends DatabaseModel{
 	 * サイトのコネクションリストを取得する。
 	 */
 	public function connections(){
-		$loader = new PluginLoader();
+		$loader = new Clay_Plugin();
 		$model = $loader->loadModel("SiteConnectionModel");
 		return $model->findAllBySiteId($this->site_id);
 	}
@@ -83,7 +83,7 @@ class Base_SiteModel extends DatabaseModel{
 	 * サイトの個別設定リストを取得する。
 	 */
 	public function configures(){
-		$loader = new PluginLoader();
+		$loader = new Clay_Plugin();
 		$model = $loader->loadModel("SiteConfigureModel");
 		return $model->findAllBySiteId($this->site_id);
 	}

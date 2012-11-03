@@ -13,7 +13,7 @@
  * ### Base.Site.Reload
  * サイトのキャッシュファイルをクリアし、再生成させる。
  */
-class Base_Site_Reload extends FrameworkModule{
+class Base_Site_Reload extends Clay_Plugin_Module{
 	function execute($params){
 		// サイトデータのキャッシュを削除する。
 		foreach(glob(FRAMEWORK_HOME."/cache/*/site_configure.php") as $filename){

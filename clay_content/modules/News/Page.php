@@ -6,9 +6,9 @@
  * @param delta 現在ページの前後に表示するページ数
  * @param result 結果を設定する配列のキーワード
  */
-class Content_News_Page extends FrameworkModule{
+class Content_News_Page extends Clay_Plugin_Module{
 	function execute($params){
-		$loader = new PluginLoader("Content");
+		$loader = new Clay_Plugin("Content");
 		$loader->LoadSetting();
 
 		// ページャの初期化

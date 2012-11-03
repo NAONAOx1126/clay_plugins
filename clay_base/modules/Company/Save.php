@@ -13,10 +13,10 @@
  * ### Base.Company.Save
  * サイトのデータを保存する。
  */
-class Base_Company_Save extends FrameworkModule{
+class Base_Company_Save extends Clay_Plugin_Module{
 	function execute($params){
 		// サイトデータを取得する。
-		$loader = new PluginLoader();
+		$loader = new Clay_Plugin();
 		$company = $loader->loadModel("CompanyModel");
 		$company->findByPrimaryKey($_POST["company_id"]);
 		foreach($_POST as $key => $value){

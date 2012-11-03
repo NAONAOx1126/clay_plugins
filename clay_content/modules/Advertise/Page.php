@@ -7,9 +7,9 @@
  * @param type 抽出するカテゴリのタイプ（指定しない場合は全タイプから抽出）
  * @param result 結果を設定する配列のキーワード
  */
-class Content_Advertise_Page extends FrameworkModule{
+class Content_Advertise_Page extends Clay_Plugin_Module{
 	function execute($params){
-		$loader = new PluginLoader("Content");
+		$loader = new Clay_Plugin("Content");
 		$loader->LoadSetting();
 		
 		// ページャの初期化

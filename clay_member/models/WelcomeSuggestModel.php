@@ -2,9 +2,9 @@
 /**
  * 契約のモデルクラス
  */
-class Member_WelcomeSuggestModel extends DatabaseModel{
+class Member_WelcomeSuggestModel extends Clay_Plugin_Model{
 	public function __construct($values = array()){
-		$loader = new PluginLoader("Member");
+		$loader = new Clay_Plugin("Member");
 		parent::__construct($loader->loadTable("WelcomeSuggestsTable"), $values);
 	}
 	
@@ -29,21 +29,21 @@ class Member_WelcomeSuggestModel extends DatabaseModel{
 	}
 	
 	public function customer(){
-		$loader = new PluginLoader("Member");
+		$loader = new Clay_Plugin("Member");
 		$customer = $loader->loadModel("CustomerModel");
 		$customer->findByPrimaryKey($this->customer_id);
 		return $customer;
 	}
 
 	public function welcome(){
-		$loader = new PluginLoader("Member");
+		$loader = new Clay_Plugin("Member");
 		$welcome = $loader->loadModel("WelcomeModel");
 		$welcome->findByPrimaryKey($this->welcome_id);
 		return $welcome;
 	}
 
 	public function product(){
-		$loader = new PluginLoader("Product");
+		$loader = new Clay_Plugin("Product");
 		$product = $loader->loadModel("ProductModel");
 		$product->findByPrimaryKey($this->product_id);
 		return $product;

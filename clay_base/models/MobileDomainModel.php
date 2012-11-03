@@ -12,12 +12,12 @@
 /**
  * モバイルドメイン情報のデータモデルです。
  */
-class Base_MobileDomainModel extends DatabaseModel{
+class Base_MobileDomainModel extends Clay_Plugin_Model{
 	/**
 	 * コンストラクタ
 	 */
 	public function __construct($values = array()){
-		$loader = new PluginLoader();
+		$loader = new Clay_Plugin();
 		parent::__construct($loader->loadTable("MobileDomainsTable"), $values);
 	}
 	

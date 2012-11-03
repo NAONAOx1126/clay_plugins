@@ -18,7 +18,7 @@
  * @param regex クリアする対象の変数
  * @param result 分割対象のカラムリスト
  */
-class Base_Forms_SplitColumns extends FrameworkModule{
+class Base_Forms_SplitColumns extends Clay_Plugin_Module{
 	function execute($params){
 		if(isset($_SERVER["ATTRIBUTES"][$params->get("key")]) && is_array($_SERVER["ATTRIBUTES"][$params->get("key")])){
 			foreach($_SERVER["ATTRIBUTES"][$params->get("key")] as $index => $data){

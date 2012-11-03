@@ -2,9 +2,9 @@
 /**
  * 契約のモデルクラス
  */
-class Movabletype_CategoryModel extends DatabaseModel{
+class Movabletype_CategoryModel extends Clay_Plugin_Model{
 	public function __construct($values = array()){
-		$loader = new PluginLoader("Movabletype");
+		$loader = new Clay_Plugin("Movabletype");
 		parent::__construct($loader->loadTable("CategoriesTable"), $values);
 	}
 	
@@ -13,7 +13,7 @@ class Movabletype_CategoryModel extends DatabaseModel{
 	}
 	
 	public function placements($order = "", $reverse = false){
-		$loader = new PluginLoader("Movabletype");
+		$loader = new Clay_Plugin("Movabletype");
 		$placement = $loader->loadModel("PlacementModel");
 		return $placement->findAllByCategory($this->category_id, $order, $reverse);
 	}

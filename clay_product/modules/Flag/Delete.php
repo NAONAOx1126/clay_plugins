@@ -3,11 +3,11 @@
  * ### Product.Flag.Delete
  * 商品フラグを削除する。
  */
-class Product_Flag_Delete extends FrameworkModule{
+class Product_Flag_Delete extends Clay_Plugin_Module{
 	function execute($params){
 		if(isset($_POST["delete"]) && !empty($_POST["delete"])){
 			// ローダーの初期化
-			$loader = new PluginLoader("Product");
+			$loader = new Clay_Plugin("Product");
 			$loader->LoadSetting();
 			
 			// トランザクションの開始

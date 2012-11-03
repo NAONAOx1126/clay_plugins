@@ -13,7 +13,7 @@
  * @version   1.0.0
  * @param key ファイルのCSV形式を特定するためのキー
  */
-class File_Excel_Download extends FrameworkModule{
+class File_Excel_Download extends Clay_Plugin_Module{
 	function execute($params){
 		// データ一括取得のため、処理期限を無効化
 		ini_set("max_execution_time", 0);

@@ -12,13 +12,13 @@
  * @version   1.0.0
  */
 
-class Member_Checks_UniqueEmail extends FrameworkModule{
+class Member_Checks_UniqueEmail extends Clay_Plugin_Module{
 	function execute($params){
 		if(!is_array($_SERVER["ERRORS"])){
 			$_SERVER["ERRORS"] = array();
 		}
 		
-		$loader = new PluginLoader("Member");
+		$loader = new Clay_Plugin("Member");
 		$loader->LoadSetting();
 
 		// 商品データを検索する。

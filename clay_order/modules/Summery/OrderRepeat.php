@@ -6,10 +6,10 @@
  * @param summery サマリーに相当するカラムを指定
  * @param result 結果を設定する配列のキーワード
  */
-class Order_Summery_OrderRepeat extends FrameworkModule{
+class Order_Summery_OrderRepeat extends Clay_Plugin_Module{
 	function execute($params){
 		// ローダーを初期化
-		$loader = new PluginLoader("Order");
+		$loader = new Clay_Plugin("Order");
 		
 		$order = $loader->loadModel("RepeaterOrderModel");
 		

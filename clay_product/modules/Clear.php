@@ -13,10 +13,10 @@
  * @version   1.0.0
  * @param key インポートするファイルの形式を特定するためのキー
  */
-class Product_Clear extends FrameworkModule{
+class Product_Clear extends Clay_Plugin_Module{
 	function execute($params){
 		// ローダーを初期化
-		$loader = new PluginLoader("Product");
+		$loader = new Clay_Plugin("Product");
 		
 		// 商品データをクリアする。
 		$products = $loader->loadTable("ProductsTable");

@@ -3,7 +3,7 @@
 LoadModel("Setting", "Members");
 LoadModel("TypeModel", "Members");
 
-class Members_Twitter_GetUser extends FrameworkModule{
+class Members_Twitter_GetUser extends Clay_Plugin_Module{
 	function execute($params){
 		if(!empty($_SESSION[OAUTH_SESSION_KEY]["user_id"]) && !isset($_SESSION[TWITTER_SESSION_KEY])){
 			$twitter = new TwitterOAuth($params->get("key"), $params->get("secret"), $_SESSION[OAUTH_SESSION_KEY]["access_token"], $_SESSION[OAUTH_SESSION_KEY]["access_token_secret"]);

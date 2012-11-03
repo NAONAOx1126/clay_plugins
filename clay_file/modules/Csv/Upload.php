@@ -15,13 +15,13 @@
  * @param key ファイルのCSV形式を特定するためのキー
  * @param skip ヘッダとして読み込みをスキップする行数
  */
-class File_Csv_Upload extends FrameworkModule{
+class File_Csv_Upload extends Clay_Plugin_Module{
 	function execute($params){
 		// 実行時間制限を解除
 		ini_set("max_execution_time", 0);
 		
 		// ローダーを初期化
-		$loader = new PluginLoader("File");
+		$loader = new Clay_Plugin("File");
 
 		if($params->check("key") && isset($_POST[$params->get("mode", "upload")])){
 			// CSV設定を取得

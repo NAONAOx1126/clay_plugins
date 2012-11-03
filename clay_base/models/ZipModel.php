@@ -12,12 +12,12 @@
 /**
  * 郵便番号のデータモデルです。。
  */
-class Base_ZipModel extends DatabaseModel{
+class Base_ZipModel extends Clay_Plugin_Model{
 	/**
 	 * コンストラクタ
 	 */
 	function __construct($values = array()){
-		$loader = new PluginLoader();
+		$loader = new Clay_Plugin();
 		parent::__construct($loader->loadTable("ZipsTable"), $values);
 	}
 	

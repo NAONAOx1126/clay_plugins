@@ -2,9 +2,9 @@
 /**
  * 顧客情報のモデルクラス
  */
-class Product_ProductOptionModel extends DatabaseModel{
+class Product_ProductOptionModel extends Clay_Plugin_Model{
 	function __construct($values = array()){
-		$loader = new PluginLoader("Product");
+		$loader = new Clay_Plugin("Product");
 		parent::__construct($loader->loadTable("ProductOptionsTable"), $values);
 	}
 	
@@ -23,7 +23,7 @@ class Product_ProductOptionModel extends DatabaseModel{
 	}
 	
 	function product(){
-		$loader = new PluginLoader("Product");
+		$loader = new Clay_Plugin("Product");
 		$product = $loader->loadModel("ProductModel");
 		$product->findByPrimaryKey($this->product_id);
 		return $product;

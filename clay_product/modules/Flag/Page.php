@@ -6,9 +6,9 @@
  * @param delta 現在ページの前後に表示するページ数
  * @param result 結果を設定する配列のキーワード
  */
-class Product_Flag_Page extends FrameworkModule{
+class Product_Flag_Page extends Clay_Plugin_Module{
 	function execute($params){
-		$loader = new PluginLoader("Product");
+		$loader = new Clay_Plugin("Product");
 		$loader->LoadSetting();
 
 		// ページャの初期化

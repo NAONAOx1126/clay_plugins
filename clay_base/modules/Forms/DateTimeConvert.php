@@ -18,7 +18,7 @@
  * @param delimiter 結合時に設定するデリミタ
  * @param result 結合後のカラム
  */
-class Base_Forms_DateTimeConvert extends FrameworkModule{
+class Base_Forms_DateTimeConvert extends Clay_Plugin_Module{
 	function execute($params){
 		if(isset($_SERVER["ATTRIBUTES"][$params->get("key")]) && is_array($_SERVER["ATTRIBUTES"][$params->get("key")])){
 			foreach($_SERVER["ATTRIBUTES"][$params->get("key")] as $index => $data){

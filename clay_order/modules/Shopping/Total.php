@@ -6,7 +6,7 @@ LoadModel("DeliveryModel", "Shopping");
 LoadModel("PaymentModel", "Shopping");
 
 // 共通処理を呼び出し。
-class Shopping_Shopping_Total extends FrameworkModule{
+class Shopping_Shopping_Total extends Clay_Plugin_Module{
 	function execute($params){
 		// 商品の合計金額／個別配送料を計算
 		$useCommonDelivFee = false;

@@ -13,7 +13,7 @@ LoadModel("OrderDetailModel", "Shopping");
 LoadModel("ProductModel", "Shopping");
 LoadModel("ProductOptionModel", "Shopping");
 
-class Shopping_Shopping_Contents extends FrameworkModule{
+class Shopping_Shopping_Contents extends Clay_Plugin_Module{
 	function execute($params){
 		// 受注完了メール送信
 		if($params->check("mail")){

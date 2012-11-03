@@ -3,7 +3,7 @@ LoadModel("PaymentSelectItem");
 
 LoadTable("PaymentsTable");
 
-class Shopping_Selections_Deliveries extends FrameworkModule{
+class Shopping_Selections_Deliveries extends Clay_Plugin_Module{
 	function execute($params){
 		if(empty($_SERVER["ATTRIBUTES"]["SELECTION"]["payments"])){
 			// 決済方法のプルダウン用リストを生成

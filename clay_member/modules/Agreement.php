@@ -2,7 +2,7 @@
 /**
  * ユーザーの同意を求める
  */
-class Member_Agreement extends FrameworkModule{
+class Member_Agreement extends Clay_Plugin_Module{
 	function execute($param){
 		if($_POST["agreement"] == "1"){
 			$_SESSION["SITE_AGREEMENT"] = "1";

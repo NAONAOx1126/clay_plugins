@@ -5,7 +5,7 @@ class Member_RegisterCustomer{
 	
 	public function execute(){
 		// 商品プラグインの初期化
-		$loader = new PluginLoader("Member");
+		$loader = new Clay_Plugin("Member");
 		$loader->LoadSetting();
 		
 		$customer = $loader->loadModel("CustomerModel");

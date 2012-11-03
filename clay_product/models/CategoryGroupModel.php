@@ -15,9 +15,9 @@
 /**
  * 決済方法のモデルクラス
  */
-class Product_CategoryGroupModel extends DatabaseModel{
+class Product_CategoryGroupModel extends Clay_Plugin_Model{
 	function __construct($values = array()){
-		$loader = new PluginLoader("Product");
+		$loader = new Clay_Plugin("Product");
 		parent::__construct($loader->loadTable("CategoryGroupsTable"), $values);
 	}
 	
@@ -26,7 +26,7 @@ class Product_CategoryGroupModel extends DatabaseModel{
 	}
 	
 	function categories($order = "", $reverse = false){
-		$loader = new PluginLoader("Product");
+		$loader = new Clay_Plugin("Product");
 		$model = $loader->loadModel("CategoryModel");
 		return $model->findAllByGroup($this->category_group_id, $order, $reverse);
 	}

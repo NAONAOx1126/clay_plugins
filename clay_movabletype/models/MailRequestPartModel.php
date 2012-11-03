@@ -2,9 +2,9 @@
 /**
  * 顧客契約のモデルクラス
  */
-class Movabletype_MailRequestPartModel extends DatabaseModel{
+class Movabletype_MailRequestPartModel extends Clay_Plugin_Model{
 	public function __construct($values = array()){
-		$loader = new PluginLoader("Movabletype");
+		$loader = new Clay_Plugin("Movabletype");
 		parent::__construct($loader->loadTable("MailRequestPartsTable"), $values);
 	}
 	
@@ -21,14 +21,14 @@ class Movabletype_MailRequestPartModel extends DatabaseModel{
 	}
 	
 	public function request(){
-		$loader = new PluginLoader("MovableType");
+		$loader = new Clay_Plugin("MovableType");
 		$request = $loader->loadModel("MailRequestModel");
 		$request->findByPrimaryKey($this->request_id);
 		return $request;
 	}
 	
 	public function entry(){
-		$loader = new PluginLoader("MovableType");
+		$loader = new Clay_Plugin("MovableType");
 		$entry = $loader->loadModel("EntryModel");
 		$entry->findByPrimaryKey($this->entry_id);
 		return $entry;

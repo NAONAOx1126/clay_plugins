@@ -12,13 +12,13 @@
 /**
  * サイトと所属組織の対応関係のモデルです。
  */
-class Base_SiteCompanyModel extends DatabaseModel{
+class Base_SiteCompanyModel extends Clay_Plugin_Model{
 	/**
 	 * コンストラクタ
 	 * @param $values モデルに初期設定する値
 	 */
 	public function __construct($values = array()){
-		$loader = new PluginLoader();
+		$loader = new Clay_Plugin();
 		parent::__construct($loader->loadTable("SiteCompanysTable"), $values);
 	}
 	
@@ -43,14 +43,14 @@ class Base_SiteCompanyModel extends DatabaseModel{
 	}
 	
 	public function site(){
-		$loader = new PluginLoader();
+		$loader = new Clay_Plugin();
 		$site = $loader->loadModel("SiteModel");
 		$site->findByPrimaryKey($this->site_id);
 		return $site;
 	}
 
 	public function company(){
-		$loader = new PluginLoader();
+		$loader = new Clay_Plugin();
 		$company = $loader->loadModel("CompanyModel");
 		$company->findByPrimaryKey($this->company_id);
 		return $company;

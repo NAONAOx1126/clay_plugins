@@ -2,9 +2,9 @@
 /**
  * 顧客情報のモデルクラス
  */
-class TempOrderModel extends DatabaseModel{
+class TempOrderModel extends Clay_Plugin_Model{
 	function __construct($values = array()){
-		$loader = new PluginLoader("Order");
+		$loader = new Clay_Plugin("Order");
 		parent::__construct($loader->loadTable("TempOrdersTable"), $values);
 	}
 	

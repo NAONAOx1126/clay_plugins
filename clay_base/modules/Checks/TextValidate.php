@@ -17,7 +17,7 @@
  * @param value チェック対象の名称
  * @param suffix エラーメッセージのサフィックス
  */
-class Base_Checks_ContentValidate extends FrameworkModule{
+class Base_Checks_ContentValidate extends Clay_Plugin_Module{
 	function execute($params){
 		if($params->check("key")){
 			if(!is_array($_SERVER["ERRORS"])){

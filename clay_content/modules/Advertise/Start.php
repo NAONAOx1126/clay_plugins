@@ -3,10 +3,10 @@
  * ### Content.Advertise.Start
  * カバー画像を削除する。
  */
-class Content_Advertise_Start extends FrameworkModule{
+class Content_Advertise_Start extends Clay_Plugin_Module{
 	function execute($params){
 		// モデルの初期化
-		$loader = new PluginLoader("Content");
+		$loader = new Clay_Plugin("Content");
 		$advertise = $loader->loadModel("AdvertiseModel");
 		
 		// キーのリストを取得する。

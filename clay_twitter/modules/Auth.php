@@ -3,7 +3,7 @@
 LoadModel("Setting", "Members");
 LoadModel("TypeModel", "Members");
 
-class Members_Twitter_Auth extends FrameworkModule{
+class Members_Twitter_Auth extends Clay_Plugin_Module{
 	function execute($params){
 		if($params->check("key") && $params->check("secret")){
 			// Twitterアプリケーション申請で取得したコンシューマ key

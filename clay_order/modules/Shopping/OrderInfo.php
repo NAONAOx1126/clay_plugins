@@ -2,7 +2,7 @@
 // ショッピングカートの設定を取得
 LoadModel("Setting", "Shopping");
 
-class Shopping_Shopping_OrderInfo extends FrameworkModule{
+class Shopping_Shopping_OrderInfo extends Clay_Plugin_Module{
 	function execute($param){
 		$order = new TempOrderModel();
 		$order->findByPrimaryKey($_POST["order_id"]);

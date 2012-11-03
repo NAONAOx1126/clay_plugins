@@ -14,7 +14,7 @@ LoadModel("CustomerImageModel", "Members");
  * @params auto 1を設定すると、携帯の個体番号が渡っていた場合、自動でユーザー情報を作成する
  * @params result 顧客情報をページで使うためのキー名
  */
-class Members_CodeAutoLogin extends FrameworkModule{
+class Members_CodeAutoLogin extends Clay_Plugin_Module{
 	function execute($params){
 		// 特定のコードでユーザ情報を取得する。
 		if($params->check("code") && !empty($_POST["code"])){

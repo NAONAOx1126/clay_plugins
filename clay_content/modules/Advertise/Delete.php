@@ -3,11 +3,11 @@
  * ### Content.Advertise.Delete
  * 広告を削除する。
  */
-class Content_Advertise_Delete extends FrameworkModule{
+class Content_Advertise_Delete extends Clay_Plugin_Module{
 	function execute($params){
 		if(isset($_POST["delete"]) && !empty($_POST["delete"])){
 			// ローダーの初期化
-			$loader = new PluginLoader("Content");
+			$loader = new Clay_Plugin("Content");
 			$loader->LoadSetting();
 			
 			// トランザクションの開始

@@ -2,7 +2,7 @@
 class Order_RankingProducts{
 	public function execute(){
 		// 商品プラグインの初期化
-		$loader = new PluginLoader("Order");
+		$loader = new Clay_Plugin("Order");
 		$loader->LoadSetting();
 		
 		$order = $loader->loadModel("OrderDetailModel");

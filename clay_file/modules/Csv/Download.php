@@ -13,13 +13,13 @@
  * @version   1.0.0
  * @param key ファイルのCSV形式を特定するためのキー
  */
-class File_Csv_Download extends FrameworkModule{
+class File_Csv_Download extends Clay_Plugin_Module{
 	function execute($params){
 		// データ一括取得のため、処理期限を無効化
 		ini_set("max_execution_time", 0);
 		
 		// ローダーを初期化
-		$loader = new PluginLoader("File");
+		$loader = new Clay_Plugin("File");
 
 		if($params->check("key")){
 			// CSV設定を取得

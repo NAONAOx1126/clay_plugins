@@ -9,7 +9,7 @@
  * @version   3.0.0
  */
 
-class Base_Pages_CheckToComment extends FrameworkModule{
+class Base_Pages_CheckToComment extends Clay_Plugin_Module{
 	function execute($params){
 		if($params->check("key") && $params->check("param") && $params->check("result") && $params->check("text")){			
 			if(is_array($_SERVER["ATTRIBUTES"][$params->get("key")]) && !empty($_SERVER["ATTRIBUTES"][$params->get("key")][$params->get("param")])){

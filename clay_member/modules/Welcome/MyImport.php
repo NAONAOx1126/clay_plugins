@@ -7,9 +7,9 @@
  * @param flag 検索条件とするフラグ
  * @param result 結果を設定する配列のキーワード
  */
-class Member_Welcome_MyImport extends FrameworkModule{
+class Member_Welcome_MyImport extends Clay_Plugin_Module{
 	function execute($params){
-		$loader = new PluginLoader("Member");
+		$loader = new Clay_Plugin("Member");
 		$loader->LoadSetting();
 		
 		if($_SESSION["OPERATOR"]["operator_id"] > 0 && is_object($_SERVER["ATTRIBUTES"]["events"])){

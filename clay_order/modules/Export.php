@@ -7,10 +7,10 @@
  * @param category【カテゴリタイプ】 商品に紐付けするカテゴリ（条件にしない場合は空文字を設定）
  * @param result 結果を設定する配列のキーワード
  */
-class Order_Export extends FrameworkModule{
+class Order_Export extends Clay_Plugin_Module{
 	function execute($params){
 		// ローダーを初期化
-		$loader = new PluginLoader("Order");
+		$loader = new Clay_Plugin("Order");
 		
 		$order = $loader->loadModel("OrderModel");
 		

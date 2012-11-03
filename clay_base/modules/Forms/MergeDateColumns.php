@@ -18,7 +18,7 @@
  * @param delimiter 結合時に設定するデリミタ
  * @param result 結合後のカラム
  */
-class Base_Forms_MergeDateColumns extends FrameworkModule{
+class Base_Forms_MergeDateColumns extends Clay_Plugin_Module{
 	function execute($params){
 		$_POST[$params->get("result")] = "";
 		if($params->check("year") && isset($_POST[$params->get("year")]) && is_numeric($_POST[$params->get("year")])

@@ -13,10 +13,10 @@
  * ### Base.Configure.Save
  * サイトのデータを保存する。
  */
-class Base_Configure_Save extends FrameworkModule{
+class Base_Configure_Save extends Clay_Plugin_Module{
 	function execute($params){
 		// サイトデータを取得する。
-		$loader = new PluginLoader();
+		$loader = new Clay_Plugin();
 		$configure = $loader->loadModel("SiteConfigureModel");
 		
 		// トランザクションの開始

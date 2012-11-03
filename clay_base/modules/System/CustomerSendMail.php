@@ -1,8 +1,8 @@
 <?php
-class Base_System_CustomerSendMail extends FrameworkModule{
+class Base_System_CustomerSendMail extends Clay_Plugin_Module{
 	function execute($params){
 		// ローダーを初期化
-		$loader = new PluginLoader();
+		$loader = new Clay_Plugin();
 		$loader->LoadSetting();
 		
 		// 引数を処理する。

@@ -12,7 +12,7 @@
 /**
  * 郵便番号から住所を取得するためのJSON実装です。
  */
-$loader = new PluginLoader();
+$loader = new Clay_Plugin();
 $zip = $loader->loadTable("ZipsTable");
 $select = new DatabaseSelect($zip);
 $select->addColumn($zip->_W)->addWhere("zipcode = ?", array($_POST["zip"]));

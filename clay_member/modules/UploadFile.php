@@ -1,5 +1,5 @@
 <?php
-class Members_UploadFile extends FrameworkModule{
+class Members_UploadFile extends Clay_Plugin_Module{
 	function execute($params){
 		if(isset($_FILES[$params->get("key")])){
 			$file = $_FILES[$params->get("key")];

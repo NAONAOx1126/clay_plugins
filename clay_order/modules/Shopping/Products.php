@@ -5,7 +5,7 @@ LoadModel("Checks", "Shopping");
 LoadModel("Registers", "Shopping");
 LoadModel("Mails", "Shopping");
 
-class Shopping_Shopping_Purchase extends FrameworkModule{
+class Shopping_Shopping_Purchase extends Clay_Plugin_Module{
 	function execute(){
 		// 購入完了処理
 		if(!empty($_POST["regist"])){

@@ -11,9 +11,9 @@
  * @license http://www.apache.org/licenses/LICENSE-2.0.html Apache License, Version 2.0
  * @version   1.0.0
  */
-class Order_OrderPaymentModel extends DatabaseModel{
+class Order_OrderPaymentModel extends Clay_Plugin_Model{
 	function __construct($values = array()){
-		$loader = new PluginLoader("Order");
+		$loader = new Clay_Plugin("Order");
 		parent::__construct($loader->loadTable("OrderPaymentsTable"), $values);
 	}
 	
@@ -26,7 +26,7 @@ class Order_OrderPaymentModel extends DatabaseModel{
 	}
 	
 	function payment(){
-		$loader = new PluginLoader("Order");
+		$loader = new Clay_Plugin("Order");
 		$payment = $loader->loadModel("PaymentModel");
 		$payment->findByPrimaryKey($this->payment_id);
 		return $payment;

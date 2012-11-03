@@ -2,9 +2,9 @@
 /**
  * 新着情報のモデルクラス
  */
-class Content_NewsModel extends DatabaseModel{
+class Content_NewsModel extends Clay_Plugin_Model{
 	public function __construct($values = array()){
-		$loader = new PluginLoader("Content");
+		$loader = new Clay_Plugin("Content");
 		parent::__construct($loader->loadTable("NewsesTable"), $values);
 	}
 	

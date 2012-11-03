@@ -6,7 +6,7 @@
  * @param area エリアのキー
  * @param data データのキー
  */
-class Order_Summery_MergeAreas extends FrameworkModule{
+class Order_Summery_MergeAreas extends Clay_Plugin_Module{
 	function execute($params){
 		$pref = $params->get("pref");
 		$area = $params->get("area");

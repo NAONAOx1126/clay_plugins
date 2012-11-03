@@ -13,10 +13,10 @@
  * ### Base.Site.Save
  * サイトのデータを保存する。
  */
-class Base_Site_Save extends FrameworkModule{
+class Base_Site_Save extends Clay_Plugin_Module{
 	function execute($params){
 		// サイトデータを取得する。
-		$loader = new PluginLoader();
+		$loader = new Clay_Plugin();
 		$site = $loader->loadModel("SiteModel");
 		$site->findByPrimaryKey($_POST["site_id"]);
 		foreach($_POST as $key => $value){

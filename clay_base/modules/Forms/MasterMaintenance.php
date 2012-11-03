@@ -16,7 +16,7 @@
  * @param table メンテナンス対象のテーブル名
  * @param requires 必須入力項目のコード
  */
-class Base_Forms_MasterMaintenance extends FrameworkModule{
+class Base_Forms_MasterMaintenance extends Clay_Plugin_Module{
 	function execute($params){
 		if($params->check("table")){
 			// テーブルのロード情報を取得する。
@@ -33,9 +33,9 @@ class Base_Forms_MasterMaintenance extends FrameworkModule{
 			
 			// テーブルのオブジェクトをロードする。
 			if($tableClass == "Base"){
-				$loader = new PluginLoader();
+				$loader = new Clay_Plugin();
 			}else{
-				$loader = new PluginLoader($tableClass);
+				$loader = new Clay_Plugin($tableClass);
 			}
 			$table = $loader->loadTable($tableModule);
 			

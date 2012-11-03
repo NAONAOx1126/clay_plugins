@@ -11,9 +11,9 @@
  * @license http://www.apache.org/licenses/LICENSE-2.0.html Apache License, Version 2.0
  * @version   1.0.0
  */
-class File_CsvModel extends DatabaseModel{
+class File_CsvModel extends Clay_Plugin_Model{
 	function __construct($values = array()){
-		$loader = new PluginLoader("File");
+		$loader = new Clay_Plugin("File");
 		parent::__construct($loader->loadTable("CsvsTable"), $values);
 	}
 	

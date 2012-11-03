@@ -13,7 +13,7 @@
  * @version   1.0.0
  * @param key インポートするファイルの形式を特定するためのキー
  */
-class Product_Import extends FrameworkModule{
+class Product_Import extends Clay_Plugin_Module{
 	function execute($params){
 		if($params->check("key") && is_array($_SERVER["ATTRIBUTES"][$params->get("key")])){
 			try{
@@ -21,7 +21,7 @@ class Product_Import extends FrameworkModule{
 				DBFactory::begin("product");
 				
 				// ローダーを初期化
-				$loader = new PluginLoader("Product");
+				$loader = new Clay_Plugin("Product");
 				
 				$list = $_SERVER["ATTRIBUTES"][$params->get("key")];
 				foreach($list as $index => $data){

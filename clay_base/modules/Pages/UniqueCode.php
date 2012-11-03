@@ -12,7 +12,7 @@
 /**
  * 一意性をある程度考慮したランダムコードを発行します。
  */
-class Base_Pages_UniqueCode extends FrameworkModule{
+class Base_Pages_UniqueCode extends Clay_Plugin_Module{
 	function execute($params){
 		if($params->check("code")){
 			// ランダムコードを発行します。

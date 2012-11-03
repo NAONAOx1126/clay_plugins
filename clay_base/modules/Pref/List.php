@@ -13,10 +13,10 @@
  * ### Base.Pref.List
  * 都道府県のリストを取得する。
  */
-class Base_Pref_List extends FrameworkModule{
+class Base_Pref_List extends Clay_Plugin_Module{
 	function execute($params){
 		// モデルの初期化
-		$loader = new PluginLoader();
+		$loader = new Clay_Plugin();
 		$pref = $loader->loadModel("PrefModel");
 		
 		$prefs = $pref->findAllBy();

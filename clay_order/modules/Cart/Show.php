@@ -5,7 +5,7 @@ LoadModel("ShoppingSettings", "Shopping");
 // 共通処理を呼び出し
 LoadModel("Calculations", "Shopping");
 
-class Shopping_Cart_Show extends FrameworkModule{
+class Shopping_Cart_Show extends Clay_Plugin_Module{
 	function execute($param){
 		// パラメータを取得する。
 		$cartSessionKey = $param->get("session_cart", "Shopping_Cart");

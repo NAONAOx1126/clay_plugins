@@ -12,13 +12,13 @@
 /**
  * 管理画面ユーザーの所属組織のモデルです。
  */
-class Base_CompanyModel extends DatabaseModel{
+class Base_CompanyModel extends Clay_Plugin_Model{
 	/**
 	 * コンストラクタ
 	 * @param $values モデルに初期設定する値
 	 */
 	public function __construct($values = array()){
-		$loader = new PluginLoader();
+		$loader = new Clay_Plugin();
 		parent::__construct($loader->loadTable("CompanysTable"), $values);
 	}
 	
@@ -35,21 +35,21 @@ class Base_CompanyModel extends DatabaseModel{
 	 * @return オペレータのリスト
 	 */
 	public function operators(){
-		$loader = new PluginLoader();
+		$loader = new Clay_Plugin();
 		$companyOperator = $loader->loadModel("CompanyOperatorModel");
 		$companyOperators = $companyOperator->findAllByCompanyId($this->company_id);
 		return $companyOperator;		
 	}
 	
 	public function siteCompanys(){
-		$loader = new PluginLoader();
+		$loader = new Clay_Plugin();
 		$siteCompany = $loader->loadModel("SiteCompanyModel");
 		return $siteCompany->findAllByCompany($this->company_id);
 		
 	}
 	
 	public function hasSite($site_id){
-		$loader = new PluginLoader();
+		$loader = new Clay_Plugin();
 		$siteCompany = $loader->loadModel("SiteCompanyModel");
 		$siteCompany->findBySiteCompany($site_id, $this->company_id);
 		if($siteCompany->site_id > 0){
@@ -59,7 +59,7 @@ class Base_CompanyModel extends DatabaseModel{
 	}
 	
 	public function site($site_id){
-		$loader = new PluginLoader();
+		$loader = new Clay_Plugin();
 		$siteCompany = $loader->loadModel("SiteCompanyModel");
 		$siteCompany->findBySiteCompany($site_id, $this->company_id);
 		return  $siteCompany->site();

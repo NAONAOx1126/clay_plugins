@@ -4,7 +4,7 @@
  *
  * Ex: /usr/bin/php batch.php "Member.AutoRegisterMail" <ホスト名> <メールアドレス> <メールサーバー> <ログイン> <パスワード> <テンプレート名>
  */
-class Member_AutoRegisterMail extends FrameworkModule{
+class Member_AutoRegisterMail extends Clay_Plugin_Module{
 	private $socket;
 	
 	private $email;
@@ -133,7 +133,7 @@ class Member_AutoRegisterMail extends FrameworkModule{
 	
 		// メイン処理
 		// この機能で使用するモデルクラス
-		$loader = new PluginLoader("Member");
+		$loader = new Clay_Plugin("Member");
 		$loader->LoadSetting();
 		
 		// カスタマモデルを使用して顧客情報を取得
@@ -172,7 +172,7 @@ class Member_AutoRegisterMail extends FrameworkModule{
 		}
 		
 		// ローダーを初期化
-		$loader = new PluginLoader();
+		$loader = new Clay_Plugin();
 		$loader->LoadSetting();
 		
 		// templateが設定されていて、hiddenに設定されたパラメータがPOSTで渡されている場合に処理を実行

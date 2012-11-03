@@ -4,12 +4,12 @@
  *
  * Ex: /usr/bin/php batch.php "Member.HourDelayedMail" <ホスト名>
  */
-class Member_HourDelayedMail extends FrameworkModule{
+class Member_HourDelayedMail extends Clay_Plugin_Module{
 	public function execute($argv){
 		// この機能で使用するモデルクラス
-		$baseLoader = new PluginLoader();
+		$baseLoader = new Clay_Plugin();
 		$baseLoader->LoadSetting();
-		$loader = new PluginLoader("Member");
+		$loader = new Clay_Plugin("Member");
 		$loader->LoadSetting();
 		
 		// 引数を処理

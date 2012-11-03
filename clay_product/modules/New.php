@@ -7,9 +7,9 @@
  * @param category【カテゴリタイプ】 商品に紐付けするカテゴリ（条件にしない場合は空文字を設定）
  * @param result 結果を設定する配列のキーワード
  */
-class Product_New extends FrameworkModule{
+class Product_New extends Clay_Plugin_Module{
 	function execute($params){
-		$loader = new PluginLoader("Product");
+		$loader = new Clay_Plugin("Product");
 		$loader->LoadSetting();
 
 		// ページャの初期化

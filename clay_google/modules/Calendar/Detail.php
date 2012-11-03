@@ -4,7 +4,7 @@
  * Googleのカレンダーの詳細を取得する。
  * @param result 結果を設定する配列のキーワード
  */
-class Google_Calendar_Detail extends FrameworkModule{
+class Google_Calendar_Detail extends Clay_Plugin_Module{
 	function execute($params){
 		if(isset($_SERVER["GOOGLE"]["Client"])){
 			// Zendの初期化

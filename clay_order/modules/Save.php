@@ -7,11 +7,11 @@
  * @param category【カテゴリタイプ】 商品に紐付けするカテゴリ（条件にしない場合は空文字を設定）
  * @param result 結果を設定する配列のキーワード
  */
-class Order_Save extends FrameworkModule{
+class Order_Save extends Clay_Plugin_Module{
 	function execute($params){
 		if(isset($_POST["save"])){
 			// 商品情報を登録する。
-			$loader = new PluginLoader("Order");
+			$loader = new Clay_Plugin("Order");
 			$loader->LoadSetting();
 	
 			// トランザクションの開始
@@ -81,7 +81,7 @@ class Order_Save extends FrameworkModule{
 				if($params->get("point", "0") == "1" && !($order_id_before > 0)){
 					DBFactory::begin("member");
 					try{
-						$memberLoader = new PluginLoader("Member");
+						$memberLoader = new Clay_Plugin("Member");
 						$rule = $memberLoader->loadModel("PointRuleModel");
 						if($order->customer_id > 0){
 							$total_pre = 0;

@@ -2,9 +2,9 @@
 /**
  * 顧客情報のモデルクラス
  */
-class Product_ProductModel extends DatabaseModel{
+class Product_ProductModel extends Clay_Plugin_Model{
 	function __construct($values = array()){
-		$loader = new PluginLoader("Product");
+		$loader = new Clay_Plugin("Product");
 		parent::__construct($loader->loadTable("ProductsTable"), $values);
 	}
 	
@@ -17,19 +17,19 @@ class Product_ProductModel extends DatabaseModel{
 	}
 	
 	function findAllByDeveloper($developer_id, $order = "", $reverse = false){
-		$loader = new PluginLoader("Product");
+		$loader = new Clay_Plugin("Product");
 		$model = $loader->loadModel("ProductModel");
 		return $model->findAllBy(array("developer_id" => $developer_id), $order, $reverse);
 	}
 	
 	function findAllBySeller($seller_id, $order = "", $reverse = false){
-		$loader = new PluginLoader("Product");
+		$loader = new Clay_Plugin("Product");
 		$model = $loader->loadModel("ProductModel");
 		return $model->findAllBy(array("seller_id" => $seller_id), $order, $reverse);
 	}
 	
 	function findAllByParent($parent_name, $order = "", $reverse = false){
-		$loader = new PluginLoader("Product");
+		$loader = new Clay_Plugin("Product");
 		$model = $loader->loadModel("ProductModel");
 		return $model->findAllBy(array("parent_name" => $parent_name), $order, $reverse);
 	}
@@ -42,27 +42,27 @@ class Product_ProductModel extends DatabaseModel{
 	}
 	
 	function developer(){
-		$loader = new PluginLoader("Product");
+		$loader = new Clay_Plugin("Product");
 		$developer = $loader->loadModel("ProductDeveloperModel");
 		$developer->findByPrimaryKey($this->developer_id);
 		return $developer;
 	}
 	
 	function seller(){
-		$loader = new PluginLoader("Product");
+		$loader = new Clay_Plugin("Product");
 		$seller = $loader->loadModel("ProductSellerModel");
 		$seller->findByPrimaryKey($this->seller_id);
 		return $seller;
 	}
 	
 	function productCategories($order = "", $reverse = false){
-		$loader = new PluginLoader("Product");
+		$loader = new Clay_Plugin("Product");
 		$model = $loader->loadModel("ProductCategoryModel");
 		return $model->findAllByProduct($this->product_id, $order, $reverse);
 	}
 	
 	function hasCategory($category_id){
-		$loader = new PluginLoader("Product");
+		$loader = new Clay_Plugin("Product");
 		$model = $loader->loadModel("ProductCategoryModel");
 		$model->findByPrimaryKey($this->product_id, $category_id);
 		if($model->product_id > 0){
@@ -80,7 +80,7 @@ class Product_ProductModel extends DatabaseModel{
 		foreach($productCategories as $item){
 			$values["in:category_id"][] = $item->category_id;
 		}
-		$loader = new PluginLoader("Product");
+		$loader = new Clay_Plugin("Product");
 		$product = $loader->loadModel("CategoryModel");
 		return $product->findAllBy($values, $order, $reverse);
 	}
@@ -90,18 +90,18 @@ class Product_ProductModel extends DatabaseModel{
 		if(count($categories) > 0){
 			return $categories[0];
 		}
-		$loader = new PluginLoader("Product");
+		$loader = new Clay_Plugin("Product");
 		return $loader->loadModel("CategoryModel");
 	}
 
 	function productFlags($order = "", $reverse = false){
-		$loader = new PluginLoader("Product");
+		$loader = new Clay_Plugin("Product");
 		$model = $loader->loadModel("ProductFlagModel");
 		return $model->findAllByProduct($this->product_id, $order, $reverse);
 	}
 	
 	function hasFlag($flag_id){
-		$loader = new PluginLoader("Product");
+		$loader = new Clay_Plugin("Product");
 		$model = $loader->loadModel("ProductFlagModel");
 		$model->findByPrimaryKey($this->product_id, $flag_id);
 		if($model->product_id > 0){
@@ -119,13 +119,13 @@ class Product_ProductModel extends DatabaseModel{
 		foreach($productFlags as $item){
 			$values["in:flag_id"][] = $item->flag_id;
 		}
-		$loader = new PluginLoader("Product");
+		$loader = new Clay_Plugin("Product");
 		$product = $loader->loadModel("FlagModel");
 		return $product->findAllBy($values, $order, $reverse);
 	}
 	
 	function images(){
-		$loader = new PluginLoader("Product");
+		$loader = new Clay_Plugin("Product");
 		$model = $loader->loadModel("ProductImageModel");
 		$images = $model->findAllByProduct($this->product_id);
 		$result = array();
@@ -136,20 +136,20 @@ class Product_ProductModel extends DatabaseModel{
 	}
 
 	function image($image_type){
-		$loader = new PluginLoader("Product");
+		$loader = new Clay_Plugin("Product");
 		$model = $loader->loadModel("ProductImageModel");
 		$model->findByPrimaryKey($this->product_id, $image_type);
 		return $model;
 	}
 
 	function productOptions($order = "", $reverse = false){
-		$loader = new PluginLoader("Product");
+		$loader = new Clay_Plugin("Product");
 		$model = $loader->loadModel("ProductOptionModel");
 		return $model->findAllByProduct($this->product_id, $order, $reverse);
 	}
 
 	function productOption($option1_id = 0, $option2_id = 0, $option3_id = 0, $option4_id = 0){
-		$loader = new PluginLoader("Product");
+		$loader = new Clay_Plugin("Product");
 		$model = $loader->loadModel("ProductOptionModel");
 		$model->findByPrimaryKey($this->product_id, $option1_id, $option2_id, $option3_id, $option4_id);
 		return $model;
@@ -157,8 +157,8 @@ class Product_ProductModel extends DatabaseModel{
 	
 	function relatedProducts($limit = 0){
 		// プラグインローダーの初期化
-		$productPlugin = new PluginLoader("Product");
-		$orderPlugin = new PluginLoader("Order");
+		$productPlugin = new Clay_Plugin("Product");
+		$orderPlugin = new Clay_Plugin("Order");
 		
 		// 商品テーブルを生成
 		$product = $productPlugin->loadTable("ProductsTable");

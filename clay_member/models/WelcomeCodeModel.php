@@ -2,9 +2,9 @@
 /**
  * 契約のモデルクラス
  */
-class Member_WelcomeCodeModel extends DatabaseModel{
+class Member_WelcomeCodeModel extends Clay_Plugin_Model{
 	public function __construct($values = array()){
-		$loader = new PluginLoader("Member");
+		$loader = new Clay_Plugin("Member");
 		parent::__construct($loader->loadTable("WelcomeCodesTable"), $values);
 	}
 	
@@ -21,20 +21,20 @@ class Member_WelcomeCodeModel extends DatabaseModel{
 	}
 	
 	function welcomes($order = "", $reverse = false){
-		$loader = new PluginLoader("Member");
+		$loader = new Clay_Plugin("Member");
 		$welcome = $loader->loadModel("WelcomeModel");
 		return $this->findAllByDate($this->welcome_date, $order, $reverse);
 	}
 	
 	function customer(){
-		$loader = new PluginLoader("Member");
+		$loader = new Clay_Plugin("Member");
 		$customer = $loader->loadModel("CustomerModel");
 		$customer->findByPrimaryKey($this->customer_id);
 		return $customer;
 	}
 	
 	function order(){
-		$loader = new PluginLoader("Order");
+		$loader = new Clay_Plugin("Order");
 		$order = $loader->loadModel("OrderModel");
 		$order->findByPrimaryKey($this->order_id);
 		return $order;

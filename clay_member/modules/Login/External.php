@@ -8,11 +8,11 @@
  * @params auto 1を設定すると、携帯の個体番号が渡っていた場合、自動でユーザー情報を作成する
  * @params result 顧客情報をページで使うためのキー名
  */
-class Member_Login_External extends FrameworkModule{
+class Member_Login_External extends Clay_Plugin_Module{
 	function execute($params){
 		if(!empty($_POST["external_id"]) || !isset($_SESSION[CUSTOMER_SESSION_KEY]) || empty($_SESSION[CUSTOMER_SESSION_KEY])){
 			// この機能で使用するモデルクラス
-			$loader = new PluginLoader("Member");
+			$loader = new Clay_Plugin("Member");
 			$loader->LoadSetting();
 	
 			// カスタマモデルを使用して顧客情報を取得

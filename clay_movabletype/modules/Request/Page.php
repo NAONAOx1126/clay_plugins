@@ -7,9 +7,9 @@
  * @param flag 検索条件とするフラグ
  * @param result 結果を設定する配列のキーワード
  */
-class Movabletype_Request_Page extends FrameworkModule{
+class Movabletype_Request_Page extends Clay_Plugin_Module{
 	function execute($params){
-		$loader = new PluginLoader("Movabletype");
+		$loader = new Clay_Plugin("Movabletype");
 		$loader->LoadSetting();
 
 		// ページャの初期化

@@ -3,11 +3,11 @@
  * ### Product.Seller.Delete
  * 開発会社を削除する。
  */
-class Product_Seller_Delete extends FrameworkModule{
+class Product_Seller_Delete extends Clay_Plugin_Module{
 	function execute($params){
 		if(isset($_POST["delete"]) && !empty($_POST["delete"])){
 			// ローダーの初期化
-			$loader = new PluginLoader("Product");
+			$loader = new Clay_Plugin("Product");
 			$loader->LoadSetting();
 			
 			// トランザクションの開始

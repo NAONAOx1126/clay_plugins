@@ -13,10 +13,10 @@
  * ### Base.Site.Detail
  * サイトの詳細データを取得する。
  */
-class Base_Site_Detail extends FrameworkModule{
+class Base_Site_Detail extends Clay_Plugin_Module{
 	function execute($params){
 		// サイトデータを取得する。
-		$loader = new PluginLoader();
+		$loader = new Clay_Plugin();
 		$site = $loader->loadModel("SiteModel");
 		$site->findByPrimaryKey($_POST["site_id"]);
 		

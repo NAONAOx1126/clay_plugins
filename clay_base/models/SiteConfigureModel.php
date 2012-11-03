@@ -12,12 +12,12 @@
 /**
  * サイト各種設定情報のデータモデルです。
  */
-class Base_SiteConfigureModel extends DatabaseModel{
+class Base_SiteConfigureModel extends Clay_Plugin_Model{
 	/**
 	 * コンストラクタ
 	 */
 	function __construct($values = array()){
-		$loader = new PluginLoader();
+		$loader = new Clay_Plugin();
 		parent::__construct($loader->loadTable("SiteConfiguresTable"), $values);
 	}
 	

@@ -3,7 +3,7 @@
 LoadModel("Setting", "Members");
 LoadModel("TypeModel", "Members");
 
-class Members_Twitter_FollowTo extends FrameworkModule{
+class Members_Twitter_FollowTo extends Clay_Plugin_Module{
 	function execute($params){
 		if(!empty($_SESSION[OAUTH_SESSION_KEY]["user_id"]) && $params->check("target")){
 			$twitter = new TwitterOAuth($params->get("key"), $params->get("secret"), $_SESSION[OAUTH_SESSION_KEY]["access_token"], $_SESSION[OAUTH_SESSION_KEY]["access_token_secret"]);

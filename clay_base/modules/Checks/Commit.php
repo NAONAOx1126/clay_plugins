@@ -13,7 +13,7 @@
  * チェックしたエラーの内容をコミットして、例外を発生させる。
  */
 
-class Base_Checks_Commit extends FrameworkModule{
+class Base_Checks_Commit extends Clay_Plugin_Module{
 	function execute($params){
 		if(!empty($_SERVER["ERRORS"])){
 			$_SERVER["INPUT_DATA"] = $_POST;

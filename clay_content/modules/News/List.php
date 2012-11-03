@@ -4,10 +4,10 @@
  * 新着情報のリストを取得する。
  * @param result 結果を設定する配列のキーワード
  */
-class Content_News_List extends FrameworkModule{
+class Content_News_List extends Clay_Plugin_Module{
 	function execute($params){
 		// ローダーの初期化
-		$loader = new PluginLoader("Content");
+		$loader = new Clay_Plugin("Content");
 		$loader->LoadSetting();
 		
 		// 並べ替え順序が指定されている場合に適用

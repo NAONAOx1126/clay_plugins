@@ -1,7 +1,7 @@
 <?php
 LoadModel("Setting", "Members");
 
-class Members_Address extends FrameworkModule{
+class Members_Address extends Clay_Plugin_Module{
 	function execute($param){
 		$mode = $param->get("zip", "zip");
 		$zip1 = $param->get("zip1", "zip1");
