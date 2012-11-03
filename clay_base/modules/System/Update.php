@@ -22,7 +22,7 @@ class Base_System_Update extends Clay_Plugin_Module{
 		switch($_POST["type"]){
 			case "base":
 			default:
-				$target = FRAMEWORK_HOME;
+				$target = CLAY_ROOT;
 				break;
 			case "plugin":
 			case "plugins":

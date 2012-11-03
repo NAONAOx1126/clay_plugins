@@ -16,7 +16,7 @@
 class Base_Site_Reload extends Clay_Plugin_Module{
 	function execute($params){
 		// サイトデータのキャッシュを削除する。
-		foreach(glob(FRAMEWORK_HOME."/cache/*/site_configure.php") as $filename){
+		foreach(glob(CLAY_ROOT."/cache/*/site_configure.php") as $filename){
 			unlink($filename);
 		}
 	}
