@@ -26,15 +26,15 @@ class Base_Operator_Login extends Clay_Plugin_Module{
 				$companyOperator->findByLoginId($_POST["login_id"]);
 				
 				// ログインIDに該当するアカウントが無い場合
-				Logger::writeDebug("Try Login AS :\r\n".var_export($companyOperator->toArray(), true));
+				Clay_Logger::writeDebug("Try Login AS :\r\n".var_export($companyOperator->toArray(), true));
 				if(!($companyOperator->operator_id > 0)){
-					Logger::writeDebug("ログインIDに該当するアカウントがありません。");
+					Clay_Logger::writeDebug("ログインIDに該当するアカウントがありません。");
 					throw new Clay_Exception_Invalid(array("ログイン情報が正しくありません。"));
 				}
 				
 				// 保存されたパスワードと一致するか調べる。
 				if($companyOperator->password != sha1($companyOperator->login_id.":".$_POST["password"])){
-					Logger::writeDebug("パスワードが一致しません");
+					Clay_Logger::writeDebug("パスワードが一致しません");
 					throw new Clay_Exception_Invalid(array("ログイン情報が正しくありません。"));
 				}
 				
@@ -42,7 +42,7 @@ class Base_Operator_Login extends Clay_Plugin_Module{
 				$company = $companyOperator->company();
 				$site = $company->site($_SERVER["CONFIGURE"]->site_id);
 				if($site->site_id != $_SERVER["CONFIGURE"]->site_id){
-					Logger::writeDebug("このアカウントでは、このサイトにアクセスできません");
+					Clay_Logger::writeDebug("このアカウントでは、このサイトにアクセスできません");
 					throw new Clay_Exception_Invalid(array("ログイン情報が正しくありません。"));
 				}
 				

@@ -31,14 +31,14 @@ class Member_AutoRegisterMail extends Clay_Plugin_Module{
 	private function fetchMail($max = 100){
 		// メールサーバへ接続
 		if(($this->socket = fsockopen($this->server, 110, $err, $errno, 10)) === FALSE){
-			Logger::writeError("ｻｰﾊﾞｰに接続できません");
+			Clay_Logger::writeError("ｻｰﾊﾞｰに接続できません");
 			exit;
 		}
 		
 		// 接続メッセージを受信
 		$buf = fgets($this->socket, 1024);
 		if(substr($buf, 0, 3) != '+OK'){
-			Logger::writeError($buf);
+			Clay_Logger::writeError($buf);
 			exit;
 		}
 		
@@ -184,7 +184,7 @@ class Member_AutoRegisterMail extends Clay_Plugin_Module{
 			
 			// データが取得できた場合のみ処理を実行
 			if($mailTemplate->template_code == $this->template){
-				$mail = new SendMail();
+				$mail = new Clay_Sendmail();
 				$mail->setFrom($this->email);
 				$mail->setTo($mailfrom);
 				$mail->setSubject($mailTemplate->subject);

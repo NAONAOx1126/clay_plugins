@@ -12,7 +12,7 @@ LoadModel("MailTemplateModel");
  * @params auto 1を設定すると、携帯の個体番号が渡っていた場合、自動でユーザー情報を作成する
  * @params result 顧客情報をページで使うためのキー名
  */
-class Members_SendMail extends Clay_Plugin_Module{
+class Members_Clay_Sendmail extends Clay_Plugin_Module{
 	function execute($params){
 		if($params->check("mail")){
 			// トランザクションの開始
@@ -21,9 +21,9 @@ class Members_SendMail extends Clay_Plugin_Module{
 			try{
 				// 登録完了メール送信
 				if($params->check("html")){
-					$sendMail = new SendPCHtmlMail();
+					$Clay_Sendmail = new SendPCHtmlMail();
 				}else{
-					$sendMail = new SendMail();
+					$Clay_Sendmail = new Clay_Sendmail();
 				}
 				$emailKey = $params->get("email", "email");
 				$smarty = new Template();
@@ -32,24 +32,24 @@ class Members_SendMail extends Clay_Plugin_Module{
 				}
 				
 				// メールの送信元（サイトメールアドレス）を設定
-				$sendMail->setFrom($_SERVER["CONFIGURE"]["SITE"]["site_email"], $_SERVER["CONFIGURE"]["SITE"]["site_name"]);
+				$Clay_Sendmail->setFrom($_SERVER["CONFIGURE"]["SITE"]["site_email"], $_SERVER["CONFIGURE"]["SITE"]["site_name"]);
 				// メールの送信先を設定
-				$sendMail->setTo($_SERVER["ATTRIBUTES"][$params->get("result", "customer")]->$emailKey);
+				$Clay_Sendmail->setTo($_SERVER["ATTRIBUTES"][$params->get("result", "customer")]->$emailKey);
 				// テキストメールの設定からタイトルと本文を取得
 				$mailTemplate = new MailTemplateModel();
 				$mailTemplate->findByPrimaryKey($params->get("mail"));
-				$sendMail->setSubject($mailTemplate->subject);
+				$Clay_Sendmail->setSubject($mailTemplate->subject);
 				$body = $smarty->fetch("string:".$mailTemplate->body);
 				// HTMLメールのテンプレートから本文を取得
 				if($params->check("html")){
-					$sendMail->addExtBody($body);
+					$Clay_Sendmail->addExtBody($body);
 					$mailHtmlTemplate = new MailTemplateModel();
 					$mailHtmlTemplate->findByPrimaryKey($params->get("html"));
 					$body = $smarty->fetch("string:".$mailHtmlTemplate->body);
 				}
-				$sendMail->addBody($body);
-				$sendMail->send();
-				$sendMail->reply();
+				$Clay_Sendmail->addBody($body);
+				$Clay_Sendmail->send();
+				$Clay_Sendmail->reply();
 				Clay_Database_Factory::commit("member");
 			}catch(Exception $ex){
 				unset($_POST["regist"]);

@@ -13,7 +13,7 @@ class Content_Advertise_Page extends Clay_Plugin_Module{
 		$loader->LoadSetting();
 		
 		// ページャの初期化
-		$pager = new TemplatePager($params->get("_pager_mode", TemplatePager::PAGE_SLIDE), $params->get("_pager_dispmode", TemplatePager::DISPLAY_ATTR), $params->get("_pager_per_page", 20), $params->get("_pager_displays", 3));
+		$pager = new Clay_Pager($params->get("_pager_mode", Clay_Pager::PAGE_SLIDE), $params->get("_pager_dispmode", Clay_Pager::DISPLAY_ATTR), $params->get("_pager_per_page", 20), $params->get("_pager_displays", 3));
 		$pager->importTemplates($params);
 		
 		// 検索条件と並べ替えキー以外を無効化する。

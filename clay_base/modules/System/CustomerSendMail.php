@@ -1,5 +1,5 @@
 <?php
-class Base_System_CustomerSendMail extends Clay_Plugin_Module{
+class Base_System_CustomerClay_Sendmail extends Clay_Plugin_Module{
 	function execute($params){
 		// ローダーを初期化
 		$loader = new Clay_Plugin();
@@ -17,7 +17,7 @@ class Base_System_CustomerSendMail extends Clay_Plugin_Module{
 			
 			// データが取得できた場合のみ処理を実行
 			if($template->template_code == $template_code){
-				$mail = new SendMail();
+				$mail = new Clay_Sendmail();
 				$mail->setFrom($params->get("sendaddress", "info@clay-system.jp"), $params->get("sender", ""));
 				$mail->setTo($_POST[$params->get("email", "email")]);
 				$mail->setSubject($template->subject);
@@ -67,7 +67,7 @@ class Base_System_CustomerSendMail extends Clay_Plugin_Module{
 			$result = $select->execute();
 
 			foreach($result as $index => $group){
-				$mail = new SendMail();
+				$mail = new Clay_Sendmail();
 				$mail->setFrom($_SERVER["CONFIGURE"]["site_email"], $_SERVER["CONFIGURE"]["site_name"]);
 				$mail->setTo($group["email"], $group["manager_group_name"]);
 				$mail->setSubject($subject);
