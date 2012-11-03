@@ -1,5 +1,5 @@
 <?php
-class Game_PlayerProgressionTable extends DatabaseTable{
+class Game_PlayerProgressionTable extends Clay_Plugin_Table{
 	function __construct(){
 		$this->db = DBFactory::getConnection("game");
 		parent::__construct("game_player_progression", "game");

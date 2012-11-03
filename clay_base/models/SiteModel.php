@@ -46,7 +46,7 @@ class Base_SiteModel extends Clay_Plugin_Model{
 	 * アクセス元ホストで検索する。
 	 */
 	public function findByHostName(){
-		$select = new DatabaseSelect($this->access);
+		$select = new Clay_Query_Select($this->access);
 		$select->addColumn($this->access->_W);
 		$select->addWhere("? LIKE CONCAT('%', ".$this->access->domain_name.")", array($_SERVER["SERVER_NAME"]));
 		$select->addOrder("LENGTH(".$this->access->domain_name.")", true);

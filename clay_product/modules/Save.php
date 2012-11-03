@@ -41,7 +41,7 @@ class Product_Save extends Clay_Plugin_Module{
 				// カテゴリの要素をInsert Ignoreで登録する。
 				if(empty($_POST["category"])) $_POST["category"] = array();
 				foreach($_POST["category"] as $category_id){
-					$insert = new DatabaseInsertIgnore($loader->LoadModel("ProductCategoriesTable"));
+					$insert = new Clay_Query_InsertIgnore($loader->LoadModel("ProductCategoriesTable"));
 					$insert->execute(array(
 						"product_id" => $product->product_id, 
 						"category_id" => $category_id, 
@@ -61,7 +61,7 @@ class Product_Save extends Clay_Plugin_Module{
 				// カテゴリの要素をInsert Ignoreで登録する。
 				if(empty($_POST["flag"])) $_POST["flag"] = array();
 				foreach($_POST["flag"] as $flag_id){
-					$insert = new DatabaseInsertIgnore($loader->LoadModel("ProductFlagsTable"));
+					$insert = new Clay_Query_InsertIgnore($loader->LoadModel("ProductFlagsTable"));
 					$insert->execute(array(
 						"product_id" => $product->product_id, 
 						"flag_id" => $flag_id, 
@@ -87,7 +87,7 @@ class Product_Save extends Clay_Plugin_Module{
 							$image->save();
 						}else{
 							// データが存在しない場合は登録する。
-							$insert = new DatabaseInsertIgnore($loader->LoadModel("ProductImagesTable"));
+							$insert = new Clay_Query_InsertIgnore($loader->LoadModel("ProductImagesTable"));
 							$insert->execute(array(
 								"product_id" => $product->product_id, 
 								"image_type" => $image_type, 
@@ -127,7 +127,7 @@ class Product_Save extends Clay_Plugin_Module{
 			if(isset($option["stock"])){
 				// データを登録
 				$loader = new Clay_Plugin("Product");
-				$insert = new DatabaseInsert($loader->LoadModel("ProductOptionsTable"));
+				$insert = new Clay_Query_Insert($loader->LoadModel("ProductOptionsTable"));
 				$data = array(
 					"product_id" => $product->product_id, 
 					"stock" => $option["stock"], 

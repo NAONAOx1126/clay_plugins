@@ -46,7 +46,7 @@ class Base_Forms_MasterMaintenance extends Clay_Plugin_Module{
 				
 				try{
 					// DBのデータを削除
-					$delete = new DatabaseDelete($table);
+					$delete = new Clay_Query_Delete($table);
 					foreach($_POST as $key => $value){
 						if(in_array($key, $table->getColumns())){
 							$delete->addWhere($table->$key." = ?", array($value));
@@ -82,7 +82,7 @@ class Base_Forms_MasterMaintenance extends Clay_Plugin_Module{
 					foreach($requires as $key){
 						if(empty($data[$key])){
 							// データを取得
-							$select = new DatabaseSelect($table);
+							$select = new Clay_Query_Select($table);
 							$result = $select->addColumn($table->_W)->execute();
 							$_SERVER["ATTRIBUTES"]["data"] = $result;
 							// 全ての入力を無効にする。
@@ -98,10 +98,10 @@ class Base_Forms_MasterMaintenance extends Clay_Plugin_Module{
 				
 				try{
 					// DBの内容をクリア
-					$truncate = new DatabaseTruncate($table);
+					$truncate = new Clay_Query_Truncate($table);
 					$truncate->execute();
 					// DBにデータを登録
-					$insert = new DatabaseInsert($table);
+					$insert = new Clay_Query_Insert($table);
 					foreach($_POST["data"] as $data){
 						if(empty($data["create_time"])){
 							$data["create_time"] = $data["update_time"] = date("Y-m-d H:i:s");
@@ -118,7 +118,7 @@ class Base_Forms_MasterMaintenance extends Clay_Plugin_Module{
 			}
 			
 			// データを取得
-			$select = new DatabaseSelect($table);
+			$select = new Clay_Query_Select($table);
 			$result = $select->addColumn($table->_W)->execute();
 			$_SERVER["ATTRIBUTES"]["data"] = $result;
 			

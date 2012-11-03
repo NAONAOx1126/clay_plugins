@@ -7,7 +7,7 @@ LoadTable("SellersTable", "Shopping");
 
 // メーカーのリストを取得
 $sellers = new SellersTable();
-$select = new DatabaseSelect($sellers);
+$select = new Clay_Query_Select($sellers);
 $select->addColumn($sellers->_W);
 $select->addWhere($sellers->seller_name." LIKE ?", array("%".trim($_POST["name"])."%"));
 $result = $select->execute();

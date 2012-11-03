@@ -1,5 +1,5 @@
 <?php
-class Product_OptionTypesTable extends DatabaseTable{
+class Product_OptionTypesTable extends Clay_Plugin_Table{
 	function __construct(){
 		$this->db = DBFactory::getConnection("product");
 		parent::__construct("shop_option_types", "product");

@@ -10,7 +10,7 @@ class Shopping_Selections_Deliveries extends Clay_Plugin_Module{
 			$payments = new PaymentsTable();
 
 			// データベースSELECTモデルの読み込み
-			$select = new DatabaseSelect($payments);
+			$select = new Clay_Query_Select($payments);
 			$select->addColumn($payments->_W);
 			$result = $select->execute();
 		

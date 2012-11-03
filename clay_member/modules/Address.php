@@ -22,7 +22,7 @@ class Members_Address extends Clay_Plugin_Module{
 			$prefs = new PrefsTable();
 
 			// クエリの構築
-			$select = new DatabaseSelect($zips);
+			$select = new Clay_Query_Select($zips);
 			$select->addColumn($prefs->id)->addColumn($zips->city)->addColumn($zips->town)->addColumn($zips->flg3);
 			$select->joinInner($prefs, array($zips->state." = ".$prefs->name));
 			$select->addWhere($zips->zipcode." = ?", array($_POST[$zip1].$_POST[$zip2]));

@@ -1,5 +1,5 @@
 <?php
-class Base_MobileDomainsTable extends DatabaseTable{
+class Base_MobileDomainsTable extends Clay_Plugin_Table{
 	function __construct(){
 		$this->db = DBFactory::getConnection("base");
 		parent::__construct("base_mobile_domains", "base");

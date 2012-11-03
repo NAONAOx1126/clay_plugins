@@ -182,7 +182,7 @@ class Product_ProductModel extends Clay_Plugin_Model{
 		$order2->setAlias("orders_2");
 		
 		// SELECT文を作成
-		$select = new DatabaseSelect($product);
+		$select = new Clay_Query_Select($product);
 		$select->addColumn($product->_W)->addColumn("COUNT(".$product->product_id.")");
 		$select->join($orderDetail1, array($orderDetail1->product_code." = ".$product->product_code));
 		$select->join($orderPackage1, array($orderPackage1->order_package_id." = ".$orderDetail1->order_package_id));

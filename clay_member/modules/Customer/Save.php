@@ -54,7 +54,7 @@ class Member_Customer_Save extends Clay_Plugin_Module{
 					if(is_array($_POST["option"])){
 						foreach($_POST["option"] as $name => $value){
 							// データを登録
-							$insert = new DatabaseInsert($loader->LoadModel("CustomerOptionsTable"));
+							$insert = new Clay_Query_Insert($loader->LoadModel("CustomerOptionsTable"));
 							$data = array(
 								"customer_id" => $customer->customer_id, 
 								"option_name" => $name, 

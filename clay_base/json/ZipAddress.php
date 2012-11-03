@@ -14,7 +14,7 @@
  */
 $loader = new Clay_Plugin();
 $zip = $loader->loadTable("ZipsTable");
-$select = new DatabaseSelect($zip);
+$select = new Clay_Query_Select($zip);
 $select->addColumn($zip->_W)->addWhere("zipcode = ?", array($_POST["zip"]));
 $result = $select->execute();
 ?>

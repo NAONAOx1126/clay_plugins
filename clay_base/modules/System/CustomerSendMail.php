@@ -59,7 +59,7 @@ class Base_System_CustomerSendMail extends Clay_Plugin_Module{
 			$managerGroups = new ManagerGroupsTable();
 	
 			// 管理グループのリストを取得する処理
-			$select = new DatabaseSelect($siteManagerGroups);
+			$select = new Clay_Query_Select($siteManagerGroups);
 			$select->addColumn($managerGroups->_W);
 			$select->joinInner($managerGroups, array($siteManagerGroups->manager_group_id." = ".$managerGroups->manager_group_id));
 			$select->addOrder($managerGroups->manager_group_id);

@@ -20,35 +20,35 @@ class Order_Clear extends Clay_Plugin_Module{
 		
 		// 受注データをクリアする。
 		$orders = $loader->loadTable("OrdersTable");
-		$truncate = new DatabaseTruncate($orders);
+		$truncate = new Clay_Query_Truncate($orders);
 		$truncate->execute();
 		// 受注セットデータをクリアする。
 		$orderPackages = $loader->loadTable("OrderPackagesTable");
-		$truncate = new DatabaseTruncate($orderPackages);
+		$truncate = new Clay_Query_Truncate($orderPackages);
 		$truncate->execute();
 		// 受注詳細データをクリアする。
 		$orderDetails = $loader->loadTable("OrderDetailsTable");
-		$truncate = new DatabaseTruncate($orderDetails);
+		$truncate = new Clay_Query_Truncate($orderDetails);
 		$truncate->execute();
 		// 受注決済データをクリアする。
 		$orderPayments = $loader->loadTable("OrderPaymentsTable");
-		$truncate = new DatabaseTruncate($orderPayments);
+		$truncate = new Clay_Query_Truncate($orderPayments);
 		$truncate->execute();
 		// 受注ステータスデータをクリアする。
 		$orderStatuses = $loader->loadTable("OrderStatusesTable");
-		$truncate = new DatabaseTruncate($orderStatuses);
+		$truncate = new Clay_Query_Truncate($orderStatuses);
 		$truncate->execute();
 		// 受注データをクリアする。
 		$orders = $loader->loadTable("RepeaterOrdersTable");
-		$truncate = new DatabaseTruncate($orders);
+		$truncate = new Clay_Query_Truncate($orders);
 		$truncate->execute();
 		// 受注詳細データをクリアする。
 		$orderDetails = $loader->loadTable("RepeaterOrderDetailsTable");
-		$truncate = new DatabaseTruncate($orderDetails);
+		$truncate = new Clay_Query_Truncate($orderDetails);
 		$truncate->execute();
 		// 受注決済データをクリアする。
 		$orderPayments = $loader->loadTable("RepeaterOrderPaymentsTable");
-		$truncate = new DatabaseTruncate($orderPayments);
+		$truncate = new Clay_Query_Truncate($orderPayments);
 		$truncate->execute();
 	}
 }

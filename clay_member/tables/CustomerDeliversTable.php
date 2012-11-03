@@ -1,5 +1,5 @@
 <?php
-class Member_CustomerDeliversTable extends DatabaseTable{
+class Member_CustomerDeliversTable extends Clay_Plugin_Table{
 	function __construct(){
 		$this->db = DBFactory::getConnection("member");
 		parent::__construct("member_customer_delivers", "member");

@@ -20,7 +20,7 @@ class Order_Range extends Clay_Plugin_Module{
 		
 		// 受注データをクリアする。
 		$orders = $loader->loadTable("OrdersTable");
-		$select = new DatabaseSelect($orders);
+		$select = new Clay_Query_Select($orders);
 		$select->addColumn("MAX(".$orders->order_time.")", "order_time_max")->addColumn("MIN(".$orders->order_time.")", "order_time_min");
 		$result = $select->execute();
 		$format = $params->get("format", "Y-m-d H:i:s");

@@ -29,7 +29,7 @@ class Order_Summery_Promotion extends Clay_Plugin_Module{
 		$summery = array();
 		
 		// 当月のデータを取得する。
-		$select = new DatabaseSelect($promoDetail);
+		$select = new Clay_Query_Select($promoDetail);
 		$select->addColumn($promoDetail->product_code, "promotion_product_code");
 		$select->addColumn($promoDetail->parent_name, "promotion_parent_name")->addColumn($promoDetail->product_name, "promotion_product_name");
 		$select->joinInner($promotion, array($promoDetail->product_code." = ".$promotion->promotion_product_code));
