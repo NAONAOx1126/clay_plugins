@@ -28,7 +28,7 @@ class Members_CheckSerial extends FrameworkModule{
 			
 			// シリアルが登録されていない場合にはエラー
 			if($serial == "6DIt9VAquSDE5" || empty($option->customer_id)){
-				throw new InvalidException(array("シリアルが正しくありません。"));
+				throw new Clay_Exception_Invalid(array("シリアルが正しくありません。"));
 			}else{
 				// カスタマモデルを使用して顧客情報を取得
 				$customer = new CustomerModel();

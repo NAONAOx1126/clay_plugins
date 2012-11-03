@@ -41,7 +41,7 @@ class Member_Login_Mobile extends FrameworkModule{
 				exit;
 			}
 			// guidが設定されていても取得できない場合は、エラーとする。
-			throw new InvalidException(array("ログインに失敗しました。"));
+			throw new Clay_Exception_Invalid(array("ログインに失敗しました。"));
 		}
 		
 		// モバイルのGUIDをセッションに保存
@@ -94,7 +94,7 @@ class Member_Login_Mobile extends FrameworkModule{
 	
 		if(empty($_SESSION[CUSTOMER_SESSION_KEY])){
 			if($params->get("error")){
-				throw new InvalidException(array("ログインに失敗しました"));
+				throw new Clay_Exception_Invalid(array("ログインに失敗しました"));
 			}elseif($params->get("redirect")){
 				throw new RedirectException();
 			}

@@ -88,7 +88,7 @@ class Base_Forms_MasterMaintenance extends FrameworkModule{
 							// 全ての入力を無効にする。
 							$_SESSION["INPUT_DATA"][TEMPLATE_DIRECTORY] = array();
 							$_POST = array();
-							throw new InvalidException(array("必須入力の項目が未入力です。"));
+							throw new Clay_Exception_Invalid(array("必須入力の項目が未入力です。"));
 						}
 					}
 				}

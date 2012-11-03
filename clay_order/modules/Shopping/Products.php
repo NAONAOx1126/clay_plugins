@@ -18,7 +18,7 @@ class Shopping_Shopping_Purchase extends FrameworkModule{
 			// エラーがあった場合、入力エラー例外をスロー
 			if(!empty($errors)){
 				unset($_POST["regist"]);
-				throw new InvalidException($errors);
+				throw new Clay_Exception_Invalid($errors);
 			}
 		
 			// トランザクションの開始
@@ -89,7 +89,7 @@ class Shopping_Shopping_Purchase extends FrameworkModule{
 						$_POST["order_id"] = $order["order_id"];
 					}
 				}else{
-					throw new InvalidException(array("カートの中身がありません"));
+					throw new Clay_Exception_Invalid(array("カートの中身がありません"));
 				}
 			}catch(Exception $ex){
 				unset($_POST["regist"]);
@@ -126,7 +126,7 @@ class Shopping_Shopping_Purchase extends FrameworkModule{
 					// 注文データを結果として返す
 					$_SERVER["ATTRIBUTES"]["order"] = $order;
 				}else{
-					throw new InvalidException(array("カートの中身がありません"));
+					throw new Clay_Exception_Invalid(array("カートの中身がありません"));
 				}
 			}catch(Exception $ex){
 				DBFactory::rollback("order");

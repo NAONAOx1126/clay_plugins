@@ -35,7 +35,7 @@ class Members_CodeAutoLogin extends FrameworkModule{
 	
 		if(empty($_SESSION[CUSTOMER_SESSION_KEY])){
 			if($params->get("error")){
-				throw new InvalidException(array("ログインに失敗しました"));
+				throw new Clay_Exception_Invalid(array("ログインに失敗しました"));
 			}elseif($params->get("redirect")){
 				throw new RedirectException();
 			}

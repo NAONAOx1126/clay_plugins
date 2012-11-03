@@ -15,7 +15,7 @@ class Shopping_Cart_Show extends FrameworkModule{
 		
 		// カートが空の場合は例外をスローする。
 		if(empty($_SESSION[$cartSessionKey])){
-			throw new InvalidException(array(SHOPPING_MESSAGE_EMPTY_CART));
+			throw new Clay_Exception_Invalid(array(SHOPPING_MESSAGE_EMPTY_CART));
 		}
 
 		// customerの配列が空の場合は、same_orderのフラグをたてる。

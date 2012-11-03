@@ -25,12 +25,12 @@ class Base_Administrator_Login extends FrameworkModule{
 			
 			// ログインIDが一致しない場合
 			if($site->site_code != $_POST["login_id"]){
-				throw new InvalidException(array("ログイン情報が正しくありません。"));
+				throw new Clay_Exception_Invalid(array("ログイン情報が正しくありません。"));
 			}
 			
 			// 保存されたパスワードと一致するか調べる。
 			if($site->site_password != $_POST["password"]){
-				throw new InvalidException(array("ログイン情報が正しくありません。"));
+				throw new Clay_Exception_Invalid(array("ログイン情報が正しくありません。"));
 			}
 			
 			// ログインに成功した場合には管理者情報をセッションに格納する。

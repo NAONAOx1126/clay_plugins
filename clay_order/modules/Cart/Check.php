@@ -40,7 +40,7 @@ class Shopping_Cart_Check extends FrameworkModule{
 				}
 				if($existSameProduct){
 					unset($_POST[$mode]);
-					throw new InvalidException(array(SHOPPING_MESSAGE_ALREADY_CART));
+					throw new Clay_Exception_Invalid(array(SHOPPING_MESSAGE_ALREADY_CART));
 				}
 			}
 		}

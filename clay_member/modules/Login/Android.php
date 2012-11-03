@@ -42,7 +42,7 @@ class Member_Login_Android extends FrameworkModule{
 		$conditions = array();
 		foreach($checkers as $checker){
 			if(empty($android[$checker])){
-				throw new InvalidException(array($checker."が取得できませんでした。"));
+				throw new Clay_Exception_Invalid(array($checker."が取得できませんでした。"));
 			}else{
 				$conditions[$checker] = $android[$checker];
 			}
@@ -78,7 +78,7 @@ class Member_Login_Android extends FrameworkModule{
 			$_SESSION[CUSTOMER_SESSION_KEY] = $customer;
 			$_SERVER["ATTRIBUTES"][$params->get("result", "customer")] = $_SESSION[CUSTOMER_SESSION_KEY];
 		}else{
-			throw new InvalidException(array("ログインに失敗しました"));
+			throw new Clay_Exception_Invalid(array("ログインに失敗しました"));
 		}
 	}
 }

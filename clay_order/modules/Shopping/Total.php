@@ -49,7 +49,7 @@ class Shopping_Shopping_Total extends FrameworkModule{
 			if($_SESSION[CUSTOMER_SESSION_KEY]->total <= $_SESSION[CUSTOMER_SESSION_KEY]->point){
 				$_POST["use_point"] = $_SESSION[CUSTOMER_SESSION_KEY]->total;
 			}else{
-				throw new InvalidException(array("購入に必要なポイントが不足しています。"));
+				throw new Clay_Exception_Invalid(array("購入に必要なポイントが不足しています。"));
 			}
 		}
 		

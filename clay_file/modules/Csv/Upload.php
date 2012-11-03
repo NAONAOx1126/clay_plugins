@@ -90,7 +90,7 @@ class File_Csv_Upload extends FrameworkModule{
 						}
 					}
 				}else{
-					throw new InvalidException(array($_FILES[$params->get("key")]["error"]."アップロードに失敗しました。"));
+					throw new Clay_Exception_Invalid(array($_FILES[$params->get("key")]["error"]."アップロードに失敗しました。"));
 				}
 			}
 		}

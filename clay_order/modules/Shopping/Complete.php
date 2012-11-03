@@ -49,7 +49,7 @@ class Shopping_Shopping_Complete extends FrameworkModule{
 									$productOption->stock -= $newDetail->quantity;
 									$productOption->save();
 								}else{
-									throw new InvalidException(array("購入商品の在庫が足りません"));
+									throw new Clay_Exception_Invalid(array("購入商品の在庫が足りません"));
 								}
 							}
 						}
@@ -64,7 +64,7 @@ class Shopping_Shopping_Complete extends FrameworkModule{
 							$pointLog = new PointLogModel();
 							$pointLog->save(- $_SESSION[CUSTOMER_SESSION_KEY]->use_point);
 						}else{
-							throw new InvalidException(array("指定された利用ポイントが所持ポイントより不足しています。"));
+							throw new Clay_Exception_Invalid(array("指定された利用ポイントが所持ポイントより不足しています。"));
 						}
 
 						// エラーが無かった場合、次のページへ
@@ -76,7 +76,7 @@ class Shopping_Shopping_Complete extends FrameworkModule{
 						// 注文データを結果として返す
 						$_SERVER["ATTRIBUTES"][$params->get("result", "order")] = $newOrder;
 					}else{
-						throw new InvalidException(array("既に注文完了しております。"));
+						throw new Clay_Exception_Invalid(array("既に注文完了しております。"));
 					}
 				}catch(Exception $ex){
 					DBFactory::rollback("order");
@@ -84,7 +84,7 @@ class Shopping_Shopping_Complete extends FrameworkModule{
 				}
 			}
 		}else{
-			throw new InvalidException(array("カートの中身がありません"));
+			throw new Clay_Exception_Invalid(array("カートの中身がありません"));
 		}		
 	}
 }

@@ -27,18 +27,18 @@ class Base_Site_Save extends FrameworkModule{
 		DBFactory::begin();
 		
 		if($site->site_code == ""){
-			throw new InvalidException(array("サイトコードは必須です"));
+			throw new Clay_Exception_Invalid(array("サイトコードは必須です"));
 		}
 
 		$site2 = $loader->loadModel("SiteModel");
 		$site2->findBySiteCode($site->site_code);
 		if($site->site_id != $site2->site_id && $site->site_code == $site2->site_code){
-			throw new InvalidException(array("サイトコードは重複できません"));
+			throw new Clay_Exception_Invalid(array("サイトコードは重複できません"));
 		}
 
 		$site2->findByDomainName($site->domain_name);
 		if($site->site_id != $site2->site_id && $site->domain_name == $site2->domain_name){
-			throw new InvalidException(array("ドメイン名は重複できません"));
+			throw new Clay_Exception_Invalid(array("ドメイン名は重複できません"));
 		}
 		
 		try{

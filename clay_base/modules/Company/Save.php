@@ -27,7 +27,7 @@ class Base_Company_Save extends FrameworkModule{
 		DBFactory::begin();
 		
 		if(empty($_POST["company_name"])){
-			throw new InvalidException(array("組織名は必須です"));
+			throw new Clay_Exception_Invalid(array("組織名は必須です"));
 		}
 		
 		try{

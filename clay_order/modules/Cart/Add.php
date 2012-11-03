@@ -39,12 +39,12 @@ class Shopping_Cart_Add extends FrameworkModule{
 				}else{
 					// 在庫が０の場合はエラー画面に遷移する。
 					unset($_POST[$mode]);
-					throw new InvalidException(array("該当の商品は在庫がありません。"));
+					throw new Clay_Exception_Invalid(array("該当の商品は在庫がありません。"));
 				}
 			}else{
 				// 販売中の商品情報が取得できなかった場合はエラー画面に遷移する。
 				unset($_POST[$mode]);
-				throw new InvalidException(array("該当の商品は存在しません。"));
+				throw new Clay_Exception_Invalid(array("該当の商品は存在しません。"));
 			}
 		}
 	}

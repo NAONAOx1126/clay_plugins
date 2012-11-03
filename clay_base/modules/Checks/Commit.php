@@ -17,7 +17,7 @@ class Base_Checks_Commit extends FrameworkModule{
 	function execute($params){
 		if(!empty($_SERVER["ERRORS"])){
 			$_SERVER["INPUT_DATA"] = $_POST;
-			throw new InvalidException($_SERVER["ERRORS"]);
+			throw new Clay_Exception_Invalid($_SERVER["ERRORS"]);
 		}
 	}
 }

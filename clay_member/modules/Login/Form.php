@@ -58,7 +58,7 @@ class Member_Login_Form extends FrameworkModule{
 				// パスワードチェックする。　
 				if($customer->password != $_POST["password"]){
 					if($params->get("error")){
-						throw new InvalidException(array("ログインに失敗しました"));
+						throw new Clay_Exception_Invalid(array("ログインに失敗しました"));
 					}elseif($params->get("redirect")){
 						throw new RedirectException();
 					}

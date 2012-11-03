@@ -39,7 +39,7 @@ class Members_Twitter_AutoLogin extends FrameworkModule{
 		
 		if(empty($_SESSION[CUSTOMER_SESSION_KEY])){
 			if($params->check("error")){
-				throw new InvalidException(array("ログインに失敗しました"));
+				throw new Clay_Exception_Invalid(array("ログインに失敗しました"));
 			}
 		}
 

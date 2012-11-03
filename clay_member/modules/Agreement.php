@@ -8,7 +8,7 @@ class Member_Agreement extends FrameworkModule{
 			$_SESSION["SITE_AGREEMENT"] = "1";
 		}
 		if($_SESSION["SITE_AGREEMENT"] != "1"){
-			throw new InvalidException(array("このページにアクセスするためには同意が必要です。"));
+			throw new Clay_Exception_Invalid(array("このページにアクセスするためには同意が必要です。"));
 		}
 	}
 }

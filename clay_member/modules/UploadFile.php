@@ -23,15 +23,15 @@ class Members_UploadFile extends FrameworkModule{
 						}
 					}
 				}else{
-					throw new InvalidException(array("アップロードするファイルは".number_format($params->get("max"))."バイト以下にしてください。"));
+					throw new Clay_Exception_Invalid(array("アップロードするファイルは".number_format($params->get("max"))."バイト以下にしてください。"));
 				}
 			}else{
 				if($file["error"] != UPLOAD_ERR_NO_FILE){
-					throw new InvalidException(array("アップロードファイルが正しくありません。"));
+					throw new Clay_Exception_Invalid(array("アップロードファイルが正しくありません。"));
 				}
 			}
 		}else{
-			throw new InvalidException(array("アップロードファイルが正しくありません。"));
+			throw new Clay_Exception_Invalid(array("アップロードファイルが正しくありません。"));
 		}
 		if(!empty($_POST["upload"]) && $params->check("shift")){
 			throw new ShiftException();

@@ -42,7 +42,7 @@ class Base_Pages_MobileCode extends FrameworkModule{
 					exit;
 				}
 				// guidが設定されていても取得できない場合は、エラーとする。
-				throw new InvalidException(array("個体番号の取得に失敗しました。"));
+				throw new Clay_Exception_Invalid(array("個体番号の取得に失敗しました。"));
 			}
 			
 			// 個体番号を取得できた場合は、パラメータとして取得

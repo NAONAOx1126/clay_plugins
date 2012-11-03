@@ -12,7 +12,7 @@ class Members_Twitter_FollowTo extends FrameworkModule{
 			$http_info = $twitter->http_info;
 			if ($http_info["http_code"] != "200"){
 				if($params->check("error")){
-					throw new InvalidException(array("対象のTwitterアカウントが無いか、既にフォローしています。"));
+					throw new Clay_Exception_Invalid(array("対象のTwitterアカウントが無いか、既にフォローしています。"));
 				}
 			}
 		}

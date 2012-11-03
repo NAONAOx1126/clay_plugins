@@ -26,22 +26,22 @@ class Member_Checks_UniqueEmail extends FrameworkModule{
 		if(!empty($_POST["email"])){
 			$customer->findByEmail($_POST["email"]);
 			if($customer->customer_id > 0 && $_POST["customer_id"] != $customer->customer_id){
-				throw new InvalidException(array("このメールアドレスは既に登録されております。"));
+				throw new Clay_Exception_Invalid(array("このメールアドレスは既に登録されております。"));
 			}else{
 				$customer->findByEmailMobile($_POST["email"]);
 				if($customer->customer_id > 0 && $_POST["customer_id"] != $customer->customer_id){
-					throw new InvalidException(array("このメールアドレスは既に登録されております。"));
+					throw new Clay_Exception_Invalid(array("このメールアドレスは既に登録されております。"));
 				}
 			}
 		}
 		if(!empty($_POST["email_mobile"])){
 			$customer->findByEmail($_POST["email_mobile"]);
 			if($customer->customer_id > 0 && $_POST["customer_id"] != $customer->customer_id){
-				throw new InvalidException(array("このメールアドレスは既に登録されております。"));
+				throw new Clay_Exception_Invalid(array("このメールアドレスは既に登録されております。"));
 			}else{
 				$customer->findByEmailMobile($_POST["email_mobile"]);
 				if($customer->customer_id > 0 && $_POST["customer_id"] != $customer->customer_id){
-					throw new InvalidException(array("このメールアドレスは既に登録されております。"));
+					throw new Clay_Exception_Invalid(array("このメールアドレスは既に登録されております。"));
 				}
 			}
 		}

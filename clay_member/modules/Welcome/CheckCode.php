@@ -18,7 +18,7 @@ class Member_Welcome_CheckCode extends FrameworkModule{
 		
 		// 入力したコードと取得したコードが一致しない場合は例外発行
 		if($welcomeCode->welcome_code != $_POST["welcome_code"]){
-			throw new InvalidException(array("コードが正しくありません。"));
+			throw new Clay_Exception_Invalid(array("コードが正しくありません。"));
 		}
 	}
 }
