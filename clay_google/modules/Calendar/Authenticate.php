@@ -13,7 +13,7 @@ class Google_Calendar_Authenticate extends Clay_Plugin_Module{
 		
 		// アクセストークンが取得できなかった場合は認証URLにリダイレクト
 		if (!isset($_SESSION[GOOGLE_OAUTH_TOKEN_KEY]) && !isset($_GET["token"])) {
-			$url = Zend_Gdata_AuthSub::getAuthSubTokenUri("http://".$_SERVER['HTTP_HOST'].$_SERVER['FRAMEWORK_URL_BASE'].$_SERVER["TEMPLATE_NAME"], "http://www.google.com/calendar/feeds/", false, true);
+			$url = Zend_Gdata_AuthSub::getAuthSubTokenUri("http://".$_SERVER['HTTP_HOST'].CLAY_SUBDIR.$_SERVER["TEMPLATE_NAME"], "http://www.google.com/calendar/feeds/", false, true);
 			header("HTTP/1.0 307 Temporary redirect");
 			header("Location: ".$url);
 			exit;
@@ -22,7 +22,7 @@ class Google_Calendar_Authenticate extends Clay_Plugin_Module{
 		// 認証を行う。
 		if (!isset($_SESSION[GOOGLE_OAUTH_TOKEN_KEY]) && isset($_GET["token"])) {
 			$_SESSION[GOOGLE_OAUTH_TOKEN_KEY] = Zend_Gdata_AuthSub::getAuthSubSessionToken($_GET["token"]);
-			header("Location: http://".$_SERVER['HTTP_HOST'].$_SERVER['FRAMEWORK_URL_BASE'].$_SERVER["TEMPLATE_NAME"]);
+			header("Location: http://".$_SERVER['HTTP_HOST'].CLAY_SUBDIR.$_SERVER["TEMPLATE_NAME"]);
 		}
 		
 		// クライアントにアクセストークンを追加

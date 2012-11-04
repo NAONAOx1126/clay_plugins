@@ -26,13 +26,13 @@ class Base_System_Update extends Clay_Plugin_Module{
 				break;
 			case "plugin":
 			case "plugins":
-				$target = FRAMEWORK_PLUGIN_HOME;
+				$target = CLAY_PLUGINS_ROOT;
 				break;
 			case "site":
 			case "sites":
 			case "template":
 			case "templates":
-				$target = FRAMEWORK_SITE_HOME;
+				$target = $_SERVER["CONFIGURE"]->site_home;
 				break;
 		}
 		

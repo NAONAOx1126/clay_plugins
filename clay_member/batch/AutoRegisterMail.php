@@ -192,7 +192,6 @@ class Member_AutoRegisterMail extends Clay_Plugin_Module{
 				// メール本文用にテンプレートを使う
 				$TEMPLATE_ENGINE = $_SERVER["CONFIGURE"]->TEMPLATE_ENGINE;
 				$templateEngine = new $TEMPLATE_ENGINE();
-				$templateEngine->assign("u", FRAMEWORK_URL_BASE);
 				$templateEngine->assign("ATTRIBUTES", array("customer" => $customer->toArray()));
 				$body = $templateEngine->fetch("string:".$mailTemplate->body);
 				$mail->addBody($body);

@@ -26,7 +26,6 @@ class Base_System_CustomerClay_Sendmail extends Clay_Plugin_Module{
 				$TEMPLATE_ENGINE = $_SERVER["CONFIGURE"]->TEMPLATE_ENGINE;
 				$templateEngine = new $TEMPLATE_ENGINE();
 				
-				$templateEngine->assign("u", FRAMEWORK_URL_BASE);
 				foreach($_SERVER as $name =>$value){
 					$templateEngine->assign($name, $value);
 				}

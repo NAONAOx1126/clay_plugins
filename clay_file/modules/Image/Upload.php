@@ -32,17 +32,17 @@ class File_Image_Upload extends Clay_Plugin_Module{
 						if($_FILES[$key1]["error"][$key2] == 0){
 							// 保存先のディレクトリを構築
 							$saveDir = "/".$params->get("base", "upload")."/".sha1("site".$_SERVER["CONFIGURE"]->site_id)."/".$key1."/".$key2."/";
-							if(!file_exists(FRAMEWORK_SITE_HOME.$saveDir)){
-								mkdir(FRAMEWORK_SITE_HOME.$saveDir, 0777, true);
+							if(!file_exists($_SERVER["CONFIGURE"]->site_home.$saveDir)){
+								mkdir($_SERVER["CONFIGURE"]->site_home.$saveDir, 0777, true);
 							}
 							// 保存するファイル名を構築
 							$info = pathinfo($_FILES[$key1]["name"][$key2]);
 							$saveFile = sha1(uniqid($_FILES[$key1]["name"][$key2])).(!empty($info["extension"])?".".$info["extension"]:"");
 							// 保存するファイルを移動
-							move_uploaded_file($_FILES[$key1]["tmp_name"][$key2], FRAMEWORK_SITE_HOME.$saveDir.$saveFile);
+							move_uploaded_file($_FILES[$key1]["tmp_name"][$key2], $_SERVER["CONFIGURE"]->site_home.$saveDir.$saveFile);
 							// 登録した内容をPOSTに設定
 							$_POST[$key1."_name"][$key2] = $_FILES[$key1]["name"][$key2];
-							$_POST[$key1][$key2] = FRAMEWORK_URL_BASE."/contents/".$_SERVER["SERVER_NAME"].$saveDir.$saveFile;
+							$_POST[$key1][$key2] = CLAY_SUBDIR."/contents/".$_SERVER["SERVER_NAME"].$saveDir.$saveFile;
 						}
 					}
 				}else{
@@ -50,17 +50,17 @@ class File_Image_Upload extends Clay_Plugin_Module{
 						Clay_Logger::writeDebug(var_export($_FILES, true));
 						// 保存先のディレクトリを構築
 						$saveDir = "/".$params->get("base", "upload")."/".sha1("site".$_SERVER["CONFIGURE"]->site_id)."/".$key1."/";
-						if(!file_exists(FRAMEWORK_SITE_HOME.$saveDir)){
-							mkdir(FRAMEWORK_SITE_HOME.$saveDir, 0777, true);
+						if(!file_exists(CLAY_ROOT."/contents/".$_SERVER["SERVER_NAME"].$saveDir)){
+							mkdir(CLAY_ROOT."/contents/".$_SERVER["SERVER_NAME"].$saveDir, 0777, true);
 						}
 						// 保存するファイル名を構築
 						$info = pathinfo($_FILES[$key1]["name"]);
 						$saveFile = sha1(uniqid($_FILES[$key1]["name"])).(!empty($info["extension"])?".".$info["extension"]:"");
 						// 保存するファイルを移動
-						move_uploaded_file($_FILES[$key1]["tmp_name"], FRAMEWORK_SITE_HOME.$saveDir.$saveFile);
+						move_uploaded_file($_FILES[$key1]["tmp_name"], CLAY_ROOT."/contents/".$_SERVER["SERVER_NAME"].$saveDir.$saveFile);
 						// 登録した内容をPOSTに設定
 						$_POST[$key1."_name"] = $_FILES[$key1]["name"];
-						$_POST[$key1] = FRAMEWORK_URL_BASE."/contents/".$_SERVER["SERVER_NAME"].$saveDir.$saveFile;
+						$_POST[$key1] = CLAY_SUBDIR."/contents/".$_SERVER["SERVER_NAME"].$saveDir.$saveFile;
 					}
 				}
 			}

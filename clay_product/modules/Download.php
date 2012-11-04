@@ -25,8 +25,8 @@ class Product_Download extends Clay_Plugin_Module{
 			$key = $params->get("key");
 			$saveDir = "/".$params->get("base", "upload")."/".sha1("site".$_SERVER["CONFIGURE"]->site_id)."/".$key."/";
 			$saveFile = $_SERVER["ATTRIBUTES"]["product"]->image($key)->image;
-			$saveFile = str_replace(FRAMEWORK_URL_BASE."/contents/".$_SERVER["SERVER_NAME"].$saveDir, "", $saveFile);
-			$uri = FRAMEWORK_SITE_HOME.$saveDir.$saveFile;
+			$saveFile = str_replace(CLAY_SUBDIR."/contents/".$_SERVER["SERVER_NAME"].$saveDir, "", $saveFile);
+			$uri = CLAY_URL.$saveDir.$saveFile;
 			
 			// headerを指定
 			$size = filesize($uri);

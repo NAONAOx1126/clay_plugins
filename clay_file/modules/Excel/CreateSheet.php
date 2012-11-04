@@ -22,7 +22,6 @@ class File_Excel_CreateSheet extends Clay_Plugin_Module{
 		ini_set("max_execution_time", 0);
 		
 		if(!isset($_SERVER["PHP_EXCEL"])){
-			require(FRAMEWORK_CLASS_LIBRARY_HOME."/PHPExcel.php");
 			$_SERVER["PHP_EXCEL"] = new PHPExcel();
 			$_SERVER["PHP_EXCEL"]->setActiveSheetIndex(0);
 		}else{
