@@ -25,7 +25,7 @@ class Product_Category_Type_Delete extends Clay_Plugin_Module{
 			
 			try{
 				// 渡されたカテゴリIDのインスタンスを生成
-				$category = $loader->loadModel("CategoryTypeModel");
+				$categoryType = $loader->loadModel("CategoryTypeModel");
 				
 				// カテゴリIDを配列に変換
 				if(!is_array($_POST["category_type_id"])){
@@ -35,8 +35,8 @@ class Product_Category_Type_Delete extends Clay_Plugin_Module{
 				// 指定されたカテゴリIDのデータを全削除
 				foreach($_POST["category_type_id"] as $category_type_id){
 					// カテゴリを削除
-					$category->findByPrimaryKey($category_type_id);
-					$category->delete();
+					$categoryType->findByPrimaryKey($category_type_id);
+					$categoryType->delete();
 				}
 				
 				// エラーが無かった場合、処理をコミットする。

@@ -67,9 +67,17 @@ class Product_CategoryModel extends Clay_Plugin_Model{
 	}
 	
 	function type(){
+		$loader = new Clay_Plugin("Product");
 		$type = $loader->loadModel("CateogryTypeModel");
 		$type->findByPrimaryKey($this->category_type_id);
 		return $type;
+	}
+
+	function group(){
+		$loader = new Clay_Plugin("Product");
+		$group = $loader->loadModel("CategoryGroupModel");
+		$group->findByPrimaryKey($this->category_group_id);
+		return $group;
 	}
 }
 ?>
