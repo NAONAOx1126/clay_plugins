@@ -33,7 +33,7 @@ class Product_Category_List extends Clay_Plugin_Module{
 		
 		// カテゴリデータを検索する。
 		$category = $loader->LoadModel("CategoryModel");
-		if($params->get("type", $_POST["category_type"]) > 0){
+		if($params->get("type", $_POST["category_type_id"]) > 0){
 			$categories = $category->findAllByType($params->get("type", $_POST["category_type_id"]), $sortOrder, $sortReverse);
 		}else{
 			$categories = $category->findAllBy(array(), $sortOrder, $sortReverse);

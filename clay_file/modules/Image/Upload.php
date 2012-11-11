@@ -64,6 +64,10 @@ class File_Image_Upload extends Clay_Plugin_Module{
 					}
 				}
 			}
+			if($params->check("reload")){
+				header("Location: ".CLAY_SUBDIR."/".$params->get("reload"));
+				exit;
+			}
 		}
 	}
 }
