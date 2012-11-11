@@ -6,7 +6,7 @@
  * @copyright Copyright (c) 2010, Naohisa Minagawa
  * @license http://www.apache.org/licenses/LICENSE-2.0.html Apache License, Version 2.0
  * @since PHP 5.3
- * @version   3.0.0
+ * @version   4.0.0
  */
 
 /**
@@ -25,11 +25,10 @@ class Base_Checks_Email extends Clay_Plugin_Module{
 		if(!is_array($_SERVER["ERRORS"])){
 			$_SERVER["ERRORS"] = array();
 		}
-		if(!empty($_SERVER["POST"][$params->get("key")])){
-			if(preg_match("/^[a-zA-Z0-9!$&*.=^`|~#%'+\\/?_{}-]+@([a-zA-Z0-9_-]+\\.)+[a-zA-Z]{2,4}$/", $_SERVER["POST"][$params->get("key")]) == 0){
+		if(!empty($_POST[$params->get("key")])){
+			if(preg_match("/^[a-zA-Z0-9!$&*.=^`|~#%'+\\/?_{}-]+@([a-zA-Z0-9_-]+\\.)+[a-zA-Z]{2,4}$/", $_POST[$params->get("key")]) == 0){
 				$_SERVER["ERRORS"][$params->get("key")] = $params->get("value").$params->get("suffix", "は正しいメールアドレスではありません。");
 			}
 		}
 	}
 }
-?>

@@ -6,7 +6,7 @@
  * @copyright Copyright (c) 2010, Naohisa Minagawa
  * @license http://www.apache.org/licenses/LICENSE-2.0.html Apache License, Version 2.0
  * @since PHP 5.3
- * @version   3.0.0
+ * @version   4.0.0
  */
 
 /**
@@ -27,7 +27,7 @@ class Base_Checks_ContentValidate extends Clay_Plugin_Module{
 			}
 			
 			// サイトのコンテンツを取得
-			$url = $_SERVER["POST"][$params->get("key")];
+			$url = $_POST[$params->get("key")];
 			if(!empty($url)){
 				if(!isset($_SERVER["URL_CONTENTS"][$params->get("key")]) || empty($_SERVER["URL_CONTENTS"][$params->get("key")])){
 					ob_start();
@@ -45,4 +45,3 @@ class Base_Checks_ContentValidate extends Clay_Plugin_Module{
 		}
 	}
 }
-?>

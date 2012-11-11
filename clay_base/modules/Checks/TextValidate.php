@@ -6,7 +6,7 @@
  * @copyright Copyright (c) 2010, Naohisa Minagawa
  * @license http://www.apache.org/licenses/LICENSE-2.0.html Apache License, Version 2.0
  * @since PHP 5.3
- * @version   3.0.0
+ * @version   4.0.0
  */
 
 /**
@@ -25,7 +25,7 @@ class Base_Checks_ContentValidate extends Clay_Plugin_Module{
 			}
 			
 			// サイトのコンテンツを取得
-			$text = $_SERVER["POST"][$params->get("key")];
+			$text = $_POST[$params->get("key")];
 			if(!empty($text)){
 				// テキストに正規表現が含まれているかどうかチェック
 				if(preg_match($params->get("regex"), $text, $p) > 0){
@@ -37,4 +37,3 @@ class Base_Checks_ContentValidate extends Clay_Plugin_Module{
 		}
 	}
 }
-?>

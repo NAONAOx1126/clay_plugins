@@ -6,9 +6,9 @@
  * @copyright Copyright (c) 2010, Naohisa Minagawa
  * @license http://www.apache.org/licenses/LICENSE-2.0.html Apache License, Version 2.0
  * @since PHP 5.3
- * @version   3.0.0
+ * @version   4.0.0
  */
-
+ 
 /**
  * ### Base.Checks.Alnums
  * 半角英数かどうかのチェックを行うCheckパッケージのクラスです。
@@ -25,9 +25,8 @@ class Base_Checks_Alnums extends Clay_Plugin_Module{
 		if(!is_array($_SERVER["ERRORS"])){
 			$_SERVER["ERRORS"] = array();
 		}
-		if(!empty($_SERVER["POST"][$params->get("key")]) && !ctype_alnum($_SERVER["POST"][$params->get("key")])){
+		if(!empty($_POST[$params->get("key")]) && !ctype_alnum($_POST[$params->get("key")])){
 			$_SERVER["ERRORS"][$params->get("key")] = $params->get("value").$params->get("suffix", "は半角英数字で入力してください。");
 		}
 	}
 }
-?>

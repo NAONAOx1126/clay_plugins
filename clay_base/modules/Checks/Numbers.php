@@ -6,7 +6,7 @@
  * @copyright Copyright (c) 2010, Naohisa Minagawa
  * @license http://www.apache.org/licenses/LICENSE-2.0.html Apache License, Version 2.0
  * @since PHP 5.3
- * @version   3.0.0
+ * @version   4.0.0
  */
 
 /**
@@ -25,9 +25,8 @@ class Base_Checks_Numbers extends Clay_Plugin_Module{
 		if(!is_array($_SERVER["ERRORS"])){
 			$_SERVER["ERRORS"] = array();
 		}
-		if(!empty($_SERVER["POST"][$params->get("key")]) && !ctype_digit($_SERVER["POST"][$params->get("key")])){
+		if(!empty($_POST[$params->get("key")]) && !ctype_digit($_POST[$params->get("key")])){
 			$_SERVER["ERRORS"][$params->get("key")] = $params->get("value").$params->get("suffix", "は半角数値で入力してください。");
 		}
 	}
 }
-?>
