@@ -65,6 +65,14 @@ class File_Image_Upload extends Clay_Plugin_Module{
 				}
 			}
 			if($params->check("reload")){
+				// POSTの内容をセッションに戻す
+				unset($_POST["upload"]);
+				if(is_array($_POST)){
+					$_SESSION["INPUT_DATA"] = array(TEMPLATE_DIRECTORY => array());
+					foreach($_POST as $key => $value){
+						$_SESSION["INPUT_DATA"][TEMPLATE_DIRECTORY][$key] = $value;
+					}
+				}
 				header("Location: ".CLAY_SUBDIR."/".$params->get("reload"));
 				exit;
 			}
