@@ -8,7 +8,11 @@ class Content_ActivePageKeyModel extends Clay_Plugin_Model{
 		parent::__construct($loader->loadTable("ActivePageKeysTable"), $values);
 	}
 	
-	public function findByPrimaryKey($shop_id){
+	public function findByPrimaryKey($active_page_key_id){
+		$this->findBy(array("active_page_key_id" => $active_page_key_id));
+	}
+	
+	public function findByShop($shop_id){
 		$this->findBy(array("shop_id" => $shop_id));
 	}
 	
