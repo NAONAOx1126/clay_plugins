@@ -18,37 +18,48 @@ class Content_ActivePage_CategoryList extends Clay_Plugin_Module{
 			// データキャッシュを取得
 			if(!empty($_POST["category1"]) && !empty($_POST["category2"]) && !empty($_POST["category3"])){
 				// 商品一覧
+				$_SERVER["ATTRIBUTES"]["baseurl"] = "/".$_POST["category1"]."/".$_POST["category2"]."/".$_POST["category3"]."/";
+				$_SERVER["ATTRIBUTES"]["current_category"] = $_POST["category3"];
+				$_SERVER["ATTRIBUTES"]["category_path"] = array($_POST["category1"], $_POST["category2"]);
+				$_SERVER["ATTRIBUTES"][$params->get("result", "categories")] = array();
 			}elseif(!empty($_POST["category1"]) && !empty($_POST["category2"])){
 				// 小カテゴリ
+				$table = $loader->LoadTable("ActivePagesTable");
+				$select = new Clay_Query_Select($table);
+				$select->addColumn($table->category3, "category")->addColumn("COUNT(".$table->entry_id.")", "count");
+				$select->addWhere($table->category1." = ?", array($_POST["category1"]));
+				$select->addWhere($table->category2." = ?", array($_POST["category2"]));
+				$select->addWhere($table->category3." != ''");
+				$select->addGroupBy($table->category3)->addOrder("COUNT(".$table->entry_id.")", true);
+				$result->categories = $select->execute();
+				$_SERVER["ATTRIBUTES"]["baseurl"] = "/".$_POST["category1"]."/".$_POST["category2"]."/";
+				$_SERVER["ATTRIBUTES"]["current_category"] = $_POST["category2"];
+				$_SERVER["ATTRIBUTES"]["category_path"] = array($_POST["category1"]);
+				$_SERVER["ATTRIBUTES"][$params->get("result", "categories")] = $result->categories;
 			}elseif(!empty($_POST["category1"])){
 				// 中カテゴリ
-				$key = urlencode($_POST["category1"]);
-				$result = Clay_Cache_Factory::create("active_page_category2_".$key);
-				if($result->categories == ""){
-					// カテゴリデータを検索する。
-					$table = $loader->LoadTable("ActivePagesTable");
-					$select = new Clay_Query_Select($table);
-					$select->addColumn($table->category2, "category")->addColumn("COUNT(".$table->entry_id.")", "count");
-					$select->addWhere($table->category1." = ?", array($_POST["category1"]));
-					$select->addWhere($table->category2." != ''");
-					$select->addGroupBy($table->category2)->addOrder("COUNT(".$table->entry_id.")", true);
-					$result->categories = $select->execute();
-				}
-				$_SERVER["ATTRIBUTES"]["baseurl"] = $_POST["category1"]."/";
+				$table = $loader->LoadTable("ActivePagesTable");
+				$select = new Clay_Query_Select($table);
+				$select->addColumn($table->category2, "category")->addColumn("COUNT(".$table->entry_id.")", "count");
+				$select->addWhere($table->category1." = ?", array($_POST["category1"]));
+				$select->addWhere($table->category2." != ''");
+				$select->addGroupBy($table->category2)->addOrder("COUNT(".$table->entry_id.")", true);
+				$result->categories = $select->execute();
+				$_SERVER["ATTRIBUTES"]["baseurl"] = "/".$_POST["category1"]."/";
+				$_SERVER["ATTRIBUTES"]["current_category"] = $_POST["category1"];
+				$_SERVER["ATTRIBUTES"]["category_path"] = array();
 				$_SERVER["ATTRIBUTES"][$params->get("result", "categories")] = $result->categories;
 			}else{
 				// 大カテゴリ
-				$result = Clay_Cache_Factory::create("active_page_category1");
-				if($result->categories == ""){
-					// カテゴリデータを検索する。
-					$table = $loader->LoadTable("ActivePagesTable");
-					$select = new Clay_Query_Select($table);
-					$select->addColumn($table->category1, "category")->addColumn("COUNT(".$table->entry_id.")", "count");
-					$select->addWhere($table->category1." != ''");
-					$select->addGroupBy($table->category1)->addOrder("COUNT(".$table->entry_id.")", true);
-					$result->categories = $select->execute();
-				}
-				$_SERVER["ATTRIBUTES"]["baseurl"] = "";
+				$table = $loader->LoadTable("ActivePagesTable");
+				$select = new Clay_Query_Select($table);
+				$select->addColumn($table->category1, "category")->addColumn("COUNT(".$table->entry_id.")", "count");
+				$select->addWhere($table->category1." != ''");
+				$select->addGroupBy($table->category1)->addOrder("COUNT(".$table->entry_id.")", true);
+				$result->categories = $select->execute();
+				$_SERVER["ATTRIBUTES"]["baseurl"] = "/";
+				$_SERVER["ATTRIBUTES"]["current_category"] = "";
+				$_SERVER["ATTRIBUTES"]["category_path"] = array();
 				$_SERVER["ATTRIBUTES"][$params->get("result", "categories")] = $result->categories;
 			}
 		}

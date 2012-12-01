@@ -43,7 +43,9 @@ class Content_ActivePage_Import extends Clay_Plugin_Module{
 						$sqlval["link_url"] = mb_convert_encoding($data[12], "UTF-8", "Shift_JIS");
 						$sqlval["price"] = mb_convert_encoding($data[14], "UTF-8", "Shift_JIS");
 						$sqlval["description"] = mb_convert_encoding($data[19], "UTF-8", "Shift_JIS");
-						$insert->execute($sqlval);
+						if(!empty($sqlval["product_code"])){
+							$insert->execute($sqlval);
+						}
 					}
 				}
 			}
