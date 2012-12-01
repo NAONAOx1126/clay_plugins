@@ -25,7 +25,7 @@ class Base_ZipModel extends Clay_Plugin_Model{
 	 * 主キーでデータを検索する。
 	 */
 	function findByCode($code){
-		$this->findBy(array("code" => $code));
+		$this->findBy(array("zipcode" => $code));
 		if($this->town == "以下に掲載がない場合"){
 			$this->town = "";
 			$this->town_kana = "";
