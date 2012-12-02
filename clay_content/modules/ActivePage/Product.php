@@ -12,7 +12,11 @@ class Content_ActivePage_Product extends Clay_Plugin_Module{
 			$loader->LoadSetting();
 			
 			// ショップデータを検索する。
-			$activePage = $loader->LoadTable("ActivePageModel");
+			if($_SERVER["CLIENT_DEVICE"]->isMobile()){
+				$activePage = $loader->LoadModel("ActiveMobilePageModel");
+			}else{
+				$activePage = $loader->LoadModel("ActivePageModel");
+			}
 			$activePage->findByPrimaryKey($_POST["entry_id"]);
 
 			// トランザクションの開始
@@ -28,8 +32,22 @@ class Content_ActivePage_Product extends Clay_Plugin_Module{
 			}catch(Exception $e){
 				Clay_Database_Factory::rollback();
 			}
+
+			// リンク先URLを取得
+			if($_SERVER["CLIENT_DEVICE"]->isMobile() && $_SERVER["CLIENT_DEVICE"]->isFuturePhone()){
+				switch($_SERVER["CLIENT_DEVICE"]->getDeviceType()){
+					case "DoCoMo":
+						$activePage->link_url = $activePage->link_url_docomo;
+						break;
+					case "au":
+						$activePage->link_url = $activePage->link_url_au;
+						break;
+					case "Softbank":
+						$activePage->link_url = $activePage->link_url_softbank;
+						break;
+				}
+			}
 			
-			$_SERVER["ATTRIBUTES"][$params->get("result", "product")."_key"] = $activePage->key()->toArray();
 			$_SERVER["ATTRIBUTES"][$params->get("result", "product")] = $activePage->toArray();
 		}
 	}

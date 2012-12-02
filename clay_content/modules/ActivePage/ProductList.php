@@ -11,66 +11,73 @@ class Content_ActivePage_ProductList extends Clay_Plugin_Module{
 			$loader = new Clay_Plugin("Content");
 			$loader->LoadSetting();
 			
-			// ショップデータを検索する。
-			$table = $loader->LoadTable("ActivePagesTable");
-			$select = new Clay_Query_Select($table);
-			
-			if(!($_POST["page"] > 0)){
+			if($_SERVER["QUERY_STRING"] == ""){
 				$_POST["page"] = 1;
 			}
 
+			// ショップデータを検索する。
+			if($_SERVER["CLIENT_DEVICE"]->isMobile()){
+				$table = $loader->LoadTable("ActiveMobilePagesTable");
+			}else{
+				$table = $loader->LoadTable("ActivePagesTable");
+			}
+			$count = new Clay_Query_Select($table);
+			$count->addColumn("COUNT(*)", "count");
+
+			$select = new Clay_Query_Select($table);
+			$select->addColumn($table->product_code)->addColumn($table->product_name);
+			$select->addColumn($table->maker_name)->addColumn($table->price)->addColumn($table->description);
+			$select->addOrder($table->create_time, true);
+			$select->setLimit($params->get("items", 30), ($_POST["page"] - 1) * $params->get("items", 30));
+			
 			// データキャッシュを取得
 			if(!empty($_POST["category1"]) && !empty($_POST["category2"]) && !empty($_POST["category3"])){
 				// 商品一覧
-				$table = $loader->LoadTable("ActivePagesTable");
-				$select = new Clay_Query_Select($table);
-				$select->addColumn($table->product_code)->addColumn($table->product_name);
-				$select->addColumn($table->maker_name)->addColumn($table->price)->addColumn($table->description);
+				$count->addWhere($table->category1." = ?", array($_POST["category1"]));
+				$count->addWhere($table->category2." = ?", array($_POST["category2"]));
+				$count->addWhere($table->category3." = ?", array($_POST["category3"]));
+				$result->products_count = $count->execute();
 				$select->addWhere($table->category1." = ?", array($_POST["category1"]));
 				$select->addWhere($table->category2." = ?", array($_POST["category2"]));
 				$select->addWhere($table->category3." = ?", array($_POST["category3"]));
-				$select->addOrder($table->create_time, true);
-				$select->setLimit($params->get("items", 30), ($_POST["page"] - 1) * $params->get("items", 30));                                                                                                                                          
 				$result->products = $select->execute();
+				$_SERVER["ATTRIBUTES"][$params->get("result", "products")."_pages"] = ceil($result->products_count[0]["count"] / $params->get("items", 30));
 				$_SERVER["ATTRIBUTES"][$params->get("result", "products")] = $result->products;
 			}elseif(!empty($_POST["category1"]) && !empty($_POST["category2"])){
 				// 小カテゴリ
-				$table = $loader->LoadTable("ActivePagesTable");
-				$select = new Clay_Query_Select($table);
-				$select->addColumn($table->product_code)->addColumn($table->product_name);
-				$select->addColumn($table->maker_name)->addColumn($table->price)->addColumn($table->description);
+				$count->addWhere($table->category1." = ?", array($_POST["category1"]));
+				$count->addWhere($table->category2." = ?", array($_POST["category2"]));
+				$count->addWhere($table->category3." = ''");
+				$result->products_count = $count->execute();
 				$select->addWhere($table->category1." = ?", array($_POST["category1"]));
 				$select->addWhere($table->category2." = ?", array($_POST["category2"]));
 				$select->addWhere($table->category3." = ''");
-				$select->addOrder($table->create_time, true);
-				$select->setLimit($params->get("items", 30), ($_POST["page"] - 1) * $params->get("items", 30));                                                                                                                                          
 				$result->products = $select->execute();
+				$_SERVER["ATTRIBUTES"][$params->get("result", "products")."_pages"] = ceil($result->products_count[0]["count"] / $params->get("items", 30));
 				$_SERVER["ATTRIBUTES"][$params->get("result", "products")] = $result->products;
 			}elseif(!empty($_POST["category1"])){
 				// 大カテゴリ用
-				$table = $loader->LoadTable("ActivePagesTable");
-				$select = new Clay_Query_Select($table);
-				$select->addColumn($table->product_code)->addColumn($table->product_name);
-				$select->addColumn($table->maker_name)->addColumn($table->price)->addColumn($table->description);
+				$count->addWhere($table->category1." = ?", array($_POST["category1"]));
+				$count->addWhere($table->category2." = ''");
+				$count->addWhere($table->category3." = ''");
+				$result->products_count = $count->execute();
 				$select->addWhere($table->category1." = ?", array($_POST["category1"]));
 				$select->addWhere($table->category2." = ''");
 				$select->addWhere($table->category3." = ''");
-				$select->addOrder($table->create_time, true);
-				$select->setLimit($params->get("items", 30), ($_POST["page"] - 1) * $params->get("items", 30));                                                                                                                                          
 				$result->products = $select->execute();
+				$_SERVER["ATTRIBUTES"][$params->get("result", "products")."_pages"] = ceil($result->products_count[0]["count"] / $params->get("items", 30));
 				$_SERVER["ATTRIBUTES"][$params->get("result", "products")] = $result->products;
 			}else{
 				// トップページ用
-				$table = $loader->LoadTable("ActivePagesTable");
-				$select = new Clay_Query_Select($table);
-				$select->addColumn($table->product_code)->addColumn($table->product_name);
-				$select->addColumn($table->maker_name)->addColumn($table->price)->addColumn($table->description);
+				$count->addWhere($table->category1." = ''");
+				$count->addWhere($table->category2." = ''");
+				$count->addWhere($table->category3." = ''");
+				$result->products_count = $count->execute();
 				$select->addWhere($table->category1." = ''");
 				$select->addWhere($table->category2." = ''");
 				$select->addWhere($table->category3." = ''");
-				$select->addOrder($table->create_time, true);
-				$select->setLimit($params->get("items", 30), ($_POST["page"] - 1) * $params->get("items", 30));                                                                                                                                          
 				$result->products = $select->execute();
+				$_SERVER["ATTRIBUTES"][$params->get("result", "products")."_pages"] = ceil($result->products_count[0]["count"] / $params->get("items", 30));
 				$_SERVER["ATTRIBUTES"][$params->get("result", "products")] = $result->products;
 			}
 		}

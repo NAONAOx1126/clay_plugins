@@ -12,7 +12,11 @@ class Content_ActivePage_ProductRanking extends Clay_Plugin_Module{
 			$loader->LoadSetting();
 			
 			// ショップデータを検索する。
-			$table = $loader->LoadTable("ActivePagesTable");
+			if($_SERVER["CLIENT_DEVICE"]->isMobile()){
+				$table = $loader->LoadTable("ActiveMobilePagesTable");
+			}else{
+				$table = $loader->LoadTable("ActivePagesTable");
+			}
 			$select = new Clay_Query_Select($table);
 			
 			if(!($_POST["page"] > 0)){
@@ -22,8 +26,6 @@ class Content_ActivePage_ProductRanking extends Clay_Plugin_Module{
 			// データキャッシュを取得
 			if(!empty($_POST["category1"]) && !empty($_POST["category2"]) && !empty($_POST["category3"])){
 				// 商品一覧
-				$table = $loader->LoadTable("ActivePagesTable");
-				$select = new Clay_Query_Select($table);
 				$select->addColumn($table->category1)->addColumn($table->category2)->addColumn($table->category3);
 				$select->addColumn($table->product_code)->addColumn($table->product_name)->addColumn($table->image_url);
 				$select->addColumn($table->maker_name)->addColumn($table->price)->addColumn($table->description);
@@ -36,8 +38,6 @@ class Content_ActivePage_ProductRanking extends Clay_Plugin_Module{
 				$_SERVER["ATTRIBUTES"][$params->get("result", "rankings")] = $result->products;
 			}elseif(!empty($_POST["category1"]) && !empty($_POST["category2"])){
 				// 小カテゴリ
-				$table = $loader->LoadTable("ActivePagesTable");
-				$select = new Clay_Query_Select($table);
 				$select->addColumn($table->category1)->addColumn($table->category2)->addColumn($table->category3);
 				$select->addColumn($table->product_code)->addColumn($table->product_name)->addColumn($table->image_url);
 				$select->addColumn($table->maker_name)->addColumn($table->price)->addColumn($table->description);
@@ -49,8 +49,6 @@ class Content_ActivePage_ProductRanking extends Clay_Plugin_Module{
 				$_SERVER["ATTRIBUTES"][$params->get("result", "rankings")] = $result->products;
 			}elseif(!empty($_POST["category1"])){
 				// 大カテゴリ用
-				$table = $loader->LoadTable("ActivePagesTable");
-				$select = new Clay_Query_Select($table);
 				$select->addColumn($table->category1)->addColumn($table->category2)->addColumn($table->category3);
 				$select->addColumn($table->product_code)->addColumn($table->product_name)->addColumn($table->image_url);
 				$select->addColumn($table->maker_name)->addColumn($table->price)->addColumn($table->description);
@@ -61,8 +59,6 @@ class Content_ActivePage_ProductRanking extends Clay_Plugin_Module{
 				$_SERVER["ATTRIBUTES"][$params->get("result", "rankings")] = $result->products;
 			}else{
 				// トップページ用
-				$table = $loader->LoadTable("ActivePagesTable");
-				$select = new Clay_Query_Select($table);
 				$select->addColumn($table->category1)->addColumn($table->category2)->addColumn($table->category3);
 				$select->addColumn($table->product_code)->addColumn($table->product_name)->addColumn($table->image_url);
 				$select->addColumn($table->maker_name)->addColumn($table->price)->addColumn($table->description);

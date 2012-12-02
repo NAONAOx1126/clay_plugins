@@ -12,7 +12,11 @@ class Content_ActivePage_CategoryList extends Clay_Plugin_Module{
 			$loader->LoadSetting();
 			
 			// ショップデータを検索する。
-			$table = $loader->LoadTable("ActivePagesTable");
+			if($_SERVER["CLIENT_DEVICE"]->isMobile()){
+				$table = $loader->LoadTable("ActiveMobilePagesTable");
+			}else{
+				$table = $loader->LoadTable("ActivePagesTable");
+			}
 			$select = new Clay_Query_Select($table);
 
 			// データキャッシュを取得
@@ -24,8 +28,6 @@ class Content_ActivePage_CategoryList extends Clay_Plugin_Module{
 				$_SERVER["ATTRIBUTES"][$params->get("result", "categories")] = array();
 			}elseif(!empty($_POST["category1"]) && !empty($_POST["category2"])){
 				// 小カテゴリ
-				$table = $loader->LoadTable("ActivePagesTable");
-				$select = new Clay_Query_Select($table);
 				$select->addColumn($table->category3, "category")->addColumn("COUNT(".$table->entry_id.")", "count");
 				$select->addWhere($table->category1." = ?", array($_POST["category1"]));
 				$select->addWhere($table->category2." = ?", array($_POST["category2"]));
@@ -38,8 +40,6 @@ class Content_ActivePage_CategoryList extends Clay_Plugin_Module{
 				$_SERVER["ATTRIBUTES"][$params->get("result", "categories")] = $result->categories;
 			}elseif(!empty($_POST["category1"])){
 				// 中カテゴリ
-				$table = $loader->LoadTable("ActivePagesTable");
-				$select = new Clay_Query_Select($table);
 				$select->addColumn($table->category2, "category")->addColumn("COUNT(".$table->entry_id.")", "count");
 				$select->addWhere($table->category1." = ?", array($_POST["category1"]));
 				$select->addWhere($table->category2." != ''");
@@ -51,8 +51,6 @@ class Content_ActivePage_CategoryList extends Clay_Plugin_Module{
 				$_SERVER["ATTRIBUTES"][$params->get("result", "categories")] = $result->categories;
 			}else{
 				// 大カテゴリ
-				$table = $loader->LoadTable("ActivePagesTable");
-				$select = new Clay_Query_Select($table);
 				$select->addColumn($table->category1, "category")->addColumn("COUNT(".$table->entry_id.")", "count");
 				$select->addWhere($table->category1." != ''");
 				$select->addGroupBy($table->category1)->addOrder("COUNT(".$table->entry_id.")", true);
