@@ -1,33 +1,31 @@
 <?php
 /**
- * ### Content.ActivePage.Import
+ * ### Content.ActivePage.ImportAccessTradeMobile
  * アクティブページのデータをインポートする。
  * @param result 結果を設定する配列のキーワード
  */
-class Content_ActivePage_Import extends Clay_Plugin_Module{
+class Content_ActivePage_ImportAccessTradeMobile extends Clay_Plugin_Module{
 	function execute($params){
-		ini_set("max_execution_time", 0);
-		
-		// 登録されているカテゴリタイプのリストを取得
-		$loader = new Clay_Plugin("Content");
-		$loader->LoadSetting();
-		
-		// トランザクションの開始
-		Clay_Database_Factory::begin();
-		
-		try{
-			// ショップIDのデータを全削除
-			$table = $loader->LoadTable("ActivePagesTable");
-			$delete = new Clay_Query_Delete($table);
-			$delete->addWhere($table->shop_id." = ".$_POST["shop_id"])->execute();
+		if(isset($_POST["access_trade_mobile"]) && $_FILES["upload_file"]["error"] == 0){
+			ini_set("max_execution_time", 0);
 			
-			// インポートするファイルを読み込む
-			$filename = $_SERVER["CONFIGURE"]->site_home."/data/ActiveContents/upload/".$_POST["shop_id"].".csv";
-			if(($fp = fopen($filename, "r")) !== FALSE){
-				$insert = new Clay_Query_Insert($table);
-				while(($data = fgetcsv($fp)) !== FALSE){
-					// 1カラム目はshop_idと同じになる
-					if($data[0] == $_POST["shop_id"]){
+			// 登録されているカテゴリタイプのリストを取得
+			$loader = new Clay_Plugin("Content");
+			$loader->LoadSetting();
+			
+			// トランザクションの開始
+			Clay_Database_Factory::begin();
+			
+			try{
+				// インポートするファイルを読み込む
+				$table = $loader->LoadTable("ActiveMobilePagesTable");
+				$filename = $_FILES["upload_file"]["tmp_name"];
+				if(($fp = fopen($filename, "r")) !== FALSE){
+					$insert = new Clay_Query_Replace($table);
+					// １行目はタイトル行
+					$data = fgetcsv($fp);
+					while(($data = fgetcsv($fp)) !== FALSE){
+						// 1カラム目はshop_idと同じになる
 						$sqlval = array();
 						$sqlval["shop_id"] = mb_convert_encoding($data[18], "UTF-8", "Shift_JIS");
 						$sqlval["shop_name"] = mb_convert_encoding($data[19], "UTF-8", "Shift_JIS");
@@ -53,13 +51,13 @@ class Content_ActivePage_Import extends Clay_Plugin_Module{
 						}
 					}
 				}
+						
+				// エラーが無かった場合、処理をコミットする。
+				Clay_Database_Factory::commit();
+			}catch(Exception $e){
+				Clay_Database_Factory::rollback();
+				throw $e;
 			}
-					
-			// エラーが無かった場合、処理をコミットする。
-			Clay_Database_Factory::commit();
-		}catch(Exception $e){
-			Clay_Database_Factory::rollback();
-			throw $e;
 		}
 	}
 }

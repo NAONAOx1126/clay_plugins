@@ -4,7 +4,7 @@
  * アクティブページのデータをインポートする。
  * @param result 結果を設定する配列のキーワード
  */
-class Content_ActivePage_Import extends Clay_Plugin_Module{
+class Content_ActivePage_ImportAccessTrade extends Clay_Plugin_Module{
 	function execute($params){
 		ini_set("max_execution_time", 0);
 		
