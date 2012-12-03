@@ -46,6 +46,8 @@ class Content_ActivePage_Product extends Clay_Plugin_Module{
 						$activePage->link_url = $activePage->link_url_softbank;
 						break;
 				}
+			}else{
+				$activePage->link_url .= $activePage->key()->link_key;
 			}
 			
 			$_SERVER["ATTRIBUTES"][$params->get("result", "product")] = $activePage->toArray();
