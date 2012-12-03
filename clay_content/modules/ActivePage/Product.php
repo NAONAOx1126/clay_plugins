@@ -12,7 +12,7 @@ class Content_ActivePage_Product extends Clay_Plugin_Module{
 			$loader->LoadSetting();
 			
 			// ショップデータを検索する。
-			if($_SERVER["CLIENT_DEVICE"]->isMobile()){
+			if($_SERVER["CLIENT_DEVICE"]->isFuturePhone()){
 				$activePage = $loader->LoadModel("ActiveMobilePageModel");
 			}else{
 				$activePage = $loader->LoadModel("ActivePageModel");
@@ -34,7 +34,7 @@ class Content_ActivePage_Product extends Clay_Plugin_Module{
 			}
 
 			// リンク先URLを取得
-			if($_SERVER["CLIENT_DEVICE"]->isMobile() && $_SERVER["CLIENT_DEVICE"]->isFuturePhone()){
+			if($_SERVER["CLIENT_DEVICE"]->isFuturePhone()){
 				switch($_SERVER["CLIENT_DEVICE"]->getDeviceType()){
 					case "DoCoMo":
 						$activePage->link_url = $activePage->link_url_docomo;

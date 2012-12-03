@@ -12,7 +12,7 @@ class Content_ActivePage_ProductRanking extends Clay_Plugin_Module{
 			$loader->LoadSetting();
 			
 			// ショップデータを検索する。
-			if($_SERVER["CLIENT_DEVICE"]->isMobile()){
+			if($_SERVER["CLIENT_DEVICE"]->isFuturePhone()){
 				$table = $loader->LoadTable("ActiveMobilePagesTable");
 			}else{
 				$table = $loader->LoadTable("ActivePagesTable");
