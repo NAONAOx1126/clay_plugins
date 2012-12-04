@@ -30,10 +30,13 @@ class Content_ActivePage_ProductList extends Clay_Plugin_Module{
 				$select->addColumn($table->product_code)->addColumn($table->create_time);
 				$select->addOrder($table->create_time, true);
 			}else{
+				$select->addColumn($table->category1)->addColumn($table->category2)->addColumn($table->category3);
 				$select->addColumn($table->product_code)->addColumn($table->product_name)->addColumn($table->image_url);
 				$select->addColumn($table->maker_name)->addColumn($table->price)->addColumn($table->description);
 				$select->addOrder($table->create_time, true);
-				$select->setLimit($params->get("items", 30), ($_POST["page"] - 1) * $params->get("items", 30));
+				if($params->get("items", 30) > 0){
+					$select->setLimit($params->get("items", 30), ($_POST["page"] - 1) * $params->get("items", 30));
+				}
 			}
 			
 			// データキャッシュを取得
@@ -93,7 +96,11 @@ class Content_ActivePage_ProductList extends Clay_Plugin_Module{
 				$select->addWhere($table->category2." = ''");
 				$select->addWhere($table->category3." = ''");
 				$result->products = $select->execute();
-				$_SERVER["ATTRIBUTES"][$params->get("result", "products")."_pages"] = ceil($result->products_count[0]["count"] / $params->get("items", 30));
+				if($params->get("items", 30) > 0){
+					$_SERVER["ATTRIBUTES"][$params->get("result", "products")."_pages"] = ceil($result->products_count[0]["count"] / $params->get("items", 30));
+				}else{
+					$_SERVER["ATTRIBUTES"][$params->get("result", "products")."_pages"] = 1;
+				}
 				$_SERVER["ATTRIBUTES"][$params->get("result", "products")] = $result->products;
 			}
 		}
