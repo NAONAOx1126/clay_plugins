@@ -16,7 +16,7 @@ class Content_ActivePage_ProductList extends Clay_Plugin_Module{
 			}
 
 			// ショップデータを検索する。
-			if($_SERVER["CLIENT_DEVICE"]->isFuturePhone()){
+			if($_SERVER["CLIENT_DEVICE"]->isFuturePhone() || $params->get("mobile", 0)){
 				$table = $loader->LoadTable("ActiveMobilePagesTable");
 			}else{
 				$table = $loader->LoadTable("ActivePagesTable");
@@ -25,10 +25,16 @@ class Content_ActivePage_ProductList extends Clay_Plugin_Module{
 			$count->addColumn("COUNT(*)", "count");
 
 			$select = new Clay_Query_Select($table);
-			$select->addColumn($table->product_code)->addColumn($table->product_name)->addColumn($table->image_url);
-			$select->addColumn($table->maker_name)->addColumn($table->price)->addColumn($table->description);
-			$select->addOrder($table->create_time, true);
-			$select->setLimit($params->get("items", 30), ($_POST["page"] - 1) * $params->get("items", 30));
+			if($params->check("all")){
+				$select->addColumn($table->category1)->addColumn($table->category2)->addColumn($table->category3);
+				$select->addColumn($table->product_code)->addColumn($table->create_time);
+				$select->addOrder($table->create_time, true);
+			}else{
+				$select->addColumn($table->product_code)->addColumn($table->product_name)->addColumn($table->image_url);
+				$select->addColumn($table->maker_name)->addColumn($table->price)->addColumn($table->description);
+				$select->addOrder($table->create_time, true);
+				$select->setLimit($params->get("items", 30), ($_POST["page"] - 1) * $params->get("items", 30));
+			}
 			
 			// データキャッシュを取得
 			if(!empty($_POST["category1"]) && !empty($_POST["category2"]) && !empty($_POST["category3"])){
@@ -67,6 +73,16 @@ class Content_ActivePage_ProductList extends Clay_Plugin_Module{
 				$result->products = $select->execute();
 				$_SERVER["ATTRIBUTES"][$params->get("result", "products")."_pages"] = ceil($result->products_count[0]["count"] / $params->get("items", 30));
 				$_SERVER["ATTRIBUTES"][$params->get("result", "products")] = $result->products;
+			}elseif($params->check("all")){
+				// トップページ用
+				$list = $select->execute();
+				$_SERVER["ATTRIBUTES"][$params->get("result", "product_tree")] = array();
+				foreach($list as $item){
+					if(!isset($_SERVER["ATTRIBUTES"][$params->get("result", "product_tree")][$item["category1"]][$item["category2"]][$item["category3"]])){
+						$_SERVER["ATTRIBUTES"][$params->get("result", "product_tree")][$item["category1"]][$item["category2"]][$item["category3"]] = array();
+					}
+					$_SERVER["ATTRIBUTES"][$params->get("result", "product_tree")][$item["category1"]][$item["category2"]][$item["category3"]][] = $item["product_code"];
+				}
 			}else{
 				// トップページ用
 				$count->addWhere($table->category1." = ''");
