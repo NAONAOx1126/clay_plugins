@@ -88,17 +88,18 @@ class Content_ActivePage_ProductList extends Clay_Plugin_Module{
 				}
 			}else{
 				// トップページ用
-				$count->addWhere($table->category1." = ''");
-				$count->addWhere($table->category2." = ''");
-				$count->addWhere($table->category3." = ''");
-				$result->products_count = $count->execute();
-				$select->addWhere($table->category1." = ''");
-				$select->addWhere($table->category2." = ''");
-				$select->addWhere($table->category3." = ''");
-				$result->products = $select->execute();
 				if($params->get("items", 30) > 0){
+					$count->addWhere($table->category1." = ''");
+					$count->addWhere($table->category2." = ''");
+					$count->addWhere($table->category3." = ''");
+					$result->products_count = $count->execute();
+					$select->addWhere($table->category1." = ''");
+					$select->addWhere($table->category2." = ''");
+					$select->addWhere($table->category3." = ''");
+					$result->products = $select->execute();
 					$_SERVER["ATTRIBUTES"][$params->get("result", "products")."_pages"] = ceil($result->products_count[0]["count"] / $params->get("items", 30));
 				}else{
+					$result->products = $select->execute();
 					$_SERVER["ATTRIBUTES"][$params->get("result", "products")."_pages"] = 1;
 				}
 				$_SERVER["ATTRIBUTES"][$params->get("result", "products")] = $result->products;
