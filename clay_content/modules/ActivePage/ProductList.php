@@ -73,20 +73,12 @@ class Content_ActivePage_ProductList extends Clay_Plugin_Module{
 			}elseif($params->check("tree")){
 				// トップページ用
 				$index = 0;
-				$select->setLimit(3000, $index);
-				$list = $select->execute();
-				$_SERVER["ATTRIBUTES"][$params->get("result", "product_tree")] = array();
-				while(!empty($list)){
-					foreach($list as $item){
-						if(!isset($_SERVER["ATTRIBUTES"][$params->get("result", "product_tree")][$item["category1"]][$item["category2"]][$item["category3"]])){
-							$_SERVER["ATTRIBUTES"][$params->get("result", "product_tree")][$item["category1"]][$item["category2"]][$item["category3"]] = array();
-						}
-						$_SERVER["ATTRIBUTES"][$params->get("result", "product_tree")][$item["category1"]][$item["category2"]][$item["category3"]][] = $item["product_code"];
-					}
-					$index += 3000;
-					$select->setLimit(3000, $index);
-					$list = $select->execute();
+				$_SERVER["ATTRIBUTES"][$params->get("result", "products")] = $select->fetch();
+				$_SERVER["ATTRIBUTES"][$params->get("result", "products")."_tree"] = array();
+				while(($item = $_SERVER["ATTRIBUTES"][$params->get("result", "products")]->next()) !== FALSE){
+					$_SERVER["ATTRIBUTES"][$params->get("result", "products")."_tree"][$item["category1"]][$item["category2"]][$item["category3"]] = "1";
 				}
+				$_SERVER["ATTRIBUTES"][$params->get("result", "products")]->rewind();
 			}else{
 				// トップページ用
 				if(!$params->check("all")){
