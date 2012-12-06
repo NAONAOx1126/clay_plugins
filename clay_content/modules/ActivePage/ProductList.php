@@ -25,11 +25,10 @@ class Content_ActivePage_ProductList extends Clay_Plugin_Module{
 			$count->addColumn("COUNT(*)", "count");
 
 			$select = new Clay_Query_Select($table);
-			$select->addColumn($table->category1)->addColumn($table->category2)->addColumn($table->category3);
-			$select->addColumn($table->product_code)->addColumn($table->product_name)->addColumn($table->image_url);
-			$select->addColumn($table->maker_name)->addColumn($table->price);
+			$select->addColumn($table->category1)->addColumn($table->category2)->addColumn($table->category3)->addColumn($table->product_code);
 			if(!$params->check("tree")){
-				$select->addColumn($table->description);
+				$select->addColumn($table->product_name)->addColumn($table->image_url);
+				$select->addColumn($table->maker_name)->addColumn($table->price)->addColumn($table->description);
 			}
 			$select->addOrder($table->create_time, true);
 			if($params->get("items", 30) > 0){
