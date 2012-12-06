@@ -74,15 +74,13 @@ class Content_ActivePage_ProductList extends Clay_Plugin_Module{
 				$_SERVER["ATTRIBUTES"][$params->get("result", "products")] = $result->products;
 			}elseif($params->check("tree")){
 				// トップページ用
-				$list = $select->execute();
+				$result = $select->fetch();
 				$_SERVER["ATTRIBUTES"][$params->get("result", "product_tree")] = array();
-				while(!empty($list)){
-					$item = array_shift($list);
+				while(($item = $result->next()) !== FALSE){
 					if(!isset($_SERVER["ATTRIBUTES"][$params->get("result", "product_tree")][$item["category1"]][$item["category2"]][$item["category3"]])){
 						$_SERVER["ATTRIBUTES"][$params->get("result", "product_tree")][$item["category1"]][$item["category2"]][$item["category3"]] = array();
 					}
 					$_SERVER["ATTRIBUTES"][$params->get("result", "product_tree")][$item["category1"]][$item["category2"]][$item["category3"]][] = $item["product_code"];
-					unset($item);
 				}
 			}else{
 				// トップページ用
