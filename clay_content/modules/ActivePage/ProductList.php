@@ -11,8 +11,11 @@ class Content_ActivePage_ProductList extends Clay_Plugin_Module{
 			$loader = new Clay_Plugin("Content");
 			$loader->LoadSetting();
 			
-			if($_SERVER["QUERY_STRING"] == ""){
-				$_POST["page"] = 1;
+			if(empty($_POST["items"])){
+				$_POST["items"] = $params->get("items", 30);
+			}
+			if(empty($_POST["page"])){
+				$_POST["page"] = "1";
 			}
 
 			// ショップデータを検索する。
@@ -29,8 +32,8 @@ class Content_ActivePage_ProductList extends Clay_Plugin_Module{
 			$select->addColumn($table->product_name)->addColumn($table->image_url);
 			$select->addColumn($table->maker_name)->addColumn($table->price)->addColumn($table->description);
 			$select->addOrder($table->create_time, true);
-			if($params->get("items", 30) > 0){
-				$select->setLimit($params->get("items", 30), ($_POST["page"] - 1) * $params->get("items", 30));
+			if($_POST["items"] > 0){
+				$select->setLimit($_POST["items"], ($_POST["page"] - 1) * $_POST["items"]);
 			}
 			
 			// データキャッシュを取得
@@ -44,7 +47,7 @@ class Content_ActivePage_ProductList extends Clay_Plugin_Module{
 				$select->addWhere($table->category2." = ?", array($_POST["category2"]));
 				$select->addWhere($table->category3." = ?", array($_POST["category3"]));
 				$result->products = $select->execute();
-				$_SERVER["ATTRIBUTES"][$params->get("result", "products")."_pages"] = ceil($result->products_count[0]["count"] / $params->get("items", 30));
+				$_SERVER["ATTRIBUTES"][$params->get("result", "products")."_pages"] = ceil($result->products_count[0]["count"] / $_POST["items"]);
 				$_SERVER["ATTRIBUTES"][$params->get("result", "products")] = $result->products;
 			}elseif(!empty($_POST["category1"]) && !empty($_POST["category2"])){
 				// 小カテゴリ
@@ -56,7 +59,7 @@ class Content_ActivePage_ProductList extends Clay_Plugin_Module{
 				$select->addWhere($table->category2." = ?", array($_POST["category2"]));
 				$select->addWhere($table->category3." = ''");
 				$result->products = $select->execute();
-				$_SERVER["ATTRIBUTES"][$params->get("result", "products")."_pages"] = ceil($result->products_count[0]["count"] / $params->get("items", 30));
+				$_SERVER["ATTRIBUTES"][$params->get("result", "products")."_pages"] = ceil($result->products_count[0]["count"] / $_POST["items"]);
 				$_SERVER["ATTRIBUTES"][$params->get("result", "products")] = $result->products;
 			}elseif(!empty($_POST["category1"])){
 				// 大カテゴリ用
@@ -68,7 +71,7 @@ class Content_ActivePage_ProductList extends Clay_Plugin_Module{
 				$select->addWhere($table->category2." = ''");
 				$select->addWhere($table->category3." = ''");
 				$result->products = $select->execute();
-				$_SERVER["ATTRIBUTES"][$params->get("result", "products")."_pages"] = ceil($result->products_count[0]["count"] / $params->get("items", 30));
+				$_SERVER["ATTRIBUTES"][$params->get("result", "products")."_pages"] = ceil($result->products_count[0]["count"] / $_POST["items"]);
 				$_SERVER["ATTRIBUTES"][$params->get("result", "products")] = $result->products;
 			}elseif($params->check("tree")){
 				// トップページ用
@@ -91,8 +94,8 @@ class Content_ActivePage_ProductList extends Clay_Plugin_Module{
 				}
 				$result->products_count = $count->execute();
 				$result->products = $select->execute();
-				if($params->get("items", 30) > 0){
-					$_SERVER["ATTRIBUTES"][$params->get("result", "products")."_pages"] = ceil($result->products_count[0]["count"] / $params->get("items", 30));
+				if($_POST["items"] > 0){
+					$_SERVER["ATTRIBUTES"][$params->get("result", "products")."_pages"] = ceil($result->products_count[0]["count"] / $_POST["items"]);
 				}else{
 					$_SERVER["ATTRIBUTES"][$params->get("result", "products")."_pages"] = 1;
 				}
