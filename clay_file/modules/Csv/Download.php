@@ -42,12 +42,12 @@ class File_Csv_Download extends Clay_Plugin_Module{
 				header("Content-Type: application/csv");
 				header("Content-Disposition: attachment; filename=\"".$csv->csv_code.date("YmdHis").".csv\"");
 
-				// リストコンテンツをループさせる。
-				$_SERVER["ATTRIBUTES"][$csv->list_key] = array();
+				// ヘッダを出力する。
+				$header_row = array();
 				foreach($csvContents as $csvContent){
-					$_SERVER["ATTRIBUTES"][$csv->list_key][] = $csvContent->column_name;
+					$header_row[] = $csvContent->column_name;
 				}
-				echo mb_convert_encoding("\"".implode("\",\"", $_SERVER["ATTRIBUTES"][$csv->list_key])."\"\r\n", "Shift_JIS", "UTF-8");
+				echo mb_convert_encoding("\"".implode("\",\"", $header_row)."\"\r\n", "Shift_JIS", "UTF-8");
 				ob_start();
 			}
 		}

@@ -1,4 +1,3 @@
 <?php
-class File_Setting{
-}
+define("CHECKIN_LOG_TYPE_MUSIC", 1);
 ?>
