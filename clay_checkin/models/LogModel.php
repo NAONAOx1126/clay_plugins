@@ -22,11 +22,11 @@ class Checkin_LogModel extends Clay_Plugin_Model{
 	}
 	
 	function findAllByNotImported($type){
-		return $this->findAllBy(array("type" => $type, "imported" => 0));
+		return $this->findAllBy(array("log_type" => $type, "log_imported" => 0));
 	}
 	
 	function findAllByImported($type){
-		return $this->findAllBy(array("type" => $type, "imported" => 1));
+		return $this->findAllBy(array("log_type" => $type, "log_imported" => 1));
 	}
 }
 ?>
