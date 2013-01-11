@@ -75,6 +75,11 @@ class Checkin_PlayMusic extends Clay_Plugin_Module{
 						$musicLog->music_id = $music->music_id;
 						$musicLog->save();
 					}
+					
+					// 使用済み
+					$data->log_imported = 1;
+					$data->save();
+					
 					// エラーが無く、変更後のポイントが0以上の場合、処理をコミットする。
 					Clay_Database_Factory::commit("checkin");
 				}catch(Exception $ex){
