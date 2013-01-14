@@ -16,15 +16,6 @@ class Content_Advertise_Page extends Clay_Plugin_Module{
 		$pager = new Clay_Pager($params->get("_pager_mode", Clay_Pager::PAGE_SLIDE), $params->get("_pager_dispmode", Clay_Pager::DISPLAY_ATTR), $params->get("_pager_per_page", 20), $params->get("_pager_displays", 3));
 		$pager->importTemplates($params);
 		
-		// 検索条件と並べ替えキー以外を無効化する。
-		if($params->get("clear", "0") == "1"){
-			if($params->check("sort_key")){
-				$_POST = array("search" => array(), $params->get("sort_key") => $_POST[$params->get("sort_key")]);
-			}else{
-				$_POST = array("search" => array());
-			}
-		}
-		
 		// カテゴリデータを検索する。
 		$advertise = $loader->LoadModel("AdvertiseModel");
 		$pager->setDataSize($advertise->countBy(array()));

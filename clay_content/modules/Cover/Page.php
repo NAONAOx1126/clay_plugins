@@ -26,15 +26,6 @@ class Content_Cover_Page extends Clay_Plugin_Module{
 			}
 		}
 		
-		// 検索条件と並べ替えキー以外を無効化する。
-		if($params->get("clear", "0") == "1"){
-			if($params->check("sort_key")){
-				$_POST = array("search" => array(), $params->get("sort_key") => $_POST[$params->get("sort_key")]);
-			}else{
-				$_POST = array("search" => array());
-			}
-		}
-		
 		// カテゴリデータを検索する。
 		$cover = $loader->LoadModel("CoverModel");
 		$pager->setDataSize($cover->countBy(array()));

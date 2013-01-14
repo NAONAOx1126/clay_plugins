@@ -1,12 +1,12 @@
 <?php
 /**
- * ### Content.ActivePage.Page
- * アクティブページのリストを取得する。
+ * ### Content.Shortcut.Page
+ * 新着情報のリストを取得する。
  * @param item １ページあたりの件数
  * @param delta 現在ページの前後に表示するページ数
  * @param result 結果を設定する配列のキーワード
  */
-class Content_ActivePage_Page extends Clay_Plugin_Module{
+class Content_Shortcut_Page extends Clay_Plugin_Module{
 	function execute($params){
 		$loader = new Clay_Plugin("Content");
 		$loader->LoadSetting();
@@ -27,13 +27,13 @@ class Content_ActivePage_Page extends Clay_Plugin_Module{
 		}
 		
 		// カテゴリデータを検索する。
-		$activePage = $loader->LoadModel("ActivePageKeyModel");
-		$pager->setDataSize($activePage->countBy(array()));
-		$activePage->limit($pager->getPageSize(), $pager->getCurrentFirstOffset());
-		$activePages = $activePage->findAllBy(array(), $sortOrder, $sortReverse);
+		$shortcut = $loader->LoadModel("ShortcutModel");
+		$pager->setDataSize($shortcut->countBy(array()));
+		$shortcut->limit($pager->getPageSize(), $pager->getCurrentFirstOffset());
+		$shortcuts = $shortcut->findAllBy(array(), $sortOrder, $sortReverse);
 		
-		$_SERVER["ATTRIBUTES"][$params->get("result", "active_pages")."_pager"] = $pager;
-		$_SERVER["ATTRIBUTES"][$params->get("result", "active_pages")] = $activePages;
+		$_SERVER["ATTRIBUTES"][$params->get("result", "shortcuts")."_pager"] = $pager;
+		$_SERVER["ATTRIBUTES"][$params->get("result", "shortcuts")] = $shortcuts;
 	}
 }
 ?>

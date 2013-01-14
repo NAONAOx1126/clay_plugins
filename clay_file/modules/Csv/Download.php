@@ -30,18 +30,30 @@ class File_Csv_Download extends Clay_Plugin_Module{
 				// CSVコンテンツ設定を取得
 				$csvContent = $loader->loadModel("CsvContentModel");
 				$csvContents = $csvContent->getCotentArrayByCsv($csv->csv_id);
+			}else{
+				// 存在しない場合は適当に作成
+				$csv->csv_code = $csv->list_key = $params->get("key");
+				$columns = explode(",", $params->get("columns", "create_time,update_time"));
+				$csvContents = array();
+				foreach($columns as $column){
+					$csvContent = $loader->loadModel("CsvContentModel");
+					$csvContent->content_key = $column;
+					$csvContents[] = $csvContent;
+				}
+			}
 
+			$_SERVER["FILE_CSV_DOWNLOAD"]["OFFSET"] = 0;
+			$_SERVER["FILE_CSV_DOWNLOAD"]["LIMIT"] = $params->get("unit", PHP_INT_MAX);
+			$_SERVER["FILE_CSV_DOWNLOAD"]["CSV"] = $csv;
+			$_SERVER["FILE_CSV_DOWNLOAD"]["CSV_CONTENTS"] = $csvContents;
+			
+			header("Content-Type: application/csv");
+			header("Content-Disposition: attachment; filename=\"".$csv->csv_code.date("YmdHis").".csv\"");
+
+			if(!empty($csv->csv_id)){
 				// ダウンロードの際は、よけいなバッファリングをクリア
 				ob_end_clean();
 				
-				$_SERVER["FILE_CSV_DOWNLOAD"]["OFFSET"] = 0;
-				$_SERVER["FILE_CSV_DOWNLOAD"]["LIMIT"] = $params->get("unit", PHP_INT_MAX);
-				$_SERVER["FILE_CSV_DOWNLOAD"]["CSV"] = $csv;
-				$_SERVER["FILE_CSV_DOWNLOAD"]["CSV_CONTENTS"] = $csvContents;
-				
-				header("Content-Type: application/csv");
-				header("Content-Disposition: attachment; filename=\"".$csv->csv_code.date("YmdHis").".csv\"");
-
 				// ヘッダを出力する。
 				$header_row = array();
 				foreach($csvContents as $csvContent){
@@ -50,6 +62,9 @@ class File_Csv_Download extends Clay_Plugin_Module{
 				echo mb_convert_encoding("\"".implode("\",\"", $header_row)."\"\r\n", "Shift_JIS", "UTF-8");
 				ob_start();
 			}
+			
+			// ループがいきなり終了しないように暫定的にtrueを設定
+			$_SERVER["ATTRIBUTES"][$params->get("loop")] = true;
 		}
 	}
 }

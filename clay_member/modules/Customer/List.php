@@ -25,7 +25,7 @@ class Member_Customer_List extends Clay_Plugin_Module_List{
 		$loader = new Clay_Plugin("Member");
 		$loader->LoadSetting();
 
-		// カテゴリが選択された場合、カテゴリの商品IDのリストを使う
+		// 検索条件を設定する。
 		$conditions = array();
 		if(is_array($_POST["search"])){
 			foreach($_POST["search"] as $key => $value){

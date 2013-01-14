@@ -43,12 +43,12 @@ class Base_Pages_UniqueCode extends Clay_Plugin_Module{
 			}
 			while($num > strlen($codes)){
 				$result .= $codes[$num % strlen($codes)];
-				$num = $num - ($num % strlen($codes)) / strlen($codes);
+				$num = sprintf("%d", $num - ($num % strlen($codes))) / strlen($codes);
 			}
 			$result .= $codes[$num];
 			
 			if($params->check("original", "0") == "0" || !isset($_POST[$params->get("code")])){
-				$_POST[$params->get("code")] = uniqid($result);
+				$_POST[$params->get("code")] = $result;
 			}
 		}
 	}
