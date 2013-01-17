@@ -11,5 +11,9 @@ class Content_ShortcutModel extends Clay_Plugin_Model{
 	public function findByPrimaryKey($shortcut_id){
 		$this->findBy(array("shortcut_id" => $shortcut_id));
 	}
+	
+	public function findByCode($shortcut_code){
+		$this->findBy(array("shortcut_code" => $shortcut_code));
+	}
 }
 ?>
