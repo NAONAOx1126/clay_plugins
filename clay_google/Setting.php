@@ -1,3 +1,2 @@
 <?php
 define("GOOGLE_OAUTH_TOKEN_KEY", "GOOGLE_OAUTH_ACCESS_TOKEN");
-?>

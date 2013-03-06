@@ -1,12 +1,4 @@
 <?php
-
-if (!function_exists('curl_init')) {
-  throw new Exception('Facebook needs the CURL PHP extension.');
-}
-if (!function_exists('json_decode')) {
-  throw new Exception('Facebook needs the JSON PHP extension.');
-}
-
 /**
  * Copyright 2011 Facebook, Inc.
  *
@@ -99,3 +91,8 @@ class Facebook extends BaseFacebook
                               $key));
   }
 }
+
+// FacebookのCURLオプションを変更
+Facebook::$CURL_OPTS[CURLOPT_SSL_VERIFYPEER] = false;
+Facebook::$CURL_OPTS[CURLOPT_SSL_VERIFYHOST] = 2;
+
