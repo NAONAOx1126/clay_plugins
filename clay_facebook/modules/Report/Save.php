@@ -24,9 +24,17 @@ class Facebook_Report_Save extends Clay_Plugin_Module_Save{
 					if(!is_dir($_SERVER["CONFIGURE"]->site_home."/upload/facebook_report/")){
 						mkdir($_SERVER["CONFIGURE"]->site_home."/upload/facebook_report/");
 					}
-					move_uploaded_file($_FILES["upload"]["tmp_name"][$key], $_SERVER["CONFIGURE"]->site_home."/upload/facebook_report/".$upfile_name);
+					
+					// 元のファイル名から拡張子を取得する。
+					if(strrpos($value, ".") > 0){
+						$ext = substr($value, strrpos($value, "."));
+					}else{
+						$ext = "";
+					}
+					
+					move_uploaded_file($_FILES["upload"]["tmp_name"][$key], $_SERVER["CONFIGURE"]->site_home."/upload/facebook_report/".$upfile_name.$ext);
 					$_POST[str_replace("report_file", "report_type", $key)] = $_FILES["upload"]["type"][$key];
-					$_POST[$key] = $upfile_name;
+					$_POST[$key] = $upfile_name.$ext;
 				}
 			}
 		}

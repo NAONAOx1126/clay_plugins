@@ -10,42 +10,35 @@ class Facebook_UpdateFeed extends Clay_Plugin_Module{
 	public function execute($argv){
 		$loader = new Clay_Plugin("facebook");
 		$loader->LoadSetting();
-		$user = $loader->loadModel("UserModel");
+		$group = $loader->loadModel("GroupModel");
 		// ユーザーのリストを取得する。
-		$users = $user->findAllBy(array());
-		foreach($users as $user){
+		$groups = $group->findAllBy(array());
+		foreach($groups as $group){
+			echo "===========".$group->group_name."============<br>\r\n";
 			// Facebookのインスタンスを初期化
 			$this->facebook = new Facebook($_SERVER["CONFIGURE"]->facebook);
 			// Facebookからユーザーの情報を取得する。
-			$this->facebook->setAccessToken($user->access_token);
+			$this->facebook->setAccessToken($group->access_token);
 			
 			// ユーザーのフィードを取得する。
-			$feeds = $this->facebook->api("/me/feed");
+			$feeds = $this->facebook->api("/".$group->facebook_id."/feed");
 			
 			// 対象グループ宛のフィードかどうか検索する。
 			foreach($feeds["data"] as $feed){
-				if(array_key_exists("to", $feed) && is_array($feed["to"]["data"])){
-					foreach($feed["to"]["data"] as $target){
-						$group = $loader->loadModel("GroupModel");
-						$group->findByFacebookId($target["id"]);
-						if($group->group_id > 0){
-							// トランザクションの開始
-							Clay_Database_Factory::begin("Facebook");
+				// トランザクションの開始
+				Clay_Database_Factory::begin("Facebook");
 							
-							try{
-								// ターゲットがグループの場合は投稿として処理し、次のフィードへ
-								$this->registerPost($group->group_id, $feed);
+				try{
+					// ターゲットがグループの場合は投稿として処理し、次のフィードへ
+					$this->registerPost($group->group_id, $feed);
 																	
-								// エラーが無かった場合、処理をコミットする。
-								Clay_Database_Factory::commit("Facebook");
-							}catch(Exception $e){
-								Clay_Database_Factory::rollBack("Facebook");
-								throw $e;
-							}
-							break;
-						}
-					}
+					// エラーが無かった場合、処理をコミットする。
+					Clay_Database_Factory::commit("Facebook");
+				}catch(Exception $e){
+					Clay_Database_Factory::rollBack("Facebook");
+					throw $e;
 				}
+				break;
 			}
 		}
 	}
@@ -137,6 +130,7 @@ class Facebook_UpdateFeed extends Clay_Plugin_Module{
 	protected function registerQuestion($group_id, $post_id, $question_id){
 		// 質問のオブジェクトを取得する。
 		$question = $this->facebook->api("/".$question_id);
+		print_r($question);
 		
 		// 質問の元となる投稿データを取得する。
 		$loader = new Clay_Plugin("facebook");

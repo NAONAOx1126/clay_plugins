@@ -13,42 +13,34 @@ class Facebook_UpdateFeed extends Clay_Plugin_Module{
 	public function execute($params){
 		$loader = new Clay_Plugin("facebook");
 		$loader->LoadSetting();
-		$user = $loader->loadModel("UserModel");
+		$group = $loader->loadModel("GroupModel");
 		// ユーザーのリストを取得する。
-		$users = $user->findAllBy(array());
-		foreach($users as $user){
+		$groups = $group->findAllBy(array());
+		foreach($groups as $group){
 			// Facebookのインスタンスを初期化
 			$this->facebook = new Facebook($_SERVER["CONFIGURE"]->facebook);
 			// Facebookからユーザーの情報を取得する。
-			$this->facebook->setAccessToken($user->access_token);
+			$this->facebook->setAccessToken($group->access_token);
 			
 			// ユーザーのフィードを取得する。
-			$feeds = $this->facebook->api("/me/feed");
+			$feeds = $this->facebook->api("/".$group->facebook_id."/feed");
 			
 			// 対象グループ宛のフィードかどうか検索する。
 			foreach($feeds["data"] as $feed){
-				if(array_key_exists("to", $feed) && is_array($feed["to"]["data"])){
-					foreach($feed["to"]["data"] as $target){
-						$group = $loader->loadModel("GroupModel");
-						$group->findByFacebookId($target["id"]);
-						if($group->group_id > 0){
-							// トランザクションの開始
-							Clay_Database_Factory::begin("Facebook");
-							
-							try{
-								// ターゲットがグループの場合は投稿として処理し、次のフィードへ
-								$this->registerPost($group->group_id, $feed);
-																	
-								// エラーが無かった場合、処理をコミットする。
-								Clay_Database_Factory::commit("Facebook");
-							}catch(Exception $e){
-								Clay_Database_Factory::rollBack("Facebook");
-								throw $e;
-							}
-							break;
-						}
-					}
+				// トランザクションの開始
+				Clay_Database_Factory::begin("Facebook");
+				
+				try{
+					// ターゲットがグループの場合は投稿として処理し、次のフィードへ
+					$this->registerPost($group->group_id, $feed);
+														
+					// エラーが無かった場合、処理をコミットする。
+					Clay_Database_Factory::commit("Facebook");
+				}catch(Exception $e){
+					Clay_Database_Factory::rollBack("Facebook");
+					throw $e;
 				}
+				break;
 			}
 		}
 	}

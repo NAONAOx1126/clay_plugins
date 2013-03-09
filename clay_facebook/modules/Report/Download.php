@@ -21,11 +21,21 @@ class Facebook_Report_Download extends Clay_Plugin_Module{
 		if($params->get("admin_role", "1") == $_SERVER["ATTRIBUTES"]["OPERATOR"]->role_id || $_SESSION["OPERATOR"]["company_id"] == $report->company_id){
 			$ext = ".txt";
 			$type = "report_type".$_POST["file"];
+			
+			// 元のファイル名から拡張子を取得する。
+			$key = "report_file".$_POST["file"];
+			if(strrpos($report->$key, ".") > 0){
+				$ext = substr($report->$key, strrpos($report->$key, "."));
+			}
+			
+			// MIMEタイプから拡張子を取得する。
 			switch($report->$type){
 				case "text/pdf":
+				case "application/pdf":
 					$ext = ".pdf";
 					break;
 				case "application/excel":
+				case "application/vnd.ms-excel":
 					$ext = ".xls";
 					break;
 				case "image/jpeg":
@@ -39,9 +49,9 @@ class Facebook_Report_Download extends Clay_Plugin_Module{
 					$ext = ".png";
 					break;
 			}
+			
 			$filename = "report".date("Ymd", strtotime($report->report_time))."_".$_POST["file"].$ext;
 			// ファイルのダウンロード処理
-			$key = "report_file".$_POST["file"];
 			header("Content-Type: ".$report->$type);
 			header("Content-Disposition: attachment; filename=\"".$filename."\"");
 			if(file_exists($_SERVER["CONFIGURE"]->site_home."/upload/facebook_report/".$report->$key)){
