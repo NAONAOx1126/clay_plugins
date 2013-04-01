@@ -1,44 +1,32 @@
 <?php
 /**
- * This file is part of CLAY Framework for view-module based system.
+ * Copyright (C) 2012 Clay System All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  *
  * @author    Naohisa Minagawa <info@clay-system.jp>
- * @copyright Copyright (c) 2010, Naohisa Minagawa
+ * @copyright Copyright (c) 2010, Clay System
  * @license http://www.apache.org/licenses/LICENSE-2.0.html Apache License, Version 2.0
  * @since PHP 5.3
  * @version   4.0.0
  */
 
 /**
- * ### Base.Company.Delete
- * サイトのデータを削除する。
+ * ### Admin.Company.Delete
+ * 組織のデータを削除する。
  */
-class Admin_Company_Delete extends Clay_Plugin_Module{
+class Admin_Company_Delete extends Clay_Plugin_Module_Delete{
 	function execute($params){
-		if($_POST["delete"]){
-			// サイトデータを取得する。
-			$loader = new Clay_Plugin("Admin");
-			$company = $loader->loadModel("CompanyModel");
-			$company->findByPrimaryKey($_POST["company_id"]);
-			
-			// トランザクションデータベースの取得
-			Clay_Database_Factory::begin();
-			
-			try{
-				// 組織に関連するオペレータを削除
-				foreach($company->operators() as $operator){
-					$operator->delete();
-				}
-				$company->delete();
-						
-				// エラーが無かった場合、処理をコミットする。
-				Clay_Database_Factory::commit();
-				
-				$this->removeInput("delete");
-			}catch(Exception $e){
-				Clay_Database_Factory::rollBack();
-				throw $e;
-			}
-		}
+		$this->executeImpl("Admin", "CompanyModel", "company_id");
 	}
 }

@@ -1,1 +1,8 @@
 <?php
+if(!defined("OPERATOR_SESSION_KEY")){
+	define("OPERATOR_SESSION_KEY", "OPERATOR");
+}
+
+if(!defined("OPERATOR_ATTRIBUTE_KEY")){
+	define("OPERATOR_ATTRIBUTE_KEY", "OPERATOR");
+}

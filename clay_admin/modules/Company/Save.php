@@ -1,44 +1,32 @@
 <?php
 /**
- * This file is part of CLAY Framework for view-module based system.
+ * Copyright (C) 2012 Clay System All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  *
  * @author    Naohisa Minagawa <info@clay-system.jp>
- * @copyright Copyright (c) 2010, Naohisa Minagawa
+ * @copyright Copyright (c) 2010, Clay System
  * @license http://www.apache.org/licenses/LICENSE-2.0.html Apache License, Version 2.0
  * @since PHP 5.3
  * @version   4.0.0
  */
 
 /**
- * ### Base.Company.Save
- * サイトのデータを保存する。
+ * ### Admin.Company.Save
+ * 組織のデータを保存する。
  */
-class Admin_Company_Save extends Clay_Plugin_Module{
+class Admin_Company_Save extends Clay_Plugin_Module_Save{
 	function execute($params){
-		// サイトデータを取得する。
-		$loader = new Clay_Plugin("admin");
-		$company = $loader->loadModel("CompanyModel");
-		$company->findByPrimaryKey($_POST["company_id"]);
-		foreach($_POST as $key => $value){
-			$company->$key = $value;
-		}
-		
-		// トランザクションの開始
-		Clay_Database_Factory::begin();
-		
-		if(empty($_POST["company_name"])){
-			throw new Clay_Exception_Invalid(array("組織名は必須です"));
-		}
-		
-		try{
-			$company->save();
-			$_POST["company_id"] = $company->company_id;
-
-			// エラーが無かった場合、処理をコミットする。
-			Clay_Database_Factory::commit();
-		}catch(Exception $e){
-			Clay_Database_Factory::rollBack();
-			throw $e;
-		}
+		$this->executeImpl("Admin", "CompanyModel", "company_id");
 	}
 }
