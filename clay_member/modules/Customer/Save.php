@@ -7,76 +7,12 @@
  * @param category【カテゴリタイプ】 商品に紐付けするカテゴリ（条件にしない場合は空文字を設定）
  * @param result 結果を設定する配列のキーワード
  */
-class Member_Customer_Save extends Clay_Plugin_Module{
+class Member_Customer_Save extends Clay_Plugin_Module_Save{
 	function execute($params){
-		if(isset($_POST["save"])){
-			// 商品情報を登録する。
-			$loader = new Clay_Plugin("Member");
-			$loader->LoadSetting();
-	
-			// トランザクションの開始
-			Clay_Database_Factory::begin("member");
-		
-			try{
-				// 商品データを検索する。
-				$customer = $loader->LoadModel("CustomerModel");
-				if(!empty($_POST["customer_id"])){
-					$customer->findByPrimaryKey($_POST["customer_id"]);
-				}
-
-				// 新規登録時は登録ポイントを設定。
-				if(!($customer->customer_id > 0)){
-					if(empty($_POST["point"])){
-						$_POST["point"] = 0;
-					}
-					$rule = $loader->loadModel("PointRuleModel");
-					
-					// 新規登録時は登録ポイントを登録
-					$pointLog = $loader->loadModel("PointLogModel");
-					$pointLog->addRuledPoint($rule, Member_PointRuleModel::RULE_ENTRY);
-				}
-				
-				// 商品データをモデルに格納して保存する。
-				foreach($_POST as $key => $value){
-					$customer->$key = $value;
-				}
-				
-				$customer->save();
-				$_POST["customer_id"] = $customer->customer_id;
-				
-				// 顧客のオプションを登録する。
-				if(isset($_POST["option"])){
-					$customerOptions = $customer->customerOptions();
-					foreach($customerOptions as $customerOption){
-						// 登録時にオプションは全て削除
-						$customerOption->delete();
-					}
-					if(is_array($_POST["option"])){
-						foreach($_POST["option"] as $name => $value){
-							// データを登録
-							$insert = new Clay_Query_Insert($loader->LoadModel("CustomerOptionsTable"));
-							$data = array(
-								"customer_id" => $customer->customer_id, 
-								"option_name" => $name, 
-								"option_value" => $value, 
-								"create_time" => date("Y-m-d H:i:s"), 
-								"update_time" => date("Y-m-d H:i:s")
-							);
-							$insert->execute($data);
-						}
-					}
-				}
-				
-				unset($_POST["save"]);
-				
-				// エラーが無かった場合、処理をコミットする。
-				Clay_Database_Factory::commit("member");
-			}catch(Exception $e){
-				Clay_Database_Factory::rollback("member");
-				unset($_POST["save"]);
-				throw $e;
-			}
+		if(!empty($_POST["pair_id"]) && empty($_POST[$this->key_prefix."pair_id"])){
+			$_POST[$this->key_prefix."pair_id"] = $_POST["pair_id"];
 		}
+		$this->executeImpl("Member", "CustomerModel", "customer_id");
 	}
 }
 ?>

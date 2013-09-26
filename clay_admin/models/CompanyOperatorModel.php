@@ -89,4 +89,11 @@ class Admin_CompanyOperatorModel extends Clay_Plugin_Model{
 		return $role;
 		
 	}
+	
+	/**
+	 * オペレータが該当の役割に含まれるか調べる
+	 */
+	public function hasRole($roles){
+		return in_array($this->role()->role_code, $roles);
+	}
 }

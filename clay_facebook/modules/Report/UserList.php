@@ -43,34 +43,41 @@ class Facebook_Report_UserList extends Clay_Plugin_Module_List{
 			// クエリのカラムを設定
 			$select->addColumn($users->_W);
 			$select->addColumn("(YEAR(CURDATE())-YEAR(".$users->birthday.")) - (RIGHT(CURDATE(),5) < RIGHT(".$users->birthday.",5))", "age");
-			$select->addColumn("COUNT(".$comments->comment_id.")", "comment_count");
-			$select->addColumn("MIN(".$comments->comment_time.")", "first_comment_time");
-			$select->addColumn("MAX(".$comments->comment_time.")", "last_comment_time");
-			$select->addColumn("COUNT(".$likes->like_id.")", "like_count");
-			$select->addColumn("MIN(".$likes->create_time.")", "first_like_time");
-			$select->addColumn("MAX(".$likes->create_time.")", "last_like_time");
+			$select->addColumn("COALESCE(comments.comment_count, 0)", "comment_count");
+			$select->addColumn("COALESCE(comments.first_comment_time, 0)", "first_comment_time");
+			$select->addColumn("COALESCE(comments.last_comment_time, 0)", "last_comment_time");
+			$select->addColumn("COALESCE(likes.like_count, 0)", "like_count");
+			$select->addColumn("COALESCE(likes.first_like_time, 0)", "first_like_time");
+			$select->addColumn("COALESCE(likes.last_like_time, 0)", "last_like_time");
 			
 			// クエリのJOINを設定
-			$commentJoin = array($users->user_id." = ".$comments->user_id);
+			$commentSelect = new Clay_Query_Select($comments);
+			$commentSelect->addColumn($comments->user_id);
+			$commentSelect->addColumn("COUNT(".$comments->comment_id.")", "comment_count");
+			$commentSelect->addColumn("MIN(".$comments->comment_time.")", "first_comment_time");
+			$commentSelect->addColumn("MAX(".$comments->comment_time.")", "last_comment_time");
 			if(preg_match("/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/", $_POST["search"]["start_time"]) > 0){
-				$commentJoin[] = $comments->comment_time." >= '".$_POST["search"]["start_time"]." 00:00:00'";
-				$select->addWhere($comments->like_id." IS NOT NULL");
+				$commentSelect->addWhere($comments->comment_time." >= '".$_POST["search"]["start_time"]." 00:00:00'");
 			}
 			if(preg_match("/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/", $_POST["search"]["end_time"]) > 0){
-				$commentJoin[] = $comments->comment_time." <= '".$_POST["search"]["end_time"]." 23:59:59'";
-				$select->addWhere($comments->like_id." IS NOT NULL");
+				$commentSelect->addWhere($comments->comment_time." <= '".$_POST["search"]["end_time"]." 23:59:59'");
 			}
-			$select->joinLeft($comments, $commentJoin);
-			$likeJoin = array($users->user_id." = ".$likes->user_id);
+			$commentJoin = array($users->user_id." = comments.user_id");
+			$select->joinLeft("(".$commentSelect->showQuery().") AS comments", $commentJoin);
+			
+			$likeSelect = new Clay_Query_Select($likes);
+			$likeSelect->addColumn($likes->user_id);
+			$likeSelect->addColumn("COUNT(".$likes->like_id.")", "like_count");
+			$likeSelect->addColumn("MIN(".$likes->create_time.")", "first_like_time");
+			$likeSelect->addColumn("MAX(".$likes->create_time.")", "last_like_time");
 			if(preg_match("/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/", $_POST["search"]["start_time"]) > 0){
-				$likeJoin[] = $likes->create_time." >= '".$_POST["search"]["start_time"]." 00:00:00'";
-				$select->addWhere($likes->like_id." IS NOT NULL");
+				$likeSelect->addWhere($likes->create_time." >= '".$_POST["search"]["start_time"]." 00:00:00'");
 			}
 			if(preg_match("/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/", $_POST["search"]["end_time"]) > 0){
-				$likeJoin[] = $likes->create_time." <= '".$_POST["search"]["end_time"]." 23:59:59'";
-				$select->addWhere($likes->like_id." IS NOT NULL");
+				$likeSelect->addWhere($likes->create_time." <= '".$_POST["search"]["end_time"]." 23:59:59'");
 			}
-			$select->joinLeft($likes, $likeJoin);
+			$likeJoin = array($users->user_id." = likes.user_id");
+			$select->joinLeft("(".$likeSelect->showQuery().") AS likes", $likeJoin);
 			
 			// クエリのグループ
 			$select->addGroupBy($users->user_id);
@@ -90,11 +97,11 @@ class Facebook_Report_UserList extends Clay_Plugin_Module_List{
 				$conditions = array();
 				for($i = 1; $i < 7; $i ++){
 					if($_POST["search"]["age"][$i] == $i){
-						$conditions[] = "FLOOR((YEAR(CURDATE())-YEAR(".$users->birthday.")) - (RIGHT(CURDATE(),5) < RIGHT(".$users->birthday.",5)) / 10) = ".$i;
+						$conditions[] = "FLOOR(FLOOR((YEAR(CURDATE())-YEAR(".$users->birthday.")) - (RIGHT(CURDATE(),5) < RIGHT(".$users->birthday.",5)) / 10) / 10) = ".$i;
 					}
 				}
 				if($_POST["search"]["age"][7] == 7){
-					$conditions[] = "FLOOR((YEAR(CURDATE())-YEAR(".$users->birthday.")) - (RIGHT(CURDATE(),5) < RIGHT(".$users->birthday.",5)) / 10) >= ".$i;
+					$conditions[] = "FLOOR(FLOOR((YEAR(CURDATE())-YEAR(".$users->birthday.")) - (RIGHT(CURDATE(),5) < RIGHT(".$users->birthday.",5)) / 10) / 10) >= ".$i;
 				}
 				$select->addWhere(implode(" OR ", $conditions));
 			}

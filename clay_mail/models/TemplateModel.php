@@ -17,8 +17,8 @@ class Mail_TemplateModel extends Clay_Plugin_Model{
 	 * コンストラクタ
 	 */
 	function __construct($values = array()){
-		$loader = new Clay_Plugin("mail");
-		parent::__construct($loader->loadTable("Mail_TemplatesTable"), $values);
+		$loader = new Clay_Plugin("Mail");
+		parent::__construct($loader->loadTable("TemplatesTable"), $values);
 	}
 	
 	/**

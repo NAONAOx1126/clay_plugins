@@ -27,6 +27,11 @@
  */
 class Admin_Operator_Save extends Clay_Plugin_Module_Save{
 	function execute($params){
+		if(isset($_POST["password"]) && $_POST["password"] != ""){
+			$_POST["password"] = $this->encryptPassword($_POST["login_id"], $_POST["password"]);
+		}else{
+			unset($_POST["password"]);
+		}
 		$this->executeImpl("Admin", "CompanyOperatorModel", "operator_id");
 	}
 }

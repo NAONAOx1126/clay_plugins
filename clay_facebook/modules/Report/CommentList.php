@@ -62,11 +62,11 @@ class Facebook_Report_CommentList extends Clay_Plugin_Module_List{
 				$conditions = array();
 				for($i = 1; $i < 7; $i ++){
 					if($_POST["search"]["age"][$i] == $i){
-						$conditions[] = "FLOOR((YEAR(CURDATE())-YEAR(".$users->birthday.")) - (RIGHT(CURDATE(),5) < RIGHT(".$users->birthday.",5)) / 10) = ".$i;
+						$conditions[] = "FLOOR(FLOOR((YEAR(CURDATE())-YEAR(".$users->birthday.")) - (RIGHT(CURDATE(),5) < RIGHT(".$users->birthday.",5)) / 10) / 10) = ".$i;
 					}
 				}
 				if($_POST["search"]["age"][7] == 7){
-					$conditions[] = "FLOOR((YEAR(CURDATE())-YEAR(".$users->birthday.")) - (RIGHT(CURDATE(),5) < RIGHT(".$users->birthday.",5)) / 10) >= ".$i;
+					$conditions[] = "FLOOR(FLOOR((YEAR(CURDATE())-YEAR(".$users->birthday.")) - (RIGHT(CURDATE(),5) < RIGHT(".$users->birthday.",5)) / 10) / 10) >= ".$i;
 				}
 				$select->addWhere(implode(" OR ", $conditions));
 			}
@@ -83,7 +83,6 @@ class Facebook_Report_CommentList extends Clay_Plugin_Module_List{
 						$keywordWhere .= (($_POST["search"]["keyword".$i."_connect"] == "OR")?" OR ":" AND ");
 					}
 					$keywordWhere .= $comments->comment.(($_POST["search"]["keyword".$i."_contain"] == "1")?" LIKE ?":" NOT LIKE ?");
-					echo $keywordWhere."<br>";
 					$keywordValue[] = "%".$_POST["search"]["keyword".$i]."%";
 				}
 			}
@@ -103,6 +102,7 @@ class Facebook_Report_CommentList extends Clay_Plugin_Module_List{
 				$times[$day] = $day;
 				$users[$comment->user_id] = array(
 					"user_id" => $comment->user_id,
+					"facebook_id" => $comment->facebook_id,
 					"name" => $comment->name,
 					"gender" => $comment->gender,
 					"account_name" => $comment->account_name,

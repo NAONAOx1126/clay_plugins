@@ -24,6 +24,10 @@ class Facebook_LikeModel extends Clay_Plugin_Model{
 		$this->findBy(array("like_id" => $like_id));
 	}
 	
+	function findByCommentUser($comment_id, $user_id){
+		$this->findBy(array("comment_id" => $comment_id, "user_id" => $user_id));
+	}
+	
 	function findAllByPost($post_id, $order = "", $reverse = false){
 		return $this->findAllBy(array("post_id" => $post_id, "comment_id" => 0), $order, $reverse);
 	}

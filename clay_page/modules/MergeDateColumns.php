@@ -53,6 +53,15 @@ class Page_MergeDateColumns extends Clay_Plugin_Module{
 						throw new Clay_Exception_Invalid(array("日付の指定が正しくありません。"));
 					}
 				}
+			}elseif($params->check("hourminute") && isset($_POST[$params->get("hourminute")])){
+				if(!empty($_POST[$params->get("result")])){
+					$_POST[$params->get("result")] .= " ";
+				}
+				$_POST[$params->get("result")] .= $_POST[$params->get("hourminute")];
+				if(date("Y-m-d H:i", strtotime($_POST[$params->get("result")])) != $_POST[$params->get("result")]){
+					$_POST[$params->get("result")] = "";
+					throw new Clay_Exception_Invalid(array("日付の指定が正しくありません。"));
+				}
 			}
 		}
 	}

@@ -90,11 +90,27 @@ class Facebook_UpdateFeed extends Clay_Plugin_Module{
 			$comment = $this->splitLinkComment($comment);
 			$comment->like_count = (array_key_exists("likes", $feed)?$feed["likes"]["count"]:0);
 			$comment->save();
-			
+				
 			// メインコメントを投稿に関連づけ
 			$post->comment_id = $comment->comment_id;
 			$post->save();
 			
+			// 投稿に対してのいいねデータを作成する。
+			$likes = $this->facebook->api("/".$feed["id"]."/likes");
+			foreach($likes["data"] as $like){
+				$model = $loader->loadModel("LikeModel");
+				// いいねのユーザーデータを取得する。
+				$user = $loader->loadModel("UserModel");
+				$user->findByFacebookId($like["id"]);
+				if($user->user_id > 0){
+					$model->findByCommentUser($comment->comment_id, $user->user_id);
+					$model->post_id = $comment->post_id;
+					$model->comment_id = $comment->comment_id;
+					$model->user_id = $user->user_id;
+					$model->save();
+				}
+			}
+				
 			// 投稿に対するコメントのリストを登録する。
 			if($feed["comments"]["count"] > 0){
 				foreach($feed["comments"]["data"] as $tempData){
@@ -117,6 +133,21 @@ class Facebook_UpdateFeed extends Clay_Plugin_Module{
 						$comment = $this->splitLinkComment($comment);
 						$comment->like_count = $data["like_count"];
 						$comment->save();
+						// コメントに対してのいいねデータを作成する。
+						$likes = $this->facebook->api("/".$comment->facebook_id."/likes");
+						foreach($likes["data"] as $like){
+							$model = $loader->loadModel("LikeModel");
+							// いいねのユーザーデータを取得する。
+							$user = $loader->loadModel("UserModel");
+							$user->findByFacebookId($like["id"]);
+							if($user->user_id > 0){
+								$model->findByCommentUser($comment->comment_id, $user->user_id);
+								$model->post_id = $comment->post_id;
+								$model->comment_id = $comment->comment_id;
+								$model->user_id = $user->user_id;
+								$model->save();
+							}
+						}
 					}
 				}
 			}

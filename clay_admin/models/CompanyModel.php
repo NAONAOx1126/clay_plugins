@@ -46,6 +46,75 @@ class Admin_CompanyModel extends Clay_Plugin_Model{
 	 * 組織に所属するオペレータのリストを取得する。
 	 * @return オペレータのリスト
 	 */
+	public function closes(){
+		$loader = new Clay_Plugin("admin");
+		$companyClose = $loader->loadModel("CompanyCloseModel");
+		$companyCloses = $companyClose->findAllByCompanyId($this->company_id);
+		return $companyCloses;		
+	}
+
+	/**
+	 * 組織に所属するオペレータのリストを取得する。
+	 * @return オペレータのリスト
+	 */
+	public function close($week, $weekday){
+		$loader = new Clay_Plugin("admin");
+		$companyClose = $loader->loadModel("CompanyCloseModel");
+		$companyClose->findByCompanyDay($this->company_id, $week, $weekday);
+		return $companyClose;
+	}
+
+	/**
+	 * 組織に所属するオペレータのリストを取得する。
+	 * @return オペレータのリスト
+	 */
+	public function specialCloses(){
+		$loader = new Clay_Plugin("admin");
+		$companyClose = $loader->loadModel("CompanyCloseSpecialModel");
+		$companyCloses = $companyClose->findAllByCompanyId($this->company_id);
+		return $companyCloses;
+	}
+
+	/**
+	 * 組織に所属するオペレータのリストを取得する。
+	 * @return オペレータのリスト
+	 */
+	public function specialClose($date){
+		$loader = new Clay_Plugin("admin");
+		$companyClose = $loader->loadModel("CompanyCloseSpecialModel");
+		$companyClose->findByCompanyDay($this->company_id, $date);
+		return $companyClose;		
+	}
+
+	/**
+	 * 組織に所属するオペレータのリストを取得する。
+	 * @return オペレータのリスト
+	 */
+	public function isClosed($date){
+		$loader = new Clay_Plugin("admin");
+		
+		$day = date("d", strtotime($date));
+		$week = ceil($day / 7);
+		$weekday = date("w", strtotime($date)) + 1;
+		$companyClose = $loader->loadModel("CompanyCloseModel");
+		$companyClose->findByCompanyDay($this->company_id, $week, $weekday);
+		if($companyClose->close_flg){
+			return true;
+		}
+		
+		$companyClose = $loader->loadModel("CompanyCloseSpecialModel");
+		$companyClose->findByCompanyDay($this->company_id, $date);
+		if($companyClose->close_flg){
+			return true;
+		}
+		
+		return false;
+	}
+
+	/**
+	 * 組織に所属するオペレータのリストを取得する。
+	 * @return オペレータのリスト
+	 */
 	public function operators(){
 		$loader = new Clay_Plugin("admin");
 		$companyOperator = $loader->loadModel("CompanyOperatorModel");
@@ -64,6 +133,7 @@ class Admin_CompanyModel extends Clay_Plugin_Model{
 		if(count($companyOperators) > 0){
 			return $companyOperators[0];
 		}else{
+			$companyOperator->company_id = $this->company_id;
 			return $companyOperator;
 		}
 	}

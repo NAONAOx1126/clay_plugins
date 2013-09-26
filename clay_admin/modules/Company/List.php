@@ -27,13 +27,13 @@
  */
 class Admin_Company_List extends Clay_Plugin_Module_List{
 	function execute($params){
-		if($params->check("mode", "normal") == "all"){
+		if($params->check("mode", "normal") == "select"){
 			$post = $_POST;
 			$_POST = array();
 		}
 		$_POST["search"]["display_flg"] = "1";
 		$this->executeImpl($params, "Admin", "CompanyModel", $params->get("result", "companys"));
-		if($params->check("mode", "normal") == "all"){
+		if($params->check("mode", "normal") == "select"){
 			$_POST = $post;
 		}
 	}

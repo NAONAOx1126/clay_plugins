@@ -70,11 +70,11 @@ class Facebook_Report_QuestionList extends Clay_Plugin_Module_List{
 				$conditions = array();
 				for($i = 1; $i < 7; $i ++){
 					if($_POST["search"]["age"][$i] == $i){
-						$conditions[] = "FLOOR((YEAR(CURDATE())-YEAR(".$users->birthday.")) - (RIGHT(CURDATE(),5) < RIGHT(".$users->birthday.",5)) / 10) = ".$i;
+						$conditions[] = "FLOOR(FLOOR((YEAR(CURDATE())-YEAR(".$users->birthday.")) - (RIGHT(CURDATE(),5) < RIGHT(".$users->birthday.",5)) / 10) / 10) = ".$i;
 					}
 				}
 				if($_POST["search"]["age"][7] == 7){
-					$conditions[] = "FLOOR((YEAR(CURDATE())-YEAR(".$users->birthday.")) - (RIGHT(CURDATE(),5) < RIGHT(".$users->birthday.",5)) / 10) >= ".$i;
+					$conditions[] = "FLOOR(FLOOR((YEAR(CURDATE())-YEAR(".$users->birthday.")) - (RIGHT(CURDATE(),5) < RIGHT(".$users->birthday.",5)) / 10) / 10) >= ".$i;
 				}
 				if(!empty($conditions)){
 					$select->addWhere(implode(" OR ", $conditions));

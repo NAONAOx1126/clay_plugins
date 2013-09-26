@@ -90,8 +90,8 @@ class Facebook_Report_UserListExcel extends Clay_Plugin_Module_List{
 				$excel->getActiveSheet()->getCell($this->getColKey($startCol + 2).($startRow + $line))->setValue(($user->gender == "male")?"男":"女");
 				$excel->getActiveSheet()->getCell($this->getColKey($startCol + 3).($startRow + $line))->setValue($user->age."歳");
 				$excel->getActiveSheet()->getCell($this->getColKey($startCol + 4).($startRow + $line))->setValue($user->location_name);
-				$excel->getActiveSheet()->getCell($this->getColKey($startCol + 5).($startRow + $line))->setValue(($user->last_comment_time != "")?date("Y/m/d", strtotime($user->last_comment_time)):"");
-				$excel->getActiveSheet()->getCell($this->getColKey($startCol + 6).($startRow + $line))->setValue(($user->last_like_time != "")?date("Y/m/d", strtotime($user->last_like_time)):"");
+				$excel->getActiveSheet()->getCell($this->getColKey($startCol + 5).($startRow + $line))->setValue(($user->last_comment_time != "" && $user->last_comment_time > 0)?date("Y/m/d", strtotime($user->last_comment_time)):"");
+				$excel->getActiveSheet()->getCell($this->getColKey($startCol + 6).($startRow + $line))->setValue(($user->last_like_time != "" && $user->last_like_time > 0)?date("Y/m/d", strtotime($user->last_like_time)):"");
 				$excel->getActiveSheet()->getCell($this->getColKey($startCol + 7).($startRow + $line))->setValue($user->comment_count);
 				$excel->getActiveSheet()->getCell($this->getColKey($startCol + 8).($startRow + $line))->setValue($user->like_count);
 				$excel->getActiveSheet()->getCell($this->getColKey($startCol + 9).($startRow + $line))->setValue(count($user->comments()));

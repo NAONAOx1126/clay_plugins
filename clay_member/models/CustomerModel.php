@@ -32,6 +32,10 @@ class Member_CustomerModel extends Clay_Plugin_Model{
 		$this->findBy(array("email_mobile" => $email));
 	}
 	
+	public function findAllByPair($pair_id, $order = "", $reverse = false){
+		$this->findby(array("pair_id" => $pair_id), $order, $reverse);
+	}
+	
 	/**
 	 * 顧客契約のリストを取得する。
 	*/
@@ -93,6 +97,13 @@ class Member_CustomerModel extends Clay_Plugin_Model{
 		$loader = new Clay_Plugin("Member");
 		$welcomeSuggest = $loader->loadModel("WelcomeSuggestModel");
 		return $welcomeSuggest->findAllByCustomer($this->customer_id, $order, $reverse);
+	}
+
+	public function pair($order = "", $reverse = false){
+		$loader = new Clay_Plugin("Member");
+		$pair = $loader->loadModel("PairModel");
+		$pair->findByPrimaryKey($this->pair_id);
+		return $pair;
 	}
 	
 	/**

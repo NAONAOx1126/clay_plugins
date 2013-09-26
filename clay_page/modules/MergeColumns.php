@@ -20,18 +20,25 @@
  */
 class Page_MergeColumns extends Clay_Plugin_Module{
 	function execute($params){
-		if(isset($_SERVER["ATTRIBUTES"][$params->get("key")]) && is_array($_SERVER["ATTRIBUTES"][$params->get("key")])){
-			foreach($_SERVER["ATTRIBUTES"][$params->get("key")] as $index => $data){
-				$columns = explode(",", $params->get("target"));
-				$value = "";
-				foreach($columns as $i => $column){
-					if($i > 0){
-						$value .= $params->get("delimiter");
-					}
-					$value .= $data[$column];
+		if($params->check("target") && $params->check("result")){
+			$columns = explode(",", $params->get("target"));
+			$value = "";
+			foreach($columns as $i => $column){
+				if($i > 0){
+					$value .= $params->get("delimiter");
 				}
-				$_SERVER["ATTRIBUTES"][$params->get("key")][$index][$params->get("result")] = $value;
+				if(is_array($_POST[$column])){
+					foreach($_POST[$column] as $j => $data){
+						if($i > 0 || $j > 0){
+							$data .= $params->get("delimiter");
+						}
+						$value .= $data;
+					}
+				}else{
+					$value .= $_POST[$column];
+				}
 			}
+			$_POST[$params->get("result")] = $value;
 		}
 	}
 }

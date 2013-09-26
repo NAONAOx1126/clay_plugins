@@ -27,6 +27,54 @@
  */
 class Admin_Company_Save extends Clay_Plugin_Module_Save{
 	function execute($params){
+		$this->continue = "1";
 		$this->executeImpl("Admin", "CompanyModel", "company_id");
+		
+		// トランザクションの開始
+		Clay_Database_Factory::begin("admin");
+
+		try{
+		
+			$company_id = $_POST["company_id"];
+			$loader = new Clay_Plugin("Admin");
+			$model = $loader->loadModel("CompanyCloseModel");
+			foreach($_POST["close_flg"] as $week => $closes){
+				foreach($closes as $weekday => $close){
+					$model = $loader->loadModel("CompanyCloseModel");
+					$model->findByCompanyDay($company_id, $week, $weekday);
+					$model->company_id = $company_id;
+					$model->week = $week;
+					$model->weekday = $weekday;
+					$model->close_flg = $close;
+					$model->save();
+				}
+			}
+			
+			$model = $loader->loadModel("CompanyCloseSpecialModel");
+			$result = $model->findAllByCompanyId($company_id);
+			foreach($result as $data){
+				$data->delete();
+			}
+			foreach($_POST["close_flg2"] as $close){
+				if(!empty($close["year"]) && !empty($close["month"]) && !empty($close["day"])){
+					$model = $loader->loadModel("CompanyCloseSpecialModel");
+					$model->company_id = $company_id;
+					$model->close_day = $close["year"]."-".$close["month"]."-".$close["day"];
+					$model->close_flg = "1";
+					$model->save();
+				}
+			}
+			
+			// エラーが無かった場合、処理をコミットする。
+			Clay_Database_Factory::commit("admin");
+			if($this->continue != "1"){
+				$this->removeInput("add");
+				$this->removeInput("save");
+				$this->reload();
+			}
+		}catch(Exception $e){
+			Clay_Database_Factory::rollBack(strtolower($type));
+			throw $e;
+		}
 	}
 }

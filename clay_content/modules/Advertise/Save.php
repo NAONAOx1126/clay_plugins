@@ -16,13 +16,14 @@ class Content_Advertise_Save extends Clay_Plugin_Module{
 			try{
 				// POSTされたデータを元にモデルを作成
 				$advertise = $loader->loadModel("AdvertiseModel");
-				$advertise->findByPrimaryKey($_POST["contract_id"]);
+				$advertise->findByPrimaryKey($_POST["advertise_id"]);
 				
 				// データを設定
 				$advertise->advertise_key = $_POST["advertise_key"];
 				$advertise->advertise_code = $_POST["advertise_code"];
 				$advertise->advertise_price = $_POST["advertise_price"];
 				$advertise->advertise_name = $_POST["advertise_name"];
+				$advertise->advertise_url = $_POST["advertise_url"];
 				$advertise->advertise_start_time = date("Y-m-d 0:00:00", strtotime($_POST["advertise_start_time"]));
 				$advertise->advertise_end_time = date("Y-m-d 23:59:59", strtotime($_POST["advertise_end_time"]));
 				

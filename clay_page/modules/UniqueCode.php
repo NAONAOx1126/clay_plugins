@@ -47,7 +47,7 @@ class Page_UniqueCode extends Clay_Plugin_Module{
 			}
 			$result .= $codes[$num];
 			
-			if($params->check("original", "0") == "0" || !isset($_POST[$params->get("code")])){
+			if($params->get("original", "0") == "0" || !isset($_POST[$params->get("code")])){
 				$_POST[$params->get("code")] = $result;
 			}
 		}

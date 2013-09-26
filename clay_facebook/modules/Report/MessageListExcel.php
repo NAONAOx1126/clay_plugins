@@ -85,7 +85,10 @@ class Facebook_Report_MessageListExcel extends Clay_Plugin_Module_List{
 					$excel->getActiveSheet()->getCell($this->getColKey($startCol).($startRow + $index))->setValue($date);
 					$message = "";
 					foreach($mess as $time => $data){
-						$message .= "【".$time."】\n".$data."\n";
+						$message .= "【".$time."】\n";
+						foreach($data as $m){
+							$message .= $m."\n";
+						}
 					}
 					$excel->getActiveSheet()->getCell($this->getColKey($startCol + $line).($startRow + $index))->setValue($message);
 					$excel->getActiveSheet()->getStyle($this->getColKey($startCol + $line).($startRow + $index))->getAlignment()->setWrapText(true);

@@ -51,6 +51,18 @@ class Admin_Login extends Clay_Plugin_Module{
 					throw new Clay_Exception_Invalid(array("ログイン情報が正しくありません。"));
 				}
 				
+				// アカウントが有効期限内か調べる。
+				if(!empty($companyOperator->start_time) && time() < strtotime($companyOperator->start_time)){
+					Clay_Logger::writeDebug("アカウントが利用開始されていません。");
+					throw new Clay_Exception_Invalid(array("アカウントが利用開始されていません。"));
+				}
+				
+				// アカウントが有効期限内か調べる。
+				if(!empty($companyOperator->end_time) && time() > strtotime($companyOperator->end_time)){
+					Clay_Logger::writeDebug("アカウントが有効期限切れです。");
+					throw new Clay_Exception_Invalid(array("アカウントが有効期限切れです。"));
+				}
+				
 				// アクセス権限のあるサイトか調べる
 				$company = $companyOperator->company();
 				

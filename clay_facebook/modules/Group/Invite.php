@@ -43,9 +43,7 @@ class Facebook_Group_Invite extends Clay_Plugin_Module{
 			$fbGroup = $facebook->api("/".$targetId);
 			
 			// グループのオーナーの情報を取得する。
-			echo "/".$targetId."/members/".$fbUser["id"];
 			$result = $facebook->api("/".$targetId."/members", "post", array("member" => $fbUser["id"]));
-			print_r($result);
 		}
 	}
 }

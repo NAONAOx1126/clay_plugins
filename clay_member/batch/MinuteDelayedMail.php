@@ -4,57 +4,56 @@
  *
  * Ex: /usr/bin/php batch.php "Member.MinuteDelayedMail" <ホスト名>
  */
-class Member_MinuteDelayedMail extends Clay_Plugin_Module{
+class Member_CsvMail extends Clay_Plugin_Module{
 	public function execute($argv){
-		// この機能で使用するモデルクラス
-		$baseLoader = new Clay_Plugin();
-		$baseLoader->LoadSetting();
-		$loader = new Clay_Plugin("Member");
-		$loader->LoadSetting();
-		
-		// 引数を処理
-		$template_code_prefix = $argv[0];
-		$Clay_Sendmail_term = $argv[1];
-		
-		// メールテンプレートを取得
-		$mailTemplate = $baseLoader->loadModel("MailTemplateModel");
-		$mailTemplate->findByPrimaryKey($template_code_prefix.$Clay_Sendmail_term);
-		$mailHtmlTemplate = $baseLoader->loadModel("MailTemplateModel");
-		$mailHtmlTemplate->findByPrimaryKey($template_code_prefix.$Clay_Sendmail_term."_html");
-		
-		// テンプレートが取れた場合のみメールを送信する。
-		if($mailTemplate->template_code ==  $template_code_prefix.$Clay_Sendmail_term){
-			// 該当の時間に登録時間が一致するユーザーを抽出する。
-			$condition = array("ge_create_time" => date("Y-m-d H:00:00", strtotime("-".($Clay_Sendmail_term + 1)." minute")), "lt_create_time" => date("Y-m-d H:00:00", strtotime("-".($Clay_Sendmail_term)." minute")));
-			
-			// カスタマモデルを使用して顧客情報を取得
-			$customer = $loader->loadModel("CustomerModel");
-			$customers = $customer->findAllBy($condition);
-			
-			foreach($customers as $customer){
+		echo "CSV MAil";
+		// ユーザー一覧をCSVで取得する。
+		if(($fp = fopen(CLAY_ROOT."/wls_templates/wp_users.csv", "r")) !== FALSE){
+			while (($data = fgetcsv($fp)) !== FALSE) {
+				print_r($data);
+				exit;
 				// 登録完了メール送信
 				$mail = new Clay_Sendmail();
-				$smarty = new Template();
-				foreach($customer as $name =>$value){
-					$smarty->assign($name, $value);
-				}
 				
 				// メールの送信元（サイトメールアドレス）を設定
-				$Clay_Sendmail->setFrom($_SERVER["CONFIGURE"]["SITE"]["site_email"], $_SERVER["CONFIGURE"]["SITE"]["site_name"]);
+				$mail->setFrom("support@lnavi.jp", "LNAVI事務局");
 				// メールの送信先を設定
-				$Clay_Sendmail->setTo($customer["email"], $customer["sei"].$customer["mei"]);
+				$mail->setTo($data[4], $data[9]);
 				// テキストメールの設定からタイトルと本文を取得
-				$Clay_Sendmail->setSubject($mailTemplate->subject);
-				$body = $smarty->fetch("string:".$mailTemplate->body);
-				// HTMLメールのテンプレートから本文を取得
-				if($mailHtmlTemplate->template_code == $template_code_prefix.$Clay_Sendmail_term."_html"){
-					$Clay_Sendmail->addExtBody($body);
-					$body = $smarty->fetch("string:".$mailHtmlTemplate->body);
-				}
-				$Clay_Sendmail->addBody($body);
-				//print_r($Clay_Sendmail);
-				$Clay_Sendmail->send();
-				$Clay_Sendmail->reply();
+				$mail->setSubject("ウェディングライフサポート　名称変更および全面リニューアルのお知らせ");
+				$body = <<<EOF
+提携店舗様各位
+
+時下ますます御清栄のこととお慶び申し上げます。 
+平素はウェディングライフサポートをご愛顧いただき、誠にありがとうございます。
+
+さて、このたび弊社では、ウェディングライフサポートにご参画頂いている皆様のサービスご利用数を劇的に向上させるべく、会員の入会時オペレーションから、会員へのアプローチ手法、またウェブサイトのリニューアルまでを「全面改革」いたします。
+
+名称も、現在の「ウェディングライフサポート」から、2013年5月17日より、愛（LOVE）のある人生（LIFE）を長く（LONG）ナビゲーションするサイトとして、「LNAVI」（エルナビ）という名前で、生まれ変わります。
+
+
+「LNAVI」（エルナビ）リニューアルにかかるページ作成につきましては、皆様に再度お手間をおかけしないように、弊社で旧ウェディングライフサポートに入力済みの既存データからの移行を行っております。
+後日、担当者様のメールアドレス（本メールの宛先）に、「LNAVI」（エルナビ）の御社専用管理画面と簡易マニュアルをお送りいたしますので、お手数ではございますが、移行後データのご確認だけ、お願い申し上げます。
+
+このたびのリニューアルにつきましては、十分なご案内が出来ておりませんことをお詫び申し上げます。本日以降、順次ご説明に参りたいと思いますので、宜しくお願い申し上げます。
+
+私どもの事業継続は、ひとえに代理店の皆様方のおかげであると感謝申し上げます。今後は今まで以上のサービス利用拡大に努めてまいりますので、ご協力のほどお願い申し上げます。
+末筆ながら貴社のますますのご発展、ご活躍をお祈り致します。
+
+
+【概要】
+１、旧名称：ウェディングライフサポート
+２、新名称：LNAVI（エルナビ）
+３、リニューアル日：2013年5月17日（金）
+４、管理画面URLおよび簡易マニュアル送付予定日：2013年5月13日
+５、皆様へのお願い事項：４、のURLより、データ移行の内容をご確認ください。
+________________________________________
+不明点等ございましたら、恐縮ですが、下記までご連絡くださいませ。
+株式会社シーマ　03－3567－1175　LNAVI（旧ウェディングライフサポート）担当：花木
+EOF;				
+				$mail->addBody($body);
+				print_r($mail);
+				//$mail->send();
 			}
 		}
 	}
