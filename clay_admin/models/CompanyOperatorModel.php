@@ -96,4 +96,30 @@ class Admin_CompanyOperatorModel extends Clay_Plugin_Model{
 	public function hasRole($roles){
 		return in_array($this->role()->role_code, $roles);
 	}
+	
+	/**
+	 * オペレータの営業日を取得する。
+	 */
+	public function activities(){
+	    $loader = new Clay_Plugin("admin");
+	    $companyOperatorActivity = $loader->loadModel("CompanyOperatorActivityModel");
+	    $companyOperatorActivities = $companyOperatorActivity->findAllByOperatorId($this->operator_id);
+	    return $companyOperatorActivities;
+	}
+	
+	/**
+	 * 都道府県の名前を取得
+	 */
+	function pref_name($pref_name = null){
+	    $loader = new Clay_Plugin("Address");
+	    $pref = $loader->loadModel("PrefModel");
+	    // 引数を渡した場合はIDを登録
+	    if($pref_name != null){
+	        $pref->findByName($pref_name);
+	        $this->pref = $pref->id;
+	    }
+	    $pref->findByPrimaryKey($this->pref);
+	    return $pref->name;
+	}
+	
 }

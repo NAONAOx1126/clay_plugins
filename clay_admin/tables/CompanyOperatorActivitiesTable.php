@@ -21,21 +21,21 @@
  * @version   4.0.0
  */
 /**
- * admin_rolesテーブルの定義クラスです。
+ * admin_company_operator_activitiesテーブルの定義クラスです。
  */
-class Admin_RolesTable extends Clay_Plugin_Table{
+class Admin_CompanyOperatorActivitiesTable extends Clay_Plugin_Table{
     /**
      * コンストラクタです。
      */
     public function __construct(){
         $this->db = Clay_Database_Factory::getConnection("admin");
-        parent::__construct("admin_roles", "admin");
+        parent::__construct("admin_company_operator_activities", "admin");
     }
     /**
      * テーブルを作成するためのスタティックメソッドです。。
      */
     public static function install(){
         $connection = Clay_Database_Factory::getConnection("admin");
-        $connection->query(file_get_contents(dirname(__FILE__)."/../sqls/roles.sql"));
+        $connection->query(file_get_contents(dirname(__FILE__)."/../sqls/company_operator_activities.sql"));
     }
 }
