@@ -15,14 +15,27 @@
  * limitations under the License.
  *
  * @author    Naohisa Minagawa <info@clay-system.jp>
- * @copyright Copyright (c) 2010, Clay System
+ * @copyright Copyright (c) 2013, Clay System
  * @license http://www.apache.org/licenses/LICENSE-2.0.html Apache License, Version 2.0
  * @since PHP 5.3
  * @version   4.0.0
  */
+/**
+ * address_prefsテーブルの定義クラスです。
+ */
 class Address_PrefsTable extends Clay_Plugin_Table{
-    function __construct(){
+    /**
+     * コンストラクタです。
+     */
+    public function __construct(){
         $this->db = Clay_Database_Factory::getConnection("address");
         parent::__construct("address_prefs", "address");
+    }
+    /**
+     * テーブルを作成するためのスタティックメソッドです。。
+     */
+    public static function install(){
+        $connection = Clay_Database_Factory::getConnection("address");
+        $connection->query(file_get_contents(dirname(__FILE__)."/../sqls/prefs.sql"));
     }
 }
